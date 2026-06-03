@@ -1,0 +1,197 @@
+/*
+ * File: styles/layout/grid.css
+ * Purpose: Container, section, and page-level grid patterns.
+ * Truth.md rule: No button or form styling here. Structure only.
+ */
+
+/* ── Container ── */
+
+.container {
+    margin-inline: auto;
+    max-width: var(--gm-container-width);
+    padding-inline: var(--gm-container-gutter);
+}
+
+.container--wide {
+    max-width: min(104rem, 100%);
+}
+
+.container--narrow {
+    max-width: min(64rem, 100%);
+}
+
+/* ── Section rhythm ── */
+
+.section {
+    padding-block: clamp(2.75rem, 4.8vw, 4.75rem);
+    position: relative;
+}
+
+.section--muted {
+    background: linear-gradient(
+        180deg,
+        var(--colour-surface-strong) 0%,
+        var(--colour-surface) 100%
+    );
+}
+
+.section--alt {
+    background: linear-gradient(
+        180deg,
+        var(--colour-surface-deep) 0%,
+        var(--colour-surface-strong) 100%
+    );
+}
+
+.section--dark {
+    background: var(--colour-panel-dark);
+    color: var(--colour-panel-text);
+}
+
+.section--dark h1,
+.section--dark h2,
+.section--dark h3,
+.section--dark p {
+    color: inherit;
+}
+
+.section--compact {
+    padding-block: clamp(2rem, 3.4vw, 3.1rem);
+}
+
+.section--flush {
+    padding-block: 0;
+}
+
+/* ── Section heading ── */
+
+.section-heading {
+    display: grid;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+    max-width: 52rem;
+    position: relative;
+    z-index: 1;
+}
+
+.section-heading--center {
+    justify-items: center;
+    margin-inline: auto;
+    text-align: center;
+}
+
+.section-heading--wide {
+    max-width: 80rem;
+}
+
+/* ── Hero section ── */
+
+.section--hero {
+    min-height: clamp(24rem, 60svh, 44rem);
+    overflow: clip;
+    padding-block-start: calc(var(--header-offset) + var(--space-xl));
+    position: relative;
+}
+
+/* ── Page hero split: text + visual ── */
+
+.hero-split {
+    align-items: center;
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 3rem);
+    grid-template-columns: minmax(0, 1fr) minmax(min(100%, 20rem), 0.9fr);
+}
+
+/* ── Card grids ── */
+
+.card-grid {
+    display: grid;
+    gap: var(--space-md);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+}
+
+.card-grid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.card-grid--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.card-grid--4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* ── Content + sidebar layout ── */
+
+.content-layout {
+    align-items: start;
+    display: grid;
+    gap: var(--space-lg);
+    grid-template-columns: minmax(0, 1.5fr) minmax(min(100%, 20rem), 0.7fr);
+}
+
+.content-layout__main > * + * {
+    margin-top: var(--space-md);
+}
+
+.content-layout__sidebar {
+    position: sticky;
+    top: calc(var(--header-offset) + var(--space-md));
+}
+
+/* ── Stack patterns ── */
+
+.stack {
+    display: grid;
+    gap: var(--space-md);
+}
+
+.stack--sm {
+    gap: var(--space-sm);
+}
+
+.stack--lg {
+    gap: var(--space-lg);
+}
+
+/* ── Cluster ── */
+
+.cluster {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+}
+
+.cluster--center {
+    justify-content: center;
+}
+
+.cluster--end {
+    justify-content: flex-end;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 64rem) {
+    .card-grid--3,
+    .card-grid--4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 48rem) {
+    .hero-split,
+    .content-layout,
+    .card-grid--2,
+    .card-grid--3,
+    .card-grid--4 {
+        grid-template-columns: 1fr;
+    }
+
+    .content-layout__sidebar {
+        position: relative;
+        top: auto;
+    }
+}

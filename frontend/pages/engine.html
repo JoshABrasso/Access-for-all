@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<!--
+  ╔══════════════════════════════════════════════════════════════════╗
+  ║  Access for All Engine — Documentation                          ║
+  ║  File: frontend/pages/engine.html                               ║
+  ║  Purpose: Human-readable documentation of the engine, its axes, ║
+  ║           the data-* contract, token chain, and integration rules. ║
+  ║           Optional in production builds.                        ║
+  ╚══════════════════════════════════════════════════════════════════╝
+-->
+<html lang="en-GB" data-theme="default" data-font="default" data-motion="default">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Technical documentation for the Access for All accessibility engine, including token architecture, JavaScript state handling, storage behavior, tool interaction, and implementation guidance." />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+    <link rel="stylesheet" href="../styles/master.css" />
+    <title>Engine Reference | Access for All</title>
+    <style>
+      /* Doc-only styles */
+      .demo-delete-banner {
+        background: var(--gm-callout-error-surface);
+        color: var(--colour-text);
+        border-bottom: 1px solid var(--gm-callout-error-border);
+        font-weight: 700;
+        font-size: 0.9rem;
+        letter-spacing: 0.06em;
+        padding: 0.6rem 1rem;
+        text-align: center;
+        text-transform: uppercase;
+        position: sticky;
+        top: 0;
+        z-index: 999;
+      }
+      .doc-section {
+        border-top: 2px solid var(--colour-border);
+        padding-top: var(--space-xl);
+        margin-top: var(--space-xl);
+      }
+      .doc-table {
+        border-collapse: collapse;
+        font-size: 0.875rem;
+        width: 100%;
+        margin: var(--space-md) 0 var(--space-lg);
+        overflow-x: auto;
+        display: block;
+      }
+      .doc-table th,
+      .doc-table td {
+        border: 1px solid var(--colour-border);
+        padding: 0.5rem 0.75rem;
+        text-align: left;
+        vertical-align: top;
+      }
+      .doc-table th {
+        background: var(--colour-surface-strong);
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .doc-table code {
+        font-size: 0.8rem;
+      }
+      .doc-law {
+        border-left: 4px solid var(--colour-accent);
+        background: var(--colour-surface-strong);
+        border-radius: 0 0.5rem 0.5rem 0;
+        margin: var(--space-sm) 0;
+        padding: 0.75rem 1rem;
+      }
+      .doc-law strong {
+        display: block;
+        margin-bottom: 0.25rem;
+      }
+      .doc-note {
+        background: color-mix(in srgb, var(--colour-accent) 12%, var(--colour-surface));
+        border: 1px solid color-mix(in srgb, var(--colour-accent) 40%, transparent);
+        border-radius: 0.5rem;
+        margin: var(--space-md) 0;
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+      }
+      .doc-toc {
+        background: linear-gradient(
+          180deg,
+          color-mix(in srgb, var(--colour-brand-100) 34%, var(--colour-surface)) 0%,
+          var(--colour-surface) 100%
+        );
+        border: 1px solid color-mix(in srgb, var(--colour-border) 76%, transparent);
+        border-radius: 1rem;
+        display: grid;
+        gap: 1rem;
+        margin-top: var(--space-lg);
+        padding: 1.25rem;
+      }
+      .doc-toc__title {
+        color: var(--colour-muted);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      .doc-toc__list {
+        display: grid;
+        gap: 0.75rem;
+        grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .doc-toc__list a {
+        border: 1px solid color-mix(in srgb, var(--colour-border) 82%, transparent);
+        border-radius: 0.8rem;
+        color: var(--colour-text);
+        display: block;
+        font-size: 0.92rem;
+        font-weight: 700;
+        padding: 0.9rem 1rem;
+        text-decoration: none;
+        transition:
+          transform var(--gm-transition-short),
+          border-color var(--gm-transition-short),
+          background var(--gm-transition-short);
+      }
+      .doc-toc__list a:hover,
+      .doc-toc__list a:focus-visible {
+        background: color-mix(in srgb, var(--colour-brand-100) 28%, transparent);
+        border-color: color-mix(in srgb, var(--colour-accent) 42%, var(--colour-border));
+        transform: translateY(-1px);
+      }
+    </style>
+  </head>
+  <body id="page-top">
+
+    <div class="demo-delete-banner" role="status" aria-live="polite">
+      Optional documentation page — remove from production if not needed
+    </div>
+
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <!-- Engine status live region — announced to screen readers on every state change -->
+    <span
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      class="sr-only"
+      data-engine-status
+    ></span>
+
+    <div class="site-shell">
+
+      <header class="site-header" data-site-header>
+        <div class="utility-bar container">
+          <div class="header-brand">
+            <a class="brand-mark" href="../index.html">
+              <span class="brand-mark__lockup">
+                <span class="brand-mark__name">Access for All</span>
+                <span class="brand-mark__eyebrow">Engine reference</span>
+              </span>
+            </a>
+          </div>
+          <nav class="primary-nav" aria-label="Primary navigation" data-primary-nav>
+            <ul id="primary-navigation" class="nav-list">
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="demo.html">Demo</a></li>
+              <li><a href="engine.html" aria-current="page">Engine docs</a></li>
+            </ul>
+          </nav>
+          <div class="header-actions">
+            <div class="header-accessibility">
+              <button
+                class="accessibility-trigger"
+                type="button"
+                data-accessibility-open
+                aria-haspopup="dialog"
+                aria-controls="accessibility-panel"
+                aria-expanded="false"
+                aria-label="Open accessibility settings"
+              >
+                <span class="accessibility-trigger__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" focusable="false">
+                    <path d="M10.5 2h3l.5 2.1a7.95 7.95 0 0 1 1.83.76l1.88-1.04 2.12 2.12-1.04 1.88c.32.58.58 1.19.76 1.83L22 10.5v3l-2.1.5a7.95 7.95 0 0 1-.76 1.83l1.04 1.88-2.12 2.12-1.88-1.04a7.95 7.95 0 0 1-1.83.76L13.5 22h-3l-.5-2.1a7.95 7.95 0 0 1-1.83-.76l-1.88 1.04-2.12-2.12 1.04-1.88a7.95 7.95 0 0 1-.76-1.83L2 13.5v-3l2.1-.5c.18-.64.44-1.25.76-1.83L3.82 6.29l2.12-2.12 1.88 1.04c.58-.32 1.19-.58 1.83-.76L10.5 2Zm1.5 6.25A3.75 3.75 0 1 0 12 15.75a3.75 3.75 0 0 0 0-7.5Z" />
+                  </svg>
+                </span>
+                <span class="accessibility-trigger__label">Accessibility</span>
+              </button>
+            </div>
+            <button
+              class="menu-toggle"
+              type="button"
+              data-nav-toggle
+              aria-expanded="false"
+              aria-controls="primary-navigation"
+              aria-label="Open menu"
+            >
+              Open menu
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main id="main-content" class="site-main">
+        <section class="section">
+          <div class="container">
+
+            <div class="section-heading">
+              <p class="eyebrow">Engine reference</p>
+              <h1>Access for All Engine — Reference</h1>
+              <p class="section-heading__support">
+                How the engine works, what each axis controls, the JS ↔ token chain,
+                the <code>data-*</code> attribute contract, localStorage structure,
+                directory architecture, and the implementation rules that keep the engine consistent.
+              </p>
+            </div>
+
+            <nav class="doc-toc" aria-label="Engine reference contents">
+              <strong class="doc-toc__title">Jump to reference section</strong>
+              <ul class="doc-toc__list">
+                <li><a href="#overview">Overview &amp; philosophy</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#token-chain">JS to token chain</a></li>
+                <li><a href="#data-contract">Data contract</a></li>
+                <li><a href="#landmark-axis">Landmark axis</a></li>
+                <li><a href="#localstorage">Storage</a></li>
+                <li><a href="#state-behaviour">State behaviour &amp; conjunction</a></li>
+                <li><a href="#public-api">Public API</a></li>
+                <li><a href="#implementation-model">Implementation model</a></li>
+                <li><a href="#add-control">Adding a control</a></li>
+                <li><a href="#mobile">Mobile model</a></li>
+                <li><a href="#talkback">Talkback</a></li>
+                <li><a href="#consent">Consent</a></li>
+                <li><a href="#build-rules">Build rules</a></li>
+                <li><a href="#token-map">Token mapping</a></li>
+              </ul>
+            </nav>
+
+            <!-- ═══════════════════════════════════════════
+                 1. OVERVIEW
+            ═══════════════════════════════════════════ -->
+            <div class="doc-section" id="overview">
+              <h2>1. Overview</h2>
+              <p>
+                The GM accessibility engine is a fully self-contained runtime preference system built
+                to solve a problem that OS-level accessibility tools cannot solve in the real world:
+                inconsistency. macOS VoiceOver and Zoom are excellent. ChromeOS accessibility is
+                nearly non-functional. Linux kiosk and POS terminal environments have fractured or
+                absent support. Corporate locked-down systems often have accessibility disabled
+                entirely. The engine treats all of those environments identically, because it
+                runs entirely inside the webpage.
+              </p>
+              <p>
+                Each user interaction writes a <code>data-*</code> attribute to <code>&lt;html&gt;</code>
+                and, for numeric values, also writes a CSS custom property directly.
+                CSS rules keyed to those attributes change the visual rendering immediately.
+                No page reload. No class toggling. No framework dependency. No OS required.
+              </p>
+
+              <h3>The conjunction principle</h3>
+              <p>
+                Every axis works independently <em>and</em> in conjunction with every other axis.
+                This is not incidental — it is the core design decision. A user with low vision,
+                photosensitivity, and dyslexia does not need three separate tools. They need one
+                engine that honours all three preferences simultaneously, as a single bespoke
+                configuration. The engine never suppresses, softens, or overrides a combination
+                because it looks unusual. If the user has chosen Dark mode + Yellow palette +
+                Warm filter, that is an intentional, valid, and respected user decision.
+              </p>
+
+              <h3>The palette tool — what it actually does</h3>
+              <p>
+                A common misconception is that the palette tool is an accent colour picker.
+                It is not. Activating a palette flattens the entire viewing surface. All backgrounds
+                collapse to neutral greys (light mode) or near-blacks (dark mode). All shadows
+                are suppressed. Images and hero art step back dramatically. The chosen colour
+                then floods every chromatic role simultaneously — text, borders, accent, focus ring,
+                and the full brand tonal scale. The result is a clean, single-colour reading
+                environment where the chosen colour <em>is</em> the design.
+              </p>
+              <p>
+                When a palette is combined with high contrast (plus-3 or above), interactive
+                elements escalate further: buttons transition from wireframe outlines to solid
+                colour fills. At plus-4 and plus-5 all interactive surfaces — primary and secondary
+                buttons, form inputs, card borders — fill solidly in the palette colour with
+                contrasting text (e.g. Yellow fill, Black text). The visual hierarchy becomes
+                entirely colour-driven with maximum separation between interactive and passive elements.
+              </p>
+
+              <h3>Persistence and boot</h3>
+              <p>
+                State is persisted in <code>localStorage</code> under the key
+                <code>"gm-accessibility-state"</code> (version key:
+                <code>"gm-accessibility-version"</code>, current value: <code>"5"</code>).
+                On every page load the engine reads stored state, normalises it, and applies it
+                before the first paint — the page never flashes the default state first.
+              </p>
+              <p>
+                The engine exposes a public API at <code>window.accessibilityEngine</code> that
+                site-ui.js and any page script can call to read, update, subscribe to, or reset state.
+              </p>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 2. ARCHITECTURE
+            ═══════════════════════════════════════════ -->
+            <div class="doc-section" id="architecture">
+              <h2>2. Directory architecture</h2>
+              <pre tabindex="0"><code>frontend/
+├── index.html                   ← permanent keeper page
+├── pages/
+│   ├── demo.html                ← DELETE before launch
+│   └── engine.html              ← DELETE before launch (this file)
+├── scripts/
+│   ├── accessibility-engine.js  ← state machine, CSS token writes, talkback
+│   └── site-ui.js               ← nav drawer, modal, form wiring, consent
+├── styles/
+│   ├── master.css               ← @import orchestrator only (no rules)
+│   ├── base/
+│   │   ├── fonts.css            ← @font-face declarations
+│   │   ├── variables.css        ← all CSS custom property tokens
+│   │   ├── reset.css            ← browser normalisation
+│   │   └── typography.css       ← base text styles
+│   ├── layout/
+│   │   ├── shell.css            ← site-shell, backdrop, full-page layout
+│   │   ├── grid.css             ← container, card-grid, layout primitives
+│   │   ├── header.css           ← utility-bar, brand, menu toggle
+│   │   └── navigation.css       ← desktop nav list, mobile nav drawer
+│   ├── components/
+│   │   ├── buttons.css          ← button primitives and variants
+│   │   ├── cards.css            ← card, stat-panel, callout-panel
+│   │   ├── forms.css            ← engine form UI, contact form, controls
+│   │   ├── modal.css            ← desktop modal, mobile engine drawer
+│   │   └── utilities.css        ← single-purpose helper classes
+│   └── themes/
+│       └── accessibility.css    ← engine state overrides (loaded last)
+└── assets/
+    ├── fonts/
+    │   └── accessibility/       ← bundled Atkinson Hyperlegible, OpenDyslexic, OFL licenses
+    └── images/                  ← logo variants, hero images</code></pre>
+
+              <div class="doc-note">
+                <strong>Load order is enforced by master.css.</strong>
+                fonts → variables → reset → typography → shell → grid → header → navigation →
+                buttons → cards → forms → modal → utilities → accessibility (last, so overrides win).
+              </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 3. JS ↔ TOKEN CHAIN
+            ═══════════════════════════════════════════ -->
+            <div class="doc-section" id="token-chain">
+              <h2>3. JS ↔ token chain</h2>
+              <p>When a user changes a control, the sequence is:</p>
+              <ol>
+                <li>
+                  <code>site-ui.js</code> calls <code>engine.updateState(newState)</code>
+                </li>
+                <li>
+                  <code>accessibility-engine.js</code> normalises state → writes
+                  <code>data-*</code> attributes to <code>&lt;html&gt;</code>
+                </li>
+                <li>
+                  For numeric axes (fontScale, lineSpacing, etc.) the engine also writes
+                  CSS custom properties directly to <code>:root</code> — e.g.
+                  <code>document.documentElement.style.setProperty("--gm-font-scale", value)</code>
+                </li>
+                <li>
+                  CSS rules in <code>themes/accessibility.css</code> key to those attributes
+                  and tokens — e.g. <code>html[data-appearance="dark"] { ... }</code>
+                </li>
+                <li>
+                  Subscribers registered via <code>engine.subscribe(fn)</code> are notified
+                </li>
+                <li>
+                  State is written to <code>localStorage</code>
+                </li>
+              </ol>
+
+              <h3>Numeric token writes (set on :root by the engine)</h3>
+              <table class="doc-table">
+                <thead>
+                  <tr>
+                    <th>State key</th>
+                    <th>CSS property written</th>
+                    <th>Unit / calculation</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>fontScale</code></td><td><code>--gm-font-scale</code></td><td><code>value / 100</code> (unitless multiplier)</td></tr>
+                  <tr><td><code>lineSpacing</code></td><td><code>--gm-line-height</code></td><td><code>value / 100</code></td></tr>
+                  <tr><td><code>paragraphSpacing</code></td><td><code>--gm-paragraph-gap</code></td><td><code>value / 100</code></td></tr>
+                  <tr><td><code>letterSpacing</code></td><td><code>--gm-letter-spacing</code></td><td><code>value / 100</code> + <code>em</code> — max value 12 produces 0.12em, the WCAG 1.4.12 minimum letter-spacing</td></tr>
+                  <tr><td><code>wordSpacing</code></td><td><code>--gm-word-spacing</code></td><td><code>value / 100em</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 4. DATA-* ATTRIBUTE CONTRACT
+            ═══════════════════════════════════════════ -->
+            <div class="doc-section" id="data-contract">
+              <h2>4. <code>data-*</code> attribute contract</h2>
+              <p>
+                All engine state is reflected on <code>&lt;html&gt;</code> as
+                <code>data-*</code> attributes. CSS reads them. JavaScript reads and writes them
+                via the engine API only — never directly.
+              </p>
+
+              <table class="doc-table">
+                <thead>
+                  <tr>
+                    <th>Attribute</th>
+                    <th>Allowed values</th>
+                    <th>Default</th>
+                    <th>What it controls</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>data-theme</code></td>
+                    <td><code>default</code></td>
+                    <td><code>default</code></td>
+                    <td>Reserved for site-level theme switching (future use). Present on <code>&lt;html&gt;</code> from initial render.</td>
+                  </tr>
+                  <tr>
+                    <td><code>data-appearance</code></td>
+                    <td><code>default | light | dark</code></td>
+                    <td><code>default</code></td>
+                    <td>Light / dark mode. "default" follows <code>prefers-color-scheme</code>.</td>
+                  </tr>
+                  <tr>
+                    <td><code>data-palette</code></td>
+                    <td><code>default | monochrome | blue | aqua | green | orange | purple | pink | yellow | red</code></td>
+                    <td><code>default</code></td>
+                    <td>Colour palette override. Remaps the <code>--colour-*</code> token family.</td>
+                  </tr>
+                  <tr>
+                    <td><code>data-contrast</code></td>
+                    <td><code>minus-5 … default … plus-5</code></td>
+                    <td><code>default</code></td>
+                    <td>Contrast level. Adjusts <code>color-mix()</code> ratios on text/surface tokens.</td>
+                  </tr>
+                  <tr>
+                    <td><code>data-depth</code></td>
+                    <td><code>default | reduced | off</code></td>
+                    <td><code>default</code></td>
+                    <td>Shadow intensity. "off" removes all box-shadows.</td>
+                  </tr>
+                  <tr>
+                    <td><code>data-font</code></td>
+                    <td><code>default | legible | dyslexia | system</code></td>
+                    <td><code>default</code></td>
+                    <td>Typeface override. Switches <code>--font-body</code> token.</td>
+                  </tr>
+                  <tr>
+                    <td><code>data-tint</code></td>
+                    <td><code>default | warm | cool | soft | monochrome | dim | bright</code></td>
+                    <td><code>default</code></td>
+                    <td>Whole-viewport visual filter type. Applied via <code>--site-visual-filter</code>.</td>
+                  </tr>
+                  <tr>
+                    <td><code>data-filter-strength</code></td>
+                    <td><code>default | low | medium | high</code></td>
+                    <td><code>default</code></td>
+                    <td>Filter intensity multiplier. Works with <code>data-tint</code>.</td>
+                  </tr>
+                  <tr>
+                    <td><code>data-reader</code></td>
+                    <td><code>default | focused</code></td>
+                    <td><code>default</code></td>
+                    <td>Reading mode. "focused" narrows the reading measure via <code>--gm-reading-measure</code>.</td>
+                  </tr>
+                  <tr>
+                    <td><code>data-guide</code></td>
+                    <td><code>off | 1 | 3 | 5</code></td>
+                    <td><code>off</code></td>
+                    <td>Reading guide ruler height (lines). Engine creates/destroys a <code>[data-guide-layer]</code> div.</td>
+                  </tr>
+                  <tr>
+                    <td><code>data-talkback</code></td>
+                    <td><code>off | hover | focus | both</code></td>
+                    <td><code>off</code></td>
+                    <td>Talkback invocation mode. "hover" = mouse, "focus" = keyboard, "both" = either.</td>
+                  </tr>
+                  <tr>
+                    <td><code>data-bold</code></td>
+                    <td><code>default | level-1 | level-2 | level-3 | level-4</code></td>
+                    <td><code>default</code></td>
+                    <td>Font weight boost. Progressively increases <code>font-weight</code> on body text.</td>
+                  </tr>
+                  <tr>
+                    <td><code>data-motion</code></td>
+                    <td><code>default | reduced | off</code></td>
+                    <td><code>default</code></td>
+                    <td>Motion reduction. "off" removes all transitions/animations.</td>
+                  </tr>
+                  <tr>
+                    <td><code>data-transparency</code></td>
+                    <td><code>default | reduced | off</code></td>
+                    <td><code>default</code></td>
+                    <td>Transparency reduction. Affects frosted surfaces, overlays, and backdrop-filter.</td>
+                  </tr>
+                  <tr>
+                    <td><code>data-focus</code></td>
+                    <td><code>default | medium | high</code></td>
+                    <td><code>default</code></td>
+                    <td>Focus ring strength. Adjusts <code>--gm-focus-width</code> and <code>--gm-focus-offset</code>.</td>
+                  </tr>
+                  <tr>
+                    <td><code>data-links</code></td>
+                    <td><code>default | medium | high</code></td>
+                    <td><code>default</code></td>
+                    <td>"medium" adds thicker underline. "high" adds thick underline + background highlight on inline text links (p, li, dd, blockquote, figcaption), making links unmistakable without changing navigation or button styling.</td>
+                  </tr>
+                  <tr>
+                    <td><code>data-landmark</code></td>
+                    <td><code>off | soft | clear</code></td>
+                    <td><code>off</code></td>
+                    <td>
+                      Landmark region highlighting. "soft" adds an inset outline stripe.
+                      "clear" adds a dashed outline. Applied to elements with
+                      <code>[data-accessibility-region]</code>. Zero layout shift — uses
+                      <code>outline</code> and <code>outline-offset</code>, not border width or padding changes.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>data-media</code></td>
+                    <td><code>default | medium | high</code></td>
+                    <td><code>default</code></td>
+                    <td>Image/media dimming. Reduces opacity on <code>img</code>, <code>video</code>, and <code>picture</code> elements.</td>
+                  </tr>
+                  <tr>
+                    <td><code>data-spacing</code></td>
+                    <td>(numeric tokens, set via CSS properties)</td>
+                    <td>—</td>
+                    <td>Font scale, line spacing, etc. are applied as <code>--gm-*</code> properties, not a single data attribute.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 5. LANDMARK AXIS — DESIGN DECISION
+            ═══════════════════════════════════════════ -->
+            <div class="doc-section" id="landmark-axis">
+              <h2>5. Landmark axis — design rationale</h2>
+              <p>
+                Earlier engine versions had two separate boolean toggles:
+                <code>highlightControls</code> (highlight buttons and inputs) and
+                <code>highlightRegions</code> (highlight landmark regions).
+                Real-world testing showed this combination caused issues:
+              </p>
+              <ul>
+                <li>Applying <code>border</code> to landmark elements caused layout shift</li>
+                <li>The two-control surface added visual noise in the engine panel</li>
+                <li>Highlighting form controls separately overlapped with <code>focusBoost</code></li>
+              </ul>
+              <p>The engine redesigns this as a single three-state axis:</p>
+              <table class="doc-table">
+                <thead>
+                  <tr>
+                    <th>Value</th>
+                    <th>Visual effect</th>
+                    <th>CSS technique</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>off</code></td>
+                    <td>No highlighting</td>
+                    <td>—</td>
+                  </tr>
+                  <tr>
+                    <td><code>soft</code></td>
+                    <td>Subtle inset stripe inside each annotated region</td>
+                    <td><code>outline: var(--gm-landmark-stripe-width) solid color-mix(...)</code> with a negative <code>outline-offset</code></td>
+                  </tr>
+                  <tr>
+                    <td><code>clear</code></td>
+                    <td>Dashed outer outline around each annotated region</td>
+                    <td><code>outline: 2px dashed color-mix(...)</code> — stronger visibility without touching box model width</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>
+                The engine's <code>annotateRegions()</code> function stamps
+                <code>data-accessibility-region</code> on the shared shell and content containers it
+                actually queries today:
+                <code>.site-header</code>, <code>.primary-nav</code>, <code>main</code>,
+                <code>main section</code>, <code>main article</code>, <code>main aside</code>,
+                and <code>.site-footer</code>. CSS in
+                <code>themes/accessibility.css</code> targets
+                <code>html[data-landmark="soft"] [data-accessibility-region]</code> and
+                <code>html[data-landmark="clear"] [data-accessibility-region]</code>.
+              </p>
+              <p>
+                No pseudo-element labels. No border (which shifts layout). No JS class toggling.
+              </p>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 6. LOCALSTORAGE STRUCTURE
+            ═══════════════════════════════════════════ -->
+            <div class="doc-section" id="localstorage">
+              <h2>6. localStorage structure</h2>
+              <p>Two keys are written:</p>
+              <ul>
+                <li>
+                  <code>"gm-accessibility-state"</code> — JSON object containing the full state snapshot
+                </li>
+                <li>
+                  <code>"gm-accessibility-version"</code> — string <code>"5"</code>
+                </li>
+              </ul>
+              <p>
+                On boot, if the stored version does not match <code>"5"</code>, the stored state
+                is discarded and defaults are used. This prevents stale state from a previous
+                engine version causing incorrect rendering.
+              </p>
+              <p>
+                The storage layer is defensive by design. <code>readStorage()</code> and
+                <code>writeStorage()</code> both sit inside <code>try / catch</code>, so
+                private browsing restrictions, blocked storage, or quota errors do not crash the
+                engine. The page simply falls back to the in-memory defaults.
+              </p>
+              <table class="doc-table">
+                <thead>
+                  <tr><th>Storage step</th><th>Actual JS behaviour</th><th>Why it matters</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Version gate</td><td><code>localStorage.getItem(storageVersionKey) !== "5"</code> clears the old state key.</td><td>Older schemas cannot silently leak into newer builds.</td></tr>
+                  <tr><td>Payload load</td><td><code>JSON.parse(stored)</code> is merged with defaults then passed through <code>normalizeState()</code>.</td><td>Even valid JSON still has to pass the allowed-value rules.</td></tr>
+                  <tr><td>Parse failure</td><td><code>loadState()</code> catches invalid JSON and returns a fresh copy of <code>defaults</code>.</td><td>Corrupt storage cannot break boot.</td></tr>
+                  <tr><td>Write control</td><td><code>updateState(partial, persist)</code> writes unless <code>persist === false</code>.</td><td>UI can preview or sync state without always committing it to storage.</td></tr>
+                </tbody>
+              </table>
+              <p>Example stored state:</p>
+              <pre tabindex="0"><code>{
+  "appearance":       "dark",
+  "palette":          "blue",
+  "contrast":         "plus-2",
+  "depth":            "default",
+  "font":             "legible",
+  "tint":             "warm",
+  "filterStrength":   "medium",
+  "readingMode":      "default",
+  "readingGuide":     "off",
+  "talkbackMode":     "off",
+  "speechRate":       100,
+  "fontScale":        120,
+  "lineSpacing":      120,
+  "paragraphSpacing": 100,
+  "letterSpacing":    0,
+  "wordSpacing":      0,
+  "boldText":         "default",
+  "motion":           "default",
+  "transparency":     "default",
+  "focusBoost":       "default",
+  "underlineLinks":   "medium",
+  "landmark":         "soft",
+  "dimMedia":         "default"
+}</code></pre>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 7. STATE BEHAVIOUR
+            ═══════════════════════════════════════════ -->
+            <div class="doc-section" id="state-behaviour">
+              <h2>7. State behaviour — independent, in conjunction, and without suppression</h2>
+              <p>
+                The engine models each axis completely independently, but every axis also stacks
+                coherently with every other axis. This is not a convenience feature — it is the
+                philosophical centre of the engine. Real users are not one-dimensional. A user may
+                need dyslexia-friendly type <em>and</em> reduced motion <em>and</em> a warm filter
+                because they are photosensitive <em>and</em> high contrast because they have low
+                vision. The engine honours all four simultaneously as a single bespoke configuration.
+              </p>
+
+              <h3>The no-suppression principle</h3>
+              <p>
+                The engine never examines a combination of active axes and decides that the combination
+                looks "wrong" or is "in conflict" and quietly overrides part of it. If a user selects
+                Dark mode + Yellow palette + Warm filter, they have chosen all three of those things
+                deliberately. The warm amber of the filter over the yellow palette in dark mode is
+                not a mistake — it is exactly what the user intended. Suppressing or "correcting" any
+                axis because of another is paternalistic and wrong.
+              </p>
+              <p>
+                This is a direct rejection of the accessibility tickbox mentality — the idea that
+                there is one correct "dark mode" user, one correct "high contrast" user, one correct
+                "dyslexia" user. There is no such thing. Each person's combination of preferences
+                defines their personal interface. Every combination the engine can produce is valid.
+              </p>
+
+              <h3>How axes stay stable when stacked</h3>
+              <p>
+                The engine separates root state, token assignment, and component consumption into
+                three distinct layers. That separation is what makes conjunction stable:
+              </p>
+
+              <table class="doc-table">
+                <thead>
+                  <tr>
+                    <th>Axis pairing</th>
+                    <th>What happens</th>
+                    <th>Why it stays stable</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>appearance + palette</code></td>
+                    <td>Dark mode flips surfaces and text. Palette then remaps the accent family over the dark base.</td>
+                    <td>Theme tokens and palette tokens are distinct token families. They do not overwrite the same concern.</td>
+                  </tr>
+                  <tr>
+                    <td><code>palette + contrast</code></td>
+                    <td>At plus-3: primary buttons become solid fills. At plus-4/5: all interactive elements fill with the palette colour and contrasting text (e.g. Yellow fill, Black text).</td>
+                    <td>The conjunction is modelled explicitly in variables.css. Specificity cascade ensures palette → contrast conjunction tokens win over individual axis tokens.</td>
+                  </tr>
+                  <tr>
+                    <td><code>appearance + palette + contrast</code></td>
+                    <td>Dark + Yellow + Contrast plus-4 = near-black surfaces, yellow text and borders everywhere, solid yellow buttons with black text.</td>
+                    <td>Each axis writes into a separate token concern. The dark base flattens surfaces, the palette floods colour roles, the conjunction escalates fills. No axis can cancel another.</td>
+                  </tr>
+                  <tr>
+                    <td><code>font + spacing + readingMode</code></td>
+                    <td>Typeface, text scale, letter spacing, word spacing, line height, and reading width all shift simultaneously.</td>
+                    <td>Each axis writes a separate runtime token. OpenDyslexic font automatically applies WCAG-compliant letter spacing (0.12em), word spacing (0.16em), and line height (1.65) as part of the font axis, not as a separate user step.</td>
+                  </tr>
+                  <tr>
+                    <td><code>tint + filterStrength</code></td>
+                    <td>Tint selects the filter type. FilterStrength is a multiplier that independently increases or decreases the effect.</td>
+                    <td>The filter values are look-up table driven — each combination of tint × strength has its own token set. No runtime calculation.</td>
+                  </tr>
+                  <tr>
+                    <td><code>tint + media</code></td>
+                    <td>The viewport filter shifts overall comfort. Media dimming dims and desaturates images independently.</td>
+                    <td>The viewport filter applies to .site-main/.site-header/.site-footer via CSS filter. Media dimming applies to img/video/picture elements separately. Two layers, no conflict.</td>
+                  </tr>
+                  <tr>
+                    <td><code>appearance + tint + warm</code></td>
+                    <td>Dark + Warm is a valid deliberate choice — it was the user's intent.</td>
+                    <td>The engine executes it fully. No suppression. See no-suppression principle above.</td>
+                  </tr>
+                  <tr>
+                    <td><code>contrast + transparency</code></td>
+                    <td>Higher contrast strengthens borders and surface separation. Transparency reduction removes blur and frosted effects.</td>
+                    <td>Contrast changes colour math. Transparency changes backdrop-filter and opacity behaviour. Separate axes, separate token concerns.</td>
+                  </tr>
+                  <tr>
+                    <td><code>motion + depth</code></td>
+                    <td>Motion can reduce or stop while layered shadows still remain, unless depth is also changed.</td>
+                    <td>Motion controls transition-duration and animation-duration. Depth controls box-shadow tokens. One does not disable the other.</td>
+                  </tr>
+                  <tr>
+                    <td><code>focus + links + landmark</code></td>
+                    <td>Focus rings, stronger link styling, and region visibility can all be active simultaneously.</td>
+                    <td>They affect distinct interactive signals: current target, link recognition, and page structure. No shared token path.</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="doc-note">
+                <strong>Design law:</strong>
+                If a new control cannot operate independently <em>and</em> survive combination with
+                every existing control without breaking either, it is not ready to join the engine.
+                Controls that only work in isolation are half-built.
+              </div>
+
+              <h3>Real-world configuration examples</h3>
+              <table class="doc-table">
+                <thead>
+                  <tr>
+                    <th>User need</th>
+                    <th>Engine configuration</th>
+                    <th>Visual result</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Low vision, high ambient light</td>
+                    <td>Dark + Blue palette + Contrast plus-4 + Bold level-2</td>
+                    <td>Near-black surfaces, blue text and borders, solid blue buttons with dark text, heavier weight throughout</td>
+                  </tr>
+                  <tr>
+                    <td>Dyslexia, needs calm reading surface</td>
+                    <td>OpenDyslexic font + Reading mode focused + Line spacing 140% + Soft filter</td>
+                    <td>Dyslexia-optimised typeface with auto-applied WCAG spacing, constrained 68ch measure, page visual noise reduced</td>
+                  </tr>
+                  <tr>
+                    <td>Photosensitivity, night use</td>
+                    <td>Dark + Warm filter high strength + Dim medium + Motion off</td>
+                    <td>Dark surfaces, strong amber tint reducing blue light, slightly dimmed overall, all animations stopped</td>
+                  </tr>
+                  <tr>
+                    <td>Cognitive load reduction</td>
+                    <td>Monochrome palette + Depth off + Media high + Reading mode focused</td>
+                    <td>Greyscale surfaces, flat (no shadows), images heavily desaturated, single narrow reading column</td>
+                  </tr>
+                  <tr>
+                    <td>Keyboard-only user</td>
+                    <td>Focus high + Links high + Landmark clear + Contrast plus-2</td>
+                    <td>7px focus ring visible from distance, thick underlined highlighted links, dashed landmark outlines, elevated contrast</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 8. PUBLIC API
+            ═══════════════════════════════════════════ -->
+            <div class="doc-section" id="public-api">
+              <h2>8. Public API — <code>window.accessibilityEngine</code></h2>
+              <table class="doc-table">
+                <thead>
+                  <tr>
+                    <th>Method / property</th>
+                    <th>Signature</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>defaults</code></td><td>object (read-only)</td><td>The engine's factory defaults for all state keys.</td></tr>
+                  <tr><td><code>getEffectiveTheme()</code></td><td>→ <code>"light" | "dark"</code></td><td>Resolves "default" appearance against <code>prefers-color-scheme</code>.</td></tr>
+                  <tr><td><code>getState()</code></td><td>→ state object</td><td>Returns a shallow copy of the current normalised state.</td></tr>
+                  <tr><td><code>normalizeState(partial)</code></td><td>partial → state</td><td>Merges partial state with defaults and clamps/validates all values.</td></tr>
+                  <tr><td><code>updateState(partial)</code></td><td>partial → void</td><td>Applies a partial state update, writes tokens, notifies subscribers, persists.</td></tr>
+                  <tr><td><code>resetState()</code></td><td>→ void</td><td>Resets all state to factory defaults and writes that clean snapshot back to storage.</td></tr>
+                  <tr><td><code>subscribe(fn)</code></td><td>fn(state) → unsubscribe fn</td><td>Registers a listener, immediately calls it once with the current state, then calls it on every later state change.</td></tr>
+                  <tr><td><code>syncForms()</code></td><td>→ void</td><td>Updates every <code>[data-accessibility-form]</code> field group to match current state, including selects, ranges, and support toggles.</td></tr>
+                  <tr><td><code>getPageMap()</code></td><td>→ array of regions</td><td>Returns an array of annotated landmark regions and their labels.</td></tr>
+                  <tr><td><code>jumpTo(targetId)</code></td><td>string → boolean</td><td>Looks up a DOM id, scrolls to that element, focuses it, and returns whether a matching id was found.</td></tr>
+                  <tr><td><code>isSpeechSupported()</code></td><td>→ boolean</td><td>Returns true if the browser's SpeechSynthesis API is available.</td></tr>
+                  <tr><td><code>getSpeechState()</code></td><td>→ speechState</td><td>Returns current talkback state: speaking, paused, source, label.</td></tr>
+                  <tr><td><code>subscribeSpeech(fn)</code></td><td>fn(speechState) → unsubscribe fn</td><td>Calls <code>fn</code> whenever talkback state changes.</td></tr>
+                  <tr><td><code>startReadAloud()</code></td><td>→ void</td><td>Begins page reading from the current queue source. If scoped talkback is active, the queue is built from that scope; otherwise it uses <code>main</code>.</td></tr>
+                  <tr><td><code>pauseReadAloud()</code></td><td>→ void</td><td>Pauses in-progress read-aloud.</td></tr>
+                  <tr><td><code>resumeReadAloud()</code></td><td>→ void</td><td>Resumes a paused read-aloud.</td></tr>
+                  <tr><td><code>stopReadAloud()</code></td><td>→ void</td><td>Stops and clears the read-aloud queue.</td></tr>
+                  <tr><td><code>activateScopedTalkback(scope)</code></td><td>element → void</td><td>Activates hover/focus talkback within a scoped DOM subtree only.</td></tr>
+                  <tr><td><code>deactivateScopedTalkback()</code></td><td>→ void</td><td>Returns talkback to its global behaviour.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 9. IMPLEMENTATION MODEL
+            ═══════════════════════════════════════════ -->
+            <div class="doc-section" id="implementation-model">
+              <h2>9. Implementation model — JS, tokens, and memory</h2>
+              <p>
+                The engine has three distinct layers of responsibility. Keeping them separate is the
+                reason it can scale.
+              </p>
+              <ol>
+                <li>
+                  <strong>Runtime state layer</strong><br />
+                  <code>accessibility-engine.js</code> owns defaults, allowed values, normalisation,
+                  localStorage versioning, read/write flow, and subscriber notifications.
+                </li>
+                <li>
+                  <strong>Presentation contract layer</strong><br />
+                  Root <code>data-*</code> attributes and runtime <code>--gm-*</code> properties form
+                  the contract that CSS reads. The engine writes state here, not into component classes.
+                </li>
+                <li>
+                  <strong>Consumption layer</strong><br />
+                  Components and layout CSS read the tokens. They should never need to know where the
+                  values came from, only that the token contract is valid.
+                </li>
+              </ol>
+
+              <p>
+                Memory behaviour is intentionally simple: the active state lives in JavaScript memory,
+                mirrors onto the root element, and is persisted to <code>localStorage</code> only as a
+                normalised snapshot. On reload, the snapshot is re-read, re-normalised, and re-applied.
+              </p>
+
+              <table class="doc-table">
+                <thead>
+                  <tr>
+                    <th>Phase</th>
+                    <th>What the engine does</th>
+                    <th>Where it writes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Boot</td>
+                    <td>Read stored version and state, reject stale or invalid values, resolve defaults.</td>
+                    <td>In-memory state object</td>
+                  </tr>
+                  <tr>
+                    <td>Apply</td>
+                    <td>Write root attributes and runtime variables.</td>
+                    <td><code>&lt;html&gt;</code> dataset and inline style properties</td>
+                  </tr>
+                  <tr>
+                    <td>Notify</td>
+                    <td>Tell UI subscribers and speech subscribers that something changed.</td>
+                    <td>Subscriber callbacks</td>
+                  </tr>
+                  <tr>
+                    <td>Persist</td>
+                    <td>Store the clean snapshot and version marker.</td>
+                    <td><code>localStorage</code></td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h3>Actual boot sequence in <code>accessibility-engine.js</code></h3>
+              <pre tabindex="0"><code>1. Define defaults, allowed lists, speech state, and helper functions
+2. loadState() → readStorage() → normalizeState()
+3. annotateRegions() stamps data-accessibility-region on shared landmarks and sections
+4. cacheSpeechVoices() hydrates browser voice candidates when available
+5. applyState(state) writes dataset values, runtime CSS props, any optional logo variants, and form values
+6. Runtime listeners attach for guide movement, talkback, speech, resize, visibility, and theme sync
+7. window.accessibilityEngine is exposed for site-ui.js and any other page consumer</code></pre>
+
+              <h3>Actual runtime writes</h3>
+              <table class="doc-table">
+                <thead>
+                  <tr><th>Write target</th><th>Source key</th><th>Exact calculation / value</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>root.dataset.theme</code></td><td><code>appearance</code></td><td>Resolved through <code>getEffectiveTheme()</code> against <code>prefers-color-scheme</code>.</td></tr>
+                  <tr><td><code>--gm-font-scale</code></td><td><code>fontScale</code></td><td><code>fontScale / 100</code></td></tr>
+                  <tr><td><code>--gm-line-height</code></td><td><code>lineSpacing</code></td><td><code>1.65 * (lineSpacing / 100)</code></td></tr>
+                  <tr><td><code>--gm-paragraph-gap</code></td><td><code>paragraphSpacing</code></td><td><code>(paragraphSpacing / 100) + "rem"</code></td></tr>
+                  <tr><td><code>--gm-letter-spacing</code></td><td><code>letterSpacing</code></td><td><code>(letterSpacing / 100) + "em"</code></td></tr>
+                  <tr><td><code>--gm-word-spacing</code></td><td><code>wordSpacing</code></td><td><code>(wordSpacing / 50) + "em"</code></td></tr>
+                  <tr><td><code>--gm-reading-measure</code></td><td><code>readingMode</code></td><td><code>100%</code> (default) or <code>68ch</code> (focused reading mode). ch unit scales with the active typeface so the measure stays proportional across all font choices.</td></tr>
+                  <tr><td><code>root.dataset.spacing</code></td><td>spacing group</td><td><code>"custom"</code> only when line, paragraph, letter, or word spacing differ from defaults.</td></tr>
+                </tbody>
+              </table>
+
+              <h3>Normalisation boundaries enforced in JS</h3>
+              <table class="doc-table">
+                <thead>
+                  <tr><th>Axis</th><th>Allowed range / set</th><th>Enforced by</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>fontScale</code></td><td><code>90 → 160</code> in <code>5</code> point steps</td><td><code>clampRange()</code></td></tr>
+                  <tr><td><code>lineSpacing</code></td><td><code>80 → 180</code> in <code>5</code> point steps</td><td><code>clampRange()</code></td></tr>
+                  <tr><td><code>paragraphSpacing</code></td><td><code>80 → 180</code> in <code>5</code> point steps</td><td><code>clampRange()</code></td></tr>
+                  <tr><td><code>letterSpacing</code></td><td><code>-8 → 12</code> in <code>1</code> point steps (max 12 produces 0.12em, the WCAG 1.4.12 minimum)</td><td><code>clampRange()</code></td></tr>
+                  <tr><td><code>wordSpacing</code></td><td><code>-10 → 14</code> in <code>1</code> point steps</td><td><code>clampRange()</code></td></tr>
+                  <tr><td><code>speechRate</code></td><td><code>85 | 100 | 115 | 130</code></td><td><code>normalizeNumberChoice()</code></td></tr>
+                </tbody>
+              </table>
+
+              <h3>Readable-node queue used by page reading</h3>
+              <p>
+                Full-page reading does not attempt to speak every DOM node. The queue is built by
+                <code>getReadableNodes(scopeRoot)</code>, which queries a fixed selector list and then
+                filters out empty nodes and, for full-page reading, any content inside the engine modal.
+              </p>
+              <table class="doc-table">
+                <thead>
+                  <tr><th>Part</th><th>Actual implementation</th><th>Effect</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Base root</td><td><code>scopeRoot instanceof Element ? scopeRoot : main</code></td><td>Page reading defaults to the live <code>&lt;main&gt;</code> tree, while scoped reading can target a subtree.</td></tr>
+                  <tr><td>Readable selector</td><td><code>h1, h2, h3, p, li, blockquote, figcaption, legend, .control-stack &gt; span, .control-group__description, .engine-note, .engine-form__status</code></td><td>The queue favours headings, body copy, and engine control labels/hints rather than every miscellaneous wrapper.</td></tr>
+                  <tr><td>Modal exclusion</td><td><code>if (!scopeRoot && node.closest(".accessibility-modal")) return false;</code></td><td>Global page reading skips the engine panel unless reading is explicitly scoped into it.</td></tr>
+                  <tr><td>Empty guard</td><td><code>node.textContent.trim().length &gt; 0</code></td><td>Whitespace-only nodes never enter the queue.</td></tr>
+                </tbody>
+              </table>
+
+              <h3>Voice scoring weights used by live talkback</h3>
+              <p>
+                The browser voice is chosen by score, not by first match. This keeps voice selection
+                predictable across systems that expose many local and remote voices.
+              </p>
+              <table class="doc-table">
+                <thead>
+                  <tr><th>Signal</th><th>Score effect</th><th>Notes</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Exact preferred language match</td><td><code>+40</code></td><td>Matches against document language and browser language list.</td></tr>
+                  <tr><td>Base language match</td><td><code>+28</code></td><td>Allows <code>en-GB</code> / <code>en-US</code> families to still rank well.</td></tr>
+                  <tr><td><code>voice.default</code></td><td><code>+16</code></td><td>Rewards the system-preferred voice.</td></tr>
+                  <tr><td><code>voice.localService</code></td><td><code>+10</code></td><td>Gives extra weight to locally available voices.</td></tr>
+                  <tr><td>Name hints such as <code>natural</code>, <code>neural</code>, <code>siri</code></td><td><code>+8</code></td><td>Favours higher-quality speech engines where exposed.</td></tr>
+                  <tr><td>Name hints such as <code>compact</code>, <code>espeak</code>, <code>robot</code></td><td><code>-10</code></td><td>Penalises lower-quality or more mechanical voices.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 10. HOW TO ADD A NEW CONTROL
+            ═══════════════════════════════════════════ -->
+            <div class="doc-section" id="add-control">
+              <h2>10. How to add a new engine control</h2>
+              <p>Adding a new accessibility axis is a four-step process:</p>
+
+              <ol>
+                <li>
+                  <strong>Add to <code>defaults</code> in accessibility-engine.js</strong><br />
+                  <code>myAxis: "default"</code>
+                </li>
+                <li>
+                  <strong>Add to <code>normalizeState()</code> in accessibility-engine.js</strong><br />
+                  <code>myAxis: normalizeChoice(nextState.myAxis, allowedMyAxisValues, defaults.myAxis)</code>
+                </li>
+                <li>
+                  <strong>Write the data attribute and/or CSS token in <code>applyState()</code></strong><br />
+                  <code>root.dataset.myAxis = state.myAxis;</code><br />
+                  or for numeric: <code>root.style.setProperty("--gm-my-token", computedValue);</code>
+                </li>
+                <li>
+                  <strong>Add the CSS rule in <code>themes/accessibility.css</code></strong><br />
+                  <code>html[data-my-axis="value"] { /* rule */ }</code>
+                </li>
+                <li>
+                  <strong>Add the form field in each page's engine modal HTML</strong><br />
+                  <code>&lt;label class="control-stack"&gt;&lt;span&gt;Label&lt;/span&gt;&lt;select name="myAxis"&gt;...&lt;/select&gt;&lt;/label&gt;</code>
+                </li>
+                <li>
+                  <strong>Add to <code>acMobileBranches</code> in site-ui.js</strong><br />
+                  Add <code>"myAxis"</code> to the appropriate branch's <code>fields</code> array.
+                </li>
+                <li>
+                  <strong>Add to <code>collectFormState()</code> in site-ui.js</strong><br />
+                  <code>myAxis: getFieldValue("myAxis", currentState.myAxis)</code>
+                </li>
+              </ol>
+
+              <div class="doc-note">
+                Never add new CSS rules to <code>variables.css</code> or any base/layout file.
+                New engine state rules belong only in <code>themes/accessibility.css</code>.
+              </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 9. MOBILE ARCHITECTURE
+            ═══════════════════════════════════════════ -->
+            <div class="doc-section" id="mobile">
+              <h2>11. Mobile architecture</h2>
+              <p>
+                On screens ≤ 48rem, the desktop modal (<code>.modal-panel</code>) is hidden by CSS.
+                <code>site-ui.js</code> injects an <code>.ac-mobile-panel</code> inside the
+                <code>[data-accessibility-modal]</code> wrapper at runtime.
+              </p>
+              <p>The mobile panel structure (built by JS):</p>
+              <pre tabindex="0"><code>.ac-mobile-panel               ← left-side drawer shell (position: fixed)
+  └─ .nav-drawer__shell          ← frosted glass surface
+       ├─ .ac-mobile-top         ← top bar: back | brand | close
+       │    ├─ .ac-mobile-back   ← returns to branch menu
+       │    ├─ .ac-mobile-brand  ← cloned .brand-mark from header
+       │    └─ .ac-mobile-close  ← closes the engine
+       ├─ .ac-mobile-menu        ← branch menu buttons (index view)
+       ├─ .ac-mobile-content     ← scrollable content pane (per-branch)
+       └─ .ac-mobile-actions     ← save / reset strip</code></pre>
+
+              <p>
+                The content pane holds a subset of the engine form. The mobile branches
+                defined in <code>site-ui.js</code> partition the form controls:
+              </p>
+              <table class="doc-table">
+                <thead>
+                  <tr><th>Branch id</th><th>Label</th><th>Fields</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>theme</code></td><td>Theme</td><td>appearance</td></tr>
+                  <tr><td><code>colour</code></td><td>Colour</td><td>palette, contrast, tint, filterStrength</td></tr>
+                  <tr><td><code>layout</code></td><td>Layout</td><td>depth, transparency, motion</td></tr>
+                  <tr><td><code>text</code></td><td>Text</td><td>font, boldText, readingMode</td></tr>
+                  <tr><td><code>spacing</code></td><td>Spacing</td><td>fontScale, lineSpacing, paragraphSpacing, letterSpacing, wordSpacing</td></tr>
+                  <tr><td><code>support</code></td><td>Support</td><td>focusBoost, underlineLinks, landmark</td></tr>
+                  <tr><td><code>media</code></td><td>Media</td><td>dimMedia</td></tr>
+                </tbody>
+              </table>
+
+              <p>
+                <code>syncAccessibilityView()</code> moves the shared
+                <code>.modal-content</code> DOM node between the desktop modal
+                and the mobile content pane depending on viewport width — no duplication.
+              </p>
+
+              <p>
+                The right-side navigation drawer (for site nav) is a separate panel built by
+                <code>buildMobileNavigationDrawer()</code> and has nothing to do with the engine.
+                Both drawers respect focus trapping, swipe-to-dismiss, and Escape key handling.
+              </p>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 10. TALKBACK
+            ═══════════════════════════════════════════ -->
+            <div class="doc-section" id="talkback">
+              <h2>12. Talkback / read-aloud</h2>
+              <p>
+                Talkback uses the browser's <code>SpeechSynthesis</code> API.
+                It is not a screen reader — it is an on-demand reading layer for users who
+                want spoken support without enabling full assistive technology.
+              </p>
+              <ul>
+                <li>
+                  <strong>Hover / focus talkback</strong> — reads the element under the pointer
+                  or the focused element, depending on <code>talkbackMode</code>
+                  ("hover", "focus", or "both").
+                </li>
+                <li>
+                  <strong>Read-aloud</strong> — reads the full page sequentially. Controlled via
+                  <code>[data-speech-play]</code>, <code>[data-speech-pause]</code>,
+                  <code>[data-speech-stop]</code> buttons.
+                </li>
+                <li>
+                  <strong>Scoped talkback</strong> — <code>activateScopedTalkback(element)</code>
+                  restricts hover/focus reading to a specific DOM subtree. Used in the engine modal
+                  so talkback only reads the panel while it is open.
+                </li>
+              </ul>
+              <p>
+                Elements can have a <code>data-speech-description</code> attribute to provide
+                an alternative spoken label — used on images and complex interactive elements.
+              </p>
+              <h3>Selectors and delays used by live talkback</h3>
+              <table class="doc-table">
+                <thead>
+                  <tr><th>Part</th><th>Actual implementation</th><th>Result</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Focus selector</td><td><code>button, a, input, select, textarea, summary, label, [role="button"], [role="link"], [role="checkbox"], [role="radio"], [tabindex], h1, h2, h3, p, li, blockquote, figcaption, img</code></td><td>Keyboard users can trigger speech on controls, labelled custom widgets, and core content blocks.</td></tr>
+                  <tr><td>Pointer selector</td><td>Focus selector plus <code>h4-h6</code>, <code>legend</code>, <code>dt</code>, and <code>dd</code></td><td>Pointer users get broader descriptive coverage for lower-level content labels and glossary-style structures.</td></tr>
+                  <tr><td>Focus delay</td><td><code>72ms</code> normally, <code>0ms</code> for scoped panel talkback</td><td>Fast feedback without over-speaking while tabbing.</td></tr>
+                  <tr><td>Pointer delay</td><td><code>240ms</code></td><td>Stops speech firing on every incidental hover pass.</td></tr>
+                  <tr><td>Hidden guard</td><td>Direct nodes with <code>hidden</code>, <code>aria-hidden="true"</code>, or <code>tabindex="-1"</code>, plus ancestors matching <code>[hidden]</code>, <code>.visually-hidden</code>, or <code>.hidden</code>, are excluded.</td><td>Talkback stays aligned to what the user can actually reach or perceive.</td></tr>
+                </tbody>
+              </table>
+
+              <h3>Voice and queue model</h3>
+              <p>
+                Voice selection is scored rather than guessed. The engine caches browser voices,
+                checks preferred languages from the document and browser, rewards signals such as
+                <code>default</code>, <code>localService</code>, <code>natural</code>, and
+                <code>neural</code>, and penalises lower-quality markers such as <code>espeak</code>.
+                The highest-scoring voice is then assigned in <code>configureUtterance()</code>.
+              </p>
+              <p>
+                Live talkback and full-page reading are separate flows. <code>speakLiveTarget()</code>
+                describes one current element at a time, while page reading builds a
+                <code>speechQueue</code> from headings, paragraphs, list items, blockquotes,
+                figcaptions, legends, engine notes, and control descriptions, then advances through
+                the queue with <code>speakNextBlock()</code> until the session ends.
+              </p>
+
+              <h3>Speech label precedence</h3>
+              <p>
+                For live target speech, the runtime resolves a label chain in order and stops at the
+                first useful result instead of blindly reading raw text content.
+              </p>
+              <table class="doc-table">
+                <thead>
+                  <tr><th>Priority</th><th>Source</th><th>Notes</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>1</td><td><code>data-speech-label</code></td><td>Highest-priority explicit spoken label.</td></tr>
+                  <tr><td>2</td><td><code>data-speech-description</code> / <code>aria-label</code></td><td>Used for custom wording or non-visible descriptive copy.</td></tr>
+                  <tr><td>3</td><td><code>aria-labelledby</code> and linked label text</td><td>Resolves associated labels for real form fields and grouped controls.</td></tr>
+                  <tr><td>4</td><td>Image description chain</td><td>For images: <code>data-speech-description</code>, <code>aria-description</code>, <code>data-image-description</code>, <code>alt</code>, then <code>figcaption</code>.</td></tr>
+                  <tr><td>5</td><td>Placeholder / current field value / <code>textContent</code></td><td>Fallbacks for plain text fields and ordinary content nodes.</td></tr>
+                </tbody>
+              </table>
+
+              <h3>Scoped talkback event model</h3>
+              <p>
+                Scoped talkback is not just a flag. Once a scope is activated, the runtime listens
+                across several event types to keep select menus and mobile interaction truthful.
+              </p>
+              <table class="doc-table">
+                <thead>
+                  <tr><th>Event</th><th>Actual implementation</th><th>Reason</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>focusin</code></td><td>Queues focus speech for the focused node when focus talkback or scoped talkback is active.</td><td>Keyboard navigation gets spoken feedback as users tab through controls and content.</td></tr>
+                  <tr><td><code>click</code></td><td>In scoped mode, taps/clicks on selects and other controls can queue immediate focus speech, especially on Apple mobile platforms.</td><td>Compensates for mobile/select interaction patterns where hover does not exist.</td></tr>
+                  <tr><td><code>touchend</code></td><td>Scoped Apple mobile interactions trigger immediate speech for the touched target.</td><td>Keeps the panel usable on iPhone/iPad where speech timing differs from desktop pointer behaviour.</td></tr>
+                  <tr><td><code>keydown</code></td><td>Selection keys on scoped <code>&lt;select&gt;</code> elements queue option-only speech immediately.</td><td>Users hear option changes while navigating menus with arrow keys, Home/End, or paging keys.</td></tr>
+                  <tr><td><code>input</code> / <code>change</code></td><td>Scoped <code>&lt;select&gt;</code> changes queue the newly chosen option for speech.</td><td>The spoken value stays in sync with the current selected option rather than only the field label.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 11. CONSENT SYSTEM
+            ═══════════════════════════════════════════ -->
+            <div class="doc-section" id="consent">
+              <h2>13. Consent system</h2>
+              <p>
+                <code>site-ui.js</code> includes a lightweight consent banner and modal.
+                Storage keys:
+              </p>
+              <ul>
+                <li><code>"gm-consent-state"</code> — JSON: <code>{ analytics: bool, marketing: bool }</code></li>
+                <li><code>"gm-consent-version"</code> — <code>"1"</code></li>
+              </ul>
+              <p>
+                The banner and modal HTML are injected by JS. You do not need to add them to pages
+                manually. The footer button with <code>data-consent-manage-open</code> opens the
+                modal for users who want to change their choices later.
+              </p>
+              <p>
+                The consent system does not set any cookies itself. Wire your analytics or
+                marketing scripts to check consent state before executing.
+              </p>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 12. BUILD RULES
+            ═══════════════════════════════════════════ -->
+            <div class="doc-section" id="build-rules">
+              <h2>14. Build and integration rules</h2>
+              <p>These rules apply to every file in this project, without exception:</p>
+
+              <div class="doc-law">
+                <strong>Rule 1 — No hard-coded colours in components</strong>
+                Every colour value must come from a CSS custom property token.
+                Never write hex, rgb(), or hsl() in component files.
+                Use <code>color-mix()</code> for computed values.
+              </div>
+
+              <div class="doc-law">
+                <strong>Rule 2 — master.css imports only</strong>
+                <code>master.css</code> must contain nothing but <code>@import</code> statements.
+                No visual rules. Load order is enforced by the import sequence.
+              </div>
+
+              <div class="doc-law">
+                <strong>Rule 3 — Variables.css declares, accessibility.css overrides</strong>
+                All token declarations live in <code>base/variables.css</code>.
+                All engine state overrides live in <code>themes/accessibility.css</code>.
+                No engine state rules in any other file.
+              </div>
+
+              <div class="doc-law">
+                <strong>Rule 4 — Keep the starter neutral</strong>
+                The GM is a reusable starting point. Keep reference pages and demo copy generic,
+                and do not let product-specific branding or project-specific content become part of
+                the shared engine baseline.
+              </div>
+
+              <div class="doc-law">
+                <strong>Rule 5 — CSS namespace</strong>
+                Engine tokens use the <code>--gm-</code> prefix.
+                Avoid introducing one-off prefixes that tie shared engine styles to a single page or build.
+              </div>
+
+              <div class="doc-law">
+                <strong>Rule 6 — No layout shift from engine controls</strong>
+                Engine state changes must not shift content. Use <code>outline</code> not
+                <code>border</code> when adding visual indicators to existing elements.
+                The GM landmark axis follows this by using outlines and outline offsets
+                rather than adding border width or padding.
+              </div>
+
+              <div class="doc-law">
+                <strong>Rule 7 — No direct DOM manipulation of state attributes</strong>
+                State attributes on <code>&lt;html&gt;</code> must only be written by
+                <code>accessibility-engine.js</code> via <code>applyState()</code>.
+                No other script should write <code>data-appearance</code>,
+                <code>data-palette</code>, etc.
+              </div>
+
+              <div class="doc-law">
+                <strong>Rule 8 — The engine modal must not receive the visual filter</strong>
+                The <code>--site-visual-filter</code> is applied to the site shell.
+                The engine modal must be outside the site shell or otherwise excluded,
+                so filter changes don't distort the panel the user is currently adjusting.
+              </div>
+
+              <div class="doc-law">
+                <strong>Rule 9 — Modular CSS, never a monolith</strong>
+                CSS files must not be merged. Each file has a single, named responsibility.
+                Source order is the cascade — do not fight it with <code>!important</code>.
+              </div>
+
+              <div class="doc-law">
+                <strong>Rule 10 — Deletable pages are clearly marked</strong>
+                <code>demo.html</code> and <code>engine.html</code> carry a visible optional-use
+                banner, a <code>noindex, nofollow</code> robots tag, and a comment block at the
+                top of the file. <code>index.html</code> is the only page that ships by default.
+              </div>
+
+              <div class="doc-law">
+                <strong>Rule 11 — The engine never suppresses a user combination</strong>
+                No engine code, CSS rule, or token conjunction block may detect an axis combination
+                and reduce, override, or silently soften another axis because of it. Dark + Yellow +
+                Warm is a user decision, not an error state. Every combination the engine can produce
+                is valid and intentional. Suppression is paternalistic and belongs in no accessibility tool.
+              </div>
+
+              <div class="doc-law">
+                <strong>Rule 12 — OS independence is a first-class requirement</strong>
+                The engine must function identically on macOS, Windows, ChromeOS, Linux kiosks,
+                POS terminals, and corporate locked-down environments. Any feature that requires
+                an OS-level accessibility API to function is not complete. Design for the user
+                whose OS gives them nothing.
+              </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 13. TOKEN MAP — QUICK REFERENCE
+            ═══════════════════════════════════════════ -->
+            <div class="doc-section" id="token-map">
+              <h2>15. Token quick reference</h2>
+              <p>
+                Full mapping lives in <code>docs/Token-Mapping.md</code>. Key tokens:
+              </p>
+              <table class="doc-table">
+                <thead>
+                  <tr><th>Token</th><th>Written by</th><th>Read by</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>--colour-accent</code></td><td>variables.css + accessibility.css (per palette)</td><td>buttons, links, focus ring, brand accents</td></tr>
+                  <tr><td><code>--colour-surface</code></td><td>variables.css + accessibility.css</td><td>cards, modal panel, nav drawer</td></tr>
+                  <tr><td><code>--colour-text</code></td><td>variables.css + accessibility.css</td><td>typography, icons, SVGs</td></tr>
+                  <tr><td><code>--colour-border</code></td><td>variables.css + accessibility.css</td><td>inputs, cards, separators</td></tr>
+                  <tr><td><code>--focus-ring-colour</code></td><td>variables.css</td><td>focus-visible ring on all interactive elements</td></tr>
+                  <tr><td><code>--gm-font-scale</code></td><td>accessibility-engine.js (runtime)</td><td>typography.css base font-size calc</td></tr>
+                  <tr><td><code>--gm-line-height</code></td><td>accessibility-engine.js (runtime)</td><td>typography.css line-height calc</td></tr>
+                  <tr><td><code>--gm-paragraph-gap</code></td><td>accessibility-engine.js (runtime)</td><td>typography.css margin-block-end on p</td></tr>
+                  <tr><td><code>--gm-letter-spacing</code></td><td>accessibility-engine.js (runtime)</td><td>typography.css letter-spacing</td></tr>
+                  <tr><td><code>--gm-word-spacing</code></td><td>accessibility-engine.js (runtime)</td><td>typography.css word-spacing</td></tr>
+                  <tr><td><code>--gm-visual-filter</code></td><td>variables.css (per tint + filterStrength)</td><td>accessibility.css, applied to .site-header/.site-main/.site-footer (not the engine panel)</td></tr>
+                  <tr><td><code>--viewport-filter-overlay</code></td><td>variables.css (set per tint value at high filterStrength)</td><td>accessibility.css .site-main::after — a fixed-position overlay that adds a warm or cool colour wash without affecting the engine panel</td></tr>
+                  <tr><td><code>--focus-ring-colour</code><br><code>--focus-ring-width</code></td><td>variables.css (default); conjunction tokens override per palette+contrast</td><td>accessibility.css *:focus-visible rule</td></tr>
+                  <tr><td><code>--gm-landmark-stripe-opacity</code></td><td>accessibility.css (per landmark)</td><td>accessibility.css landmark inset outline stripe</td></tr>
+                  <tr><td><code>--gm-landmark-outline-opacity</code></td><td>accessibility.css (per landmark)</td><td>accessibility.css landmark outline</td></tr>
+                  <tr><td><code>--gm-shadow-panel</code></td><td>variables.css</td><td>modal.css, navigation.css (drawer shadow)</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-inner">
+          <section class="footer-brand" aria-labelledby="engine-footer-title">
+            <p class="eyebrow">Optional reference page</p>
+            <h2 id="engine-footer-title">This page is the implementation reference for the engine and its runtime contract.</h2>
+            <p>Keep it during development so teams can inspect the engine model, then remove it before launch if it is not needed in production.</p>
+          </section>
+
+          <section class="footer-nav-group" aria-labelledby="engine-footer-pages-title">
+            <h2 class="footer-nav-heading" id="engine-footer-pages-title">Pages</h2>
+            <ul class="footer-nav-list">
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="demo.html">Demo</a></li>
+              <li><a href="engine.html" aria-current="page">Engine docs</a></li>
+              <li><a href="#page-top">Back to top</a></li>
+            </ul>
+          </section>
+
+          <section class="footer-nav-group" aria-labelledby="engine-footer-tools-title">
+            <h2 class="footer-nav-heading" id="engine-footer-tools-title">Tools</h2>
+            <ul class="footer-nav-list">
+              <li>
+                <button class="footer-link-button" type="button" data-accessibility-open>
+                  Accessibility settings
+                </button>
+              </li>
+              <li>
+                <button class="footer-link-button" type="button" data-consent-manage-open>
+                  Cookie settings
+                </button>
+              </li>
+            </ul>
+          </section>
+
+          <div class="footer-meta">
+            <small>Access for All engine documentation</small>
+            <p>Reference page for engine behaviour, storage, tokens, and integration rules.</p>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+
+    <!-- Engine modal — required on every page -->
+    <div class="modal-backdrop" data-modal-backdrop hidden></div>
+    <div
+      class="accessibility-modal"
+      data-accessibility-modal
+      id="accessibility-panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="accessibility-title"
+      aria-describedby="accessibility-description"
+      hidden
+    >
+      <div class="modal-panel">
+        <div class="modal-header">
+          <div class="engine-intro engine-intro--streamlined">
+            <p class="eyebrow">Accessibility engine</p>
+            <h2 id="accessibility-title">Make this page easier to use</h2>
+            <p id="accessibility-description">Change this page to suit you.</p>
+          </div>
+          <button class="modal-close" type="button" data-accessibility-close aria-label="Close accessibility settings">
+            <span class="modal-close__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false"><path d="m6.4 5 5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4L12 13.4 6.4 19 5 17.6l5.6-5.6L5 6.4z"></path></svg>
+            </span>
+          </button>
+        </div>
+        <div class="modal-content">
+          <form class="engine-form" data-accessibility-form>
+            <div class="control-groups">
+              <fieldset class="control-group">
+                <legend>Talkback</legend>
+                <p class="control-group__description">Turn talkback on when you want spoken support, then choose how it follows you.</p>
+                <div class="control-grid-3">
+                  <label class="control-stack"><span>Talkback</span><select name="talkbackEnabled"><option value="off">Off</option><option value="on">On</option></select><small>Turn spoken support on only when you want it.</small></label>
+                  <label class="control-stack"><span>Invocation</span><select name="talkbackInvocation"><option value="hover">Mouse Only</option><option value="focus">Keyboard Only</option><option value="both">Mouse and Keyboard</option></select><small>Choose whether speech follows mouse, keyboard, or both.</small></label>
+                  <label class="control-stack"><span>Voice speed</span><select name="speechRate"><option value="85">Slower</option><option value="100">Steady</option><option value="115">Quicker</option><option value="130">Fast</option></select><small>Set how quickly talkback reads the current item.</small></label>
+                </div>
+                <div class="tool-button-row">
+                  <button class="button button-primary" type="button" data-speech-play>Read page aloud</button>
+                  <button class="button button-secondary" type="button" data-speech-pause>Pause</button>
+                  <button class="button button-secondary" type="button" data-speech-stop>Stop</button>
+                </div>
+                <p class="engine-note" data-speech-status aria-live="polite">Talkback is ready when your browser supports it.</p>
+              </fieldset>
+              <fieldset class="control-group">
+                <legend>Display</legend>
+                <div class="control-grid-4">
+                  <label class="control-stack"><span>Theme</span><select name="appearance"><option value="default">Default</option><option value="light">Light</option><option value="dark">Dark</option></select><small>Switch between the site default, light, or dark presentation.</small></label>
+                  <label class="control-stack"><span>Colour</span><select name="palette"><option value="default">Site colours</option><option value="monochrome">Monochrome</option><option value="blue">Blue</option><option value="aqua">Aqua</option><option value="green">Green</option><option value="orange">Orange</option><option value="purple">Purple</option><option value="pink">Pink</option><option value="yellow">Yellow</option><option value="red">Red</option></select><small>Change the site palette without changing the page structure.</small></label>
+                  <label class="control-stack"><span>Contrast</span><select name="contrast"><option value="minus-5">-5</option><option value="minus-4">-4</option><option value="minus-3">-3</option><option value="minus-2">-2</option><option value="minus-1">-1</option><option value="default">Default</option><option value="plus-1">+1</option><option value="plus-2">+2</option><option value="plus-3">+3</option><option value="plus-4">+4</option><option value="plus-5">+5</option></select><small>Raise or lower overall contrast strength.</small></label>
+                  <label class="control-stack"><span>Depth</span><select name="depth"><option value="default">Default</option><option value="reduced">Reduced</option><option value="off">Off</option></select><small>Reduce or remove layered visual depth.</small></label>
+                  <label class="control-stack"><span>Transparency</span><select name="transparency"><option value="default">Default</option><option value="reduced">Reduced</option><option value="off">Off</option></select><small>Tone down transparency and frosted surfaces.</small></label>
+                  <label class="control-stack"><span>Motion</span><select name="motion"><option value="default">Default</option><option value="reduced">Reduced</option><option value="off">Off</option></select><small>Reduce moving effects and animated transitions.</small></label>
+                  <label class="control-stack"><span>Filter type</span><select name="tint"><option value="default">None</option><option value="warm">Warm</option><option value="cool">Cool</option><option value="soft">Soft glare filter</option><option value="monochrome">Monochrome</option><option value="dim">Dim</option><option value="bright">Bright</option></select><small>Choose a whole-site visual filter.</small></label>
+                  <label class="control-stack"><span>Strength</span><select name="filterStrength"><option value="default">Default</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select><small>Set how strong the selected filter should feel.</small></label>
+                </div>
+              </fieldset>
+              <fieldset class="control-group">
+                <legend>Text and reading</legend>
+                <div class="control-grid-4">
+                  <label class="control-stack"><span>Font</span><select name="font"><option value="default">Site font</option><option value="legible">Hyperlegible</option><option value="dyslexia">Dyslexia-friendly</option><option value="system">System sans</option></select><small>Swap to a more comfortable reading typeface.</small></label>
+                  <label class="control-stack"><span>Bold</span><select name="boldText"><option value="default">Default</option><option value="level-1">Level 1</option><option value="level-2">Level 2</option><option value="level-3">Level 3</option><option value="level-4">Level 4</option></select><small>Increase text weight for stronger character definition.</small></label>
+                  <label class="control-stack"><span>Reading view</span><select name="readingMode"><option value="default">Standard page</option><option value="focused">Focused reading</option></select><small>Narrow the reading measure for calmer scanning.</small></label>
+                  <label class="control-stack"><span>Ruler</span><select name="readingGuide"><option value="off">Off</option><option value="1">1 line</option><option value="3">3 lines</option><option value="5">5 lines</option></select><small>Add a reading guide to help track lines on the page.</small></label>
+                </div>
+                <div class="control-grid-4 control-grid-2--spacing">
+                  <label class="control-stack"><span>Text size</span><select name="fontScale"><option value="90">90%</option><option value="100">100%</option><option value="110">110%</option><option value="120">120%</option><option value="130">130%</option><option value="140">140%</option><option value="150">150%</option><option value="160">160%</option></select><small>Scale text without zooming the whole interface.</small></label>
+                  <label class="control-stack"><span>Line spacing</span><select name="lineSpacing"><option value="80">80%</option><option value="90">90%</option><option value="100">100%</option><option value="110">110%</option><option value="120">120%</option><option value="140">140%</option><option value="160">160%</option><option value="180">180%</option></select><small>Adjust the space between each line of text.</small></label>
+                  <label class="control-stack"><span>Paragraph spacing</span><select name="paragraphSpacing"><option value="80">80%</option><option value="90">90%</option><option value="100">100%</option><option value="110">110%</option><option value="120">120%</option><option value="140">140%</option><option value="160">160%</option><option value="180">180%</option></select><small>Increase the gap between paragraph blocks.</small></label>
+                  <label class="control-stack"><span>Letter spacing</span><select name="letterSpacing"><option value="-8">-8%</option><option value="-6">-6%</option><option value="-4">-4%</option><option value="-2">-2%</option><option value="0">0%</option><option value="2">+2%</option><option value="4">+4%</option><option value="6">+6%</option><option value="8">+8%</option><option value="10">+10%</option><option value="12">+12%</option></select><small>Tighten or loosen spacing between letters.</small></label>
+                  <label class="control-stack"><span>Word spacing</span><select name="wordSpacing"><option value="-10">-10%</option><option value="-8">-8%</option><option value="-5">-5%</option><option value="-2">-2%</option><option value="0">0%</option><option value="2">+2%</option><option value="4">+4%</option><option value="8">+8%</option><option value="12">+12%</option><option value="14">+14%</option></select><small>Tighten or loosen spacing between words.</small></label>
+                </div>
+              </fieldset>
+              <fieldset class="control-group">
+                <legend>Extra support</legend>
+                <p class="control-group__description">Set how strong each support layer should be.</p>
+                <div class="control-grid-4">
+                  <label class="control-stack"><span>Focus highlight</span><select name="focusBoost"><option value="default">Default</option><option value="medium">Medium</option><option value="high">High</option></select><small>Stronger focus rings around the item you are on.</small></label>
+                  <label class="control-stack"><span>Underline links</span><select name="underlineLinks"><option value="default">Default</option><option value="medium">Medium</option><option value="high">High</option></select><small>Make links more obvious without changing the whole palette.</small></label>
+                  <label class="control-stack"><span>Landmark regions</span><select name="landmark"><option value="off">Off</option><option value="soft">Soft outline</option><option value="clear">Clear outline</option></select><small>Highlight page regions with a visual border to aid navigation.</small></label>
+                  <label class="control-stack"><span>Soften images</span><select name="dimMedia"><option value="default">Default</option><option value="medium">Medium</option><option value="high">High</option></select><small>Reduce glare and visual pressure from imagery.</small></label>
+                </div>
+              </fieldset>
+            </div>
+            <div class="engine-form__footer">
+              <p class="engine-form__status" data-accessibility-status aria-live="polite">
+                Changes show up straight away. Save them if you want to keep them.
+              </p>
+              <div class="button-row">
+                <button class="button button-primary" type="submit" data-accessibility-save>Save these settings</button>
+                <button class="button button-secondary" type="button" data-accessibility-reset>Use site default</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="../scripts/accessibility-engine.js"></script>
+    <script src="../scripts/site-ui.js"></script>
+  </body>
+</html>

@@ -1,0 +1,993 @@
+/*
+ * File: styles/base/variables.css
+ * Project: Access for All Engine Starter
+ *
+ * Single source of truth for all design tokens and engine control axes.
+ * Tokens are grouped by engine axis so accessibility.css can override
+ * each axis cleanly under the correct html[data-*] attribute.
+ *
+ * Every engine control has a corresponding token axis. No tool is neglected.
+ *
+ * Engine axes defined here:
+ *   - Colour      (theme, palette, contrast)
+ *   - Typography  (font family, scale, weight)
+ *   - Spacing     (line height, letter/word spacing, paragraph gap)
+ *   - Reading     (measure, reading mode)
+ *   - Focus       (ring colour, ring width, ring offset)
+ *   - Motion      (transitions, animations)
+ *   - Depth       (shadow, elevation)
+ *   - Transparency (surface opacity)
+ *   - Filter/Tint (visual comfort overlays, filter strength)
+ *   - Media       (image dimming, saturation, blur)
+ *   - Landmark    (structural region visualisation — redesigned)
+ *   - Guide       (reading ruler/guide overlay)
+ *   - Layout      (grid, container, header offset)
+ *   - Radius      (border-radius scale)
+ *   - Spacing     (space scale)
+ *
+ * Do not add visual rules to this file. Tokens only.
+ * Visual rules live in components/, layout/, and themes/accessibility.css.
+ *
+ * Namespace: --gm-  (golden master)
+ * The --colour-* and --font-* tokens are read by the engine JS directly.
+ * --gm-* tokens are used in site CSS and bridge back to --colour-* where needed.
+ */
+
+
+/* ============================================================
+   ROOT — light mode defaults
+   All engine axes start here at their neutral/default state.
+   data-* overrides below switch individual axes without touching others.
+============================================================ */
+
+:root {
+
+    /* ── COLOUR AXIS ──────────────────────────────────────────
+       Read by: html[data-theme], html[data-palette], html[data-contrast]
+       The engine JS sets data-theme on <html>. CSS does the rest.
+       --colour-* are the live values used by all components.
+       --gm-* aliases give site CSS a stable namespace.
+    ──────────────────────────────────────────────────────── */
+
+    --colour-accent:          #2d5be3;
+    --colour-accent-strong:   #1a3db0;
+    --colour-accent-contrast: #ffffff;
+    --colour-page:            #f5f6f8;
+    --colour-surface:         #ffffff;
+    --colour-surface-strong:  #f8f9fb;
+    --colour-surface-deep:    #eff1f5;
+    --colour-frame:           #e4e8ef;
+    --colour-frame-strong:    #d8dde6;
+    --colour-text:            #111827;
+    --colour-muted:           #4b5563;
+    --colour-border:          #cdd2db;
+    --colour-overlay:         rgba(10, 14, 26, 0.62);
+
+    /* Tonal brand scale — computed from --colour-accent so they
+       adapt automatically to all palette and theme changes. */
+    --colour-brand-900: color-mix(in srgb, var(--colour-accent) 92%, #000000);
+    --colour-brand-700: color-mix(in srgb, var(--colour-accent) 72%, #000000);
+    --colour-brand-500: var(--colour-accent);
+    --colour-brand-300: color-mix(in srgb, var(--colour-accent) 52%, #ffffff);
+    --colour-brand-200: color-mix(in srgb, var(--colour-accent) 28%, #ffffff);
+    --colour-brand-100: color-mix(in srgb, var(--colour-accent) 12%, #ffffff);
+
+    /* Panel — dark surface with inverted text */
+    --colour-panel-dark:         #111827;
+    --colour-panel-dark-strong:  #0a0f1a;
+    --colour-panel-text:         #f5f6f8;
+    --colour-panel-text-muted:   rgba(245, 246, 248, 0.82);
+
+    /* Shadows — computed from accent so they tint correctly per palette */
+    --colour-shadow:  rgba(45, 91, 227, 0.10);
+
+    /* --gm-* aliases — site CSS uses these; don't use --colour-* directly in components */
+    --gm-accent:        var(--colour-accent);
+    --gm-accent-strong: var(--colour-accent-strong);
+    --gm-on-accent:     var(--colour-accent-contrast);
+    --gm-page:          var(--colour-page);
+    --gm-surface:       var(--colour-surface);
+    --gm-text:          var(--colour-text);
+    --gm-muted:         var(--colour-muted);
+    --gm-border:        var(--colour-border);
+    --gm-border-width:  1px;
+
+    /* Speech highlight — used by read-aloud word highlighting */
+    --colour-speaking-highlight: color-mix(in srgb, var(--colour-brand-200) 38%, transparent);
+    --colour-speaking-border:    color-mix(in srgb, var(--colour-accent) 48%, transparent);
+
+    /* Semantic callout tones — centralised here so component variants remain
+       palette-aware and theme-aware instead of hard-coding colour values in
+       component CSS. */
+    --gm-signal-warning: #d97706;
+    --gm-signal-success: #059669;
+    --gm-signal-error:   #dc2626;
+    --gm-callout-warning-border: var(--gm-signal-warning);
+    --gm-callout-warning-surface: color-mix(in srgb, var(--gm-signal-warning) 12%, var(--colour-surface));
+    --gm-callout-success-border: var(--gm-signal-success);
+    --gm-callout-success-surface: color-mix(in srgb, var(--gm-signal-success) 12%, var(--colour-surface));
+    --gm-callout-error-border: var(--gm-signal-error);
+    --gm-callout-error-surface: color-mix(in srgb, var(--gm-signal-error) 12%, var(--colour-surface));
+    --gm-status-success: var(--gm-callout-success-border);
+    --gm-status-error: var(--gm-callout-error-border);
+
+
+    /* ── TYPOGRAPHY AXIS ──────────────────────────────────────
+       Read by: html[data-font]
+       --gm-font-active is what body/components actually use.
+       JS switches data-font; this file switches the variable.
+    ──────────────────────────────────────────────────────── */
+
+    --gm-font-default:  "Inter", "Aptos", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --gm-font-legible:  "Atkinson Hyperlegible", "Verdana", "Segoe UI", sans-serif;
+    --gm-font-dyslexia: "OpenDyslexic", "Comic Sans MS", "Chalkboard SE", Arial, sans-serif;
+    --gm-font-system:   "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --gm-font-active:   var(--gm-font-default);
+
+
+    /* ── SCALE AXIS ───────────────────────────────────────────
+       Overridden at runtime by accessibility-engine.js via setProperty.
+       --gm-font-scale drives the root font-size multiplier.
+    ──────────────────────────────────────────────────────── */
+
+    --gm-font-scale:      1;
+    --font-scale:         var(--gm-font-scale);
+    --gm-font-size-root:  calc(100% * var(--gm-font-scale));
+
+
+    /* ── WEIGHT AXIS ──────────────────────────────────────────
+       Read by: html[data-bold]
+       --font-weight-body-accessibility and --font-weight-strong-accessibility
+       are the live values read by the engine bold control.
+    ──────────────────────────────────────────────────────── */
+
+    --font-weight-body-accessibility:   400;
+    --font-weight-strong-accessibility: 700;
+    --gm-font-weight-body:    var(--font-weight-body-accessibility);
+    --gm-font-weight-heading: var(--font-weight-strong-accessibility);
+
+
+    /* ── SPACING AXIS ─────────────────────────────────────────
+       Overridden at runtime by accessibility-engine.js.
+       JS reads --gm-* names and updates them via setProperty.
+    ──────────────────────────────────────────────────────── */
+
+    --gm-line-height:     1.6;
+    --gm-paragraph-gap:   1rem;
+    --gm-letter-spacing:  -0.01em;
+    --gm-word-spacing:    0em;
+
+    /* Bridges to names the engine JS reads */
+    --line-height-body:    var(--gm-line-height);
+    --paragraph-gap:       var(--gm-paragraph-gap);
+    --letter-spacing-body: var(--gm-letter-spacing);
+    --word-spacing-body:   var(--gm-word-spacing);
+
+
+    /* ── READING MEASURE AXIS ─────────────────────────────────
+       Overridden at runtime by accessibility-engine.js.
+       --gm-reading-measure controls max-width of text containers
+       when data-reader="focused".
+    ──────────────────────────────────────────────────────── */
+
+    --gm-reading-measure: 100%;
+    --reading-measure:    var(--gm-reading-measure);
+
+
+    /* ── FOCUS AXIS ───────────────────────────────────────────
+       Read by: html[data-focus]
+       Stepped values — default / medium / high.
+    ──────────────────────────────────────────────────────── */
+
+    --focus-ring-colour:  var(--colour-accent);
+    --focus-ring-width:   3px;
+    --gm-focus-offset:    2px;
+
+
+    /* ── MOTION AXIS ──────────────────────────────────────────
+       Read by: html[data-motion], prefers-reduced-motion
+       All transitions in components use --gm-transition-*.
+    ──────────────────────────────────────────────────────── */
+
+    --gm-transition-short: 120ms ease;
+    --gm-transition-base:  200ms ease;
+    --gm-transition-long:  560ms ease-out;
+    --gm-ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1);
+    --gm-ease-out:         cubic-bezier(0.16, 1, 0.30, 1);
+
+    /* Bridge for any code that still reads --transition-base directly */
+    --transition-base: var(--gm-transition-base);
+
+
+    /* ── DEPTH AXIS ───────────────────────────────────────────
+       Read by: html[data-depth]
+       Zeroed on reduced/off for users sensitive to shadows.
+    ──────────────────────────────────────────────────────── */
+
+    --gm-shadow-soft:  0 4px 14px var(--colour-shadow);
+    --gm-shadow-panel: 0 8px 28px var(--colour-shadow);
+    --gm-shadow-raise: 0 2px  8px var(--colour-shadow);
+    --gm-shadow-float: 0 16px 40px var(--colour-shadow);
+
+
+    /* ── TRANSPARENCY AXIS ────────────────────────────────────
+       Read by: html[data-transparency]
+       Controls frosted/translucent surface opacity.
+    ──────────────────────────────────────────────────────── */
+
+    --gm-surface-opacity: 1;
+
+
+    /* ── FILTER / TINT AXIS ───────────────────────────────────
+       Read by: html[data-tint], html[data-filter-strength]
+       Component filter values compose into --gm-visual-filter,
+       applied to .site-header/.site-main/.site-footer in shell.css.
+    ──────────────────────────────────────────────────────── */
+
+    --gm-filter-brightness: 1;
+    --gm-filter-contrast:   1;
+    --gm-filter-saturate:   1;
+    --gm-filter-sepia:      0;
+    --gm-filter-grayscale:  0;
+    --gm-visual-filter:
+        brightness(var(--gm-filter-brightness))
+        contrast(var(--gm-filter-contrast))
+        saturate(var(--gm-filter-saturate))
+        sepia(var(--gm-filter-sepia))
+        grayscale(var(--gm-filter-grayscale));
+
+    /* Viewport overlay — separate from image filters; overlays the whole page */
+    --viewport-filter-overlay: transparent;
+    --viewport-filter-opacity: 0;
+
+    /* Bridges for engine JS */
+    --site-visual-filter:   var(--gm-visual-filter);
+    --site-filter-brightness: var(--gm-filter-brightness);
+    --site-filter-contrast:   var(--gm-filter-contrast);
+    --site-filter-saturate:   var(--gm-filter-saturate);
+    --site-filter-sepia:      var(--gm-filter-sepia);
+    --site-filter-grayscale:  var(--gm-filter-grayscale);
+    --filter-strength:        1;
+
+
+    /* ── MEDIA DIM AXIS ───────────────────────────────────────
+       Read by: html[data-media]
+       Applied to img, video, figure in accessibility.css.
+    ──────────────────────────────────────────────────────── */
+
+    --media-dim-opacity:    0;
+    --media-blur-strength:  0px;
+    --media-saturation:     1;
+    --hero-art-opacity:     1;
+
+
+    /* ── LANDMARK AXIS — redesigned ───────────────────────────
+       Read by: html[data-landmark]
+       Values: off (default) | soft | clear
+       soft  — quiet left border stripe on each landmark region only.
+               No labels, no outlines, no layout shift.
+       clear — stripe + dashed outline using `outline` (not border)
+               so there is still zero layout shift.
+       No ::before labels. No position:absolute anything.
+       The page map already names regions; this is purely visual.
+    ──────────────────────────────────────────────────────── */
+
+    --gm-landmark-colour:        var(--colour-accent);
+    --gm-landmark-stripe-width:  3px;
+    --gm-landmark-stripe-opacity: 0;       /* 0 = off, set per mode below */
+    --gm-landmark-outline-opacity: 0;      /* 0 = off, set per mode below */
+
+
+    /* ── READING GUIDE AXIS ───────────────────────────────────
+       Managed at runtime by accessibility-engine.js.
+       --gm-guide-height is updated per selection (0rem = off).
+    ──────────────────────────────────────────────────────── */
+
+    --gm-guide-height:        0rem;
+    --gm-guide-overlay:       rgba(0, 0, 0, 0.12);
+    --gm-guide-band:          color-mix(in srgb, var(--colour-brand-200) 52%, transparent);
+    --gm-guide-band-border:   color-mix(in srgb, var(--colour-accent) 32%, transparent);
+
+    /* Bridges */
+    --guide-overlay:       var(--gm-guide-overlay);
+    --guide-band:          var(--gm-guide-band);
+    --guide-band-border:   var(--gm-guide-band-border);
+    --reading-guide-height: var(--gm-guide-height);
+
+
+    /* ── LINK UNDERLINE AXIS ──────────────────────────────────
+       Read by: html[data-links]
+    ──────────────────────────────────────────────────────── */
+
+    --link-underline-thickness: auto;
+    --gm-link-highlight:        transparent;
+
+
+    /* ── LAYOUT TOKENS ────────────────────────────────────────
+       Not driven by the engine. Structural values for the site shell.
+    ──────────────────────────────────────────────────────── */
+
+    --gm-container-width:   84rem;
+    --gm-container-gutter:  clamp(1.25rem, 3vw, 3rem);
+    --gm-header-height:     5rem;
+    --header-offset:        var(--gm-header-height);
+
+
+    /* ── RADIUS SCALE ─────────────────────────────────────────  */
+
+    --radius-xs: 0.25rem;
+    --radius-sm: 0.45rem;
+    --radius-md: 0.7rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+    --radius-full: 999px;
+
+
+    /* ── SPACE SCALE ──────────────────────────────────────────  */
+
+    --space-2xs: 0.375rem;
+    --space-xs:  0.625rem;
+    --space-sm:  1rem;
+    --space-md:  1.5rem;
+    --space-lg:  2.25rem;
+    --space-xl:  3.5rem;
+    --space-2xl: 5.5rem;
+
+
+    /* ── BUTTON TOKENS ────────────────────────────────────────
+       Shared button system. Components inherit; overrides are local.
+    ──────────────────────────────────────────────────────── */
+
+    --button-radius:          var(--radius-lg);
+    --button-min-height:      3.75rem;
+    --button-min-inline:      12.5rem;
+    --button-padding-inline:  1.35rem;
+    --button-font-size:       1rem;
+    --button-font-weight:     700;
+    --button-letter-spacing:  -0.01em;
+
+    --button-text-primary:    var(--gm-on-accent);
+    --button-text-secondary:  var(--gm-text);
+    --button-bg-primary:      var(--gm-accent);
+    --button-bg-primary-hover: var(--gm-accent-strong);
+    --button-bg-secondary:    color-mix(in srgb, var(--gm-surface) 88%, transparent);
+    --button-bg-secondary-hover: color-mix(in srgb, var(--colour-surface-strong) 94%, transparent);
+    --button-border-primary:  color-mix(in srgb, var(--gm-accent-strong) 52%, var(--gm-border));
+    --button-border-secondary: color-mix(in srgb, var(--gm-accent) 22%, var(--gm-border));
+    --button-shadow-primary:  0 8px 24px color-mix(in srgb, var(--gm-accent) 20%, transparent);
+    --button-shadow-secondary: 0 6px 18px color-mix(in srgb, var(--gm-accent) 8%, transparent);
+
+
+    /* ── BORDER SHORTHAND ─────────────────────────────────────  */
+
+    --border-standard: var(--gm-border-width) solid var(--gm-border);
+
+}
+
+
+/* ============================================================
+   DARK MODE OVERRIDES
+   html[data-theme="dark"]
+   The engine JS sets this when user selects dark, or when
+   data-theme="auto" and prefers-color-scheme is dark.
+============================================================ */
+
+html[data-theme="dark"] {
+
+    --colour-accent:          #6b9fff;
+    --colour-accent-strong:   #4d84ff;
+    --colour-accent-contrast: #0a1020;
+    --colour-page:            #0d1117;
+    --colour-surface:         #161b22;
+    --colour-surface-strong:  #1c2330;
+    --colour-surface-deep:    #222a38;
+    --colour-frame:           #1a2030;
+    --colour-frame-strong:    #141a26;
+    --colour-text:            #e6edf3;
+    --colour-muted:           #8b949e;
+    --colour-border:          #30363d;
+    --colour-overlay:         rgba(0, 0, 0, 0.72);
+
+    --colour-panel-dark:         #0d1117;
+    --colour-panel-dark-strong:  #090d13;
+    --colour-panel-text:         #e6edf3;
+    --colour-panel-text-muted:   rgba(230, 237, 243, 0.78);
+
+    --colour-shadow:  rgba(0, 0, 0, 0.36);
+
+    --gm-shadow-soft:  0 4px 16px rgba(0, 0, 0, 0.42);
+    --gm-shadow-panel: 0 8px 32px rgba(0, 0, 0, 0.52);
+    --gm-shadow-raise: 0 2px  8px rgba(0, 0, 0, 0.38);
+    --gm-shadow-float: 0 16px 48px rgba(0, 0, 0, 0.56);
+
+    --gm-guide-overlay:     rgba(255, 255, 255, 0.08);
+    --gm-guide-band:        color-mix(in srgb, var(--colour-accent) 14%, transparent);
+    --gm-guide-band-border: color-mix(in srgb, var(--colour-accent) 44%, transparent);
+
+    --colour-speaking-highlight: color-mix(in srgb, var(--colour-accent) 14%, transparent);
+    --colour-speaking-border:    color-mix(in srgb, var(--colour-accent) 58%, transparent);
+
+}
+
+
+/* ============================================================
+   PALETTE AXIS
+   html[data-palette]
+   The palette control flattens background surfaces to neutral,
+   then brings the chosen colour forward in text, borders, UI lines.
+   Both light and dark mode combinations are covered.
+============================================================ */
+
+/* ── Light flat base when any non-default palette is active ── */
+html[data-palette]:not([data-palette="default"]):not([data-theme="dark"]) {
+    --colour-page:             #f7f7f7;
+    --colour-surface:          #ffffff;
+    --colour-surface-strong:   #fafafa;
+    --colour-surface-deep:     #f0f0f0;
+    --colour-frame:            #ebebeb;
+    --colour-frame-strong:     #e2e2e2;
+    --colour-panel-dark:       #f5f5f5;
+    --colour-panel-dark-strong: #ececec;
+    --colour-panel-text:       var(--colour-text);
+    --colour-panel-text-muted: color-mix(in srgb, var(--colour-text) 78%, transparent);
+    --colour-shadow:           rgba(0, 0, 0, 0.05);
+    --colour-overlay:          rgba(18, 18, 18, 0.60);
+    /* Flatten media — images step back so the colour is the hero */
+    --media-saturation:        0.40;
+    --media-dim-opacity:       0.08;
+    --hero-art-opacity:        0.26;
+    /* Flatten depth — shadows near-zero, palette colour carries structure */
+    --gm-shadow-soft:          0 1px 5px rgba(0, 0, 0, 0.05);
+    --gm-shadow-panel:         0 2px 8px rgba(0, 0, 0, 0.07);
+    --gm-shadow-raise:         0 1px 3px rgba(0, 0, 0, 0.04);
+    --gm-shadow-float:         0 4px 12px rgba(0, 0, 0, 0.08);
+    /* Flatten button shadows — colour does the work, not elevation */
+    --button-shadow-primary:   none;
+    --button-shadow-secondary: none;
+    --button-bg-secondary:     var(--colour-surface);
+    --button-bg-secondary-hover: var(--colour-surface-strong);
+    --button-border-primary:   color-mix(in srgb, var(--colour-accent) 55%, var(--colour-border));
+    --button-border-secondary: color-mix(in srgb, var(--colour-border) 80%, transparent);
+    /* Speaking highlight adapts to palette colour */
+    --colour-speaking-highlight: color-mix(in srgb, var(--colour-accent) 10%, var(--colour-surface));
+    --colour-speaking-border:    color-mix(in srgb, var(--colour-accent) 52%, transparent);
+    /* Guide adapts to palette colour */
+    --gm-guide-band:           color-mix(in srgb, var(--colour-accent) 10%, var(--colour-surface));
+    --gm-guide-band-border:    color-mix(in srgb, var(--colour-accent) 38%, transparent);
+    --gm-guide-overlay:        rgba(0, 0, 0, 0.08);
+}
+
+/* ── Dark flat base when any non-default palette is active ── */
+html[data-theme="dark"][data-palette]:not([data-palette="default"]) {
+    --colour-page:             #111111;
+    --colour-surface:          #181818;
+    --colour-surface-strong:   #1e1e1e;
+    --colour-surface-deep:     #242424;
+    --colour-frame:            #0e0e0e;
+    --colour-frame-strong:     #0a0a0a;
+    --colour-panel-dark:       #111111;
+    --colour-panel-dark-strong: #0a0a0a;
+    --colour-panel-text:       var(--colour-text);
+    --colour-panel-text-muted: color-mix(in srgb, var(--colour-text) 76%, transparent);
+    --colour-shadow:           rgba(0, 0, 0, 0.28);
+    --colour-overlay:          rgba(0, 0, 0, 0.80);
+    /* Flatten media harder on dark — colour text is the sole chromatic focus */
+    --media-saturation:        0.20;
+    --media-dim-opacity:       0.18;
+    --hero-art-opacity:        0.16;
+    /* Flatten depth */
+    --gm-shadow-soft:          0 1px 5px rgba(0, 0, 0, 0.20);
+    --gm-shadow-panel:         0 2px 8px rgba(0, 0, 0, 0.26);
+    --gm-shadow-raise:         0 1px 3px rgba(0, 0, 0, 0.18);
+    --gm-shadow-float:         0 4px 12px rgba(0, 0, 0, 0.30);
+    /* Flatten button shadows */
+    --button-shadow-primary:   none;
+    --button-shadow-secondary: none;
+    --button-bg-secondary:     var(--colour-surface);
+    --button-bg-secondary-hover: var(--colour-surface-strong);
+    --button-border-primary:   color-mix(in srgb, var(--colour-accent) 60%, var(--colour-border));
+    --button-border-secondary: color-mix(in srgb, var(--colour-border) 70%, transparent);
+    /* Speaking highlight */
+    --colour-speaking-highlight: color-mix(in srgb, var(--colour-accent) 14%, var(--colour-surface));
+    --colour-speaking-border:    color-mix(in srgb, var(--colour-accent) 58%, transparent);
+    /* Guide */
+    --gm-guide-band:           color-mix(in srgb, var(--colour-accent) 12%, var(--colour-surface));
+    --gm-guide-band-border:    color-mix(in srgb, var(--colour-accent) 42%, transparent);
+    --gm-guide-overlay:        rgba(0, 0, 0, 0.22);
+}
+
+/* ── monochrome ── */
+html[data-palette="monochrome"]:not([data-theme="dark"]) {
+    --colour-text:            #1a1a1a;
+    --colour-muted:           #464646;
+    --colour-border:          #646464;
+    --colour-accent:          #1a1a1a;
+    --colour-accent-strong:   #000000;
+    --colour-accent-contrast: #ffffff;
+    --gm-filter-grayscale:    0.88;
+}
+html[data-theme="dark"][data-palette="monochrome"] {
+    --colour-text:            #f0f0f0;
+    --colour-muted:           #c8c8c8;
+    --colour-border:          #909090;
+    --colour-accent:          #ffffff;
+    --colour-accent-strong:   #efefef;
+    --colour-accent-contrast: #050505;
+    --gm-filter-grayscale:    1;
+}
+
+/* ── blue ── */
+html[data-palette="blue"]:not([data-theme="dark"]) {
+    --colour-text:            #0020d0;
+    --colour-muted:           #0030d8;
+    --colour-border:          #0040e0;
+    --colour-accent:          #0020d0;
+    --colour-accent-strong:   #0018a0;
+    --colour-accent-contrast: #ffffff;
+}
+html[data-theme="dark"][data-palette="blue"] {
+    --colour-text:            #6080ff;
+    --colour-muted:           #5070f0;
+    --colour-border:          #4060e0;
+    --colour-accent:          #6080ff;
+    --colour-accent-strong:   #0018a0;
+    --colour-accent-contrast: #06101e;
+}
+
+/* ── aqua ── */
+html[data-palette="aqua"]:not([data-theme="dark"]) {
+    --colour-text:            #005c78;
+    --colour-muted:           #007990;
+    --colour-border:          #009ab8;
+    --colour-accent:          #008fb5;
+    --colour-accent-strong:   #006d8f;
+    --colour-accent-contrast: #ffffff;
+}
+html[data-theme="dark"][data-palette="aqua"] {
+    --colour-text:            #00c8f0;
+    --colour-muted:           #00b0d8;
+    --colour-border:          #009ab8;
+    --colour-accent:          #00b0d8;
+    --colour-accent-strong:   #008fb5;
+    --colour-accent-contrast: #071a1e;
+}
+
+/* ── green ── */
+html[data-palette="green"]:not([data-theme="dark"]) {
+    --colour-text:            #006800;
+    --colour-muted:           #007800;
+    --colour-border:          #009200;
+    --colour-accent:          #009200;
+    --colour-accent-strong:   #006800;
+    --colour-accent-contrast: #ffffff;
+}
+html[data-theme="dark"][data-palette="green"] {
+    --colour-text:            #00d000;
+    --colour-muted:           #00c000;
+    --colour-border:          #009200;
+    --colour-accent:          #00d000;
+    --colour-accent-strong:   #009200;
+    --colour-accent-contrast: #081408;
+}
+
+/* ── yellow ── */
+html[data-palette="yellow"]:not([data-theme="dark"]) {
+    --colour-text:            #847000;
+    --colour-muted:           #908000;
+    --colour-border:          #b09600;
+    --colour-accent:          #a88c00;
+    --colour-accent-strong:   #847000;
+    --colour-accent-contrast: #fffacc;
+}
+html[data-theme="dark"][data-palette="yellow"] {
+    --colour-text:            #ffd800;
+    --colour-muted:           #eec800;
+    --colour-border:          #ccaa00;
+    --colour-accent:          #ffd800;
+    --colour-accent-strong:   #ccaa00;
+    --colour-accent-contrast: #201800;
+}
+
+/* ── red ── */
+html[data-palette="red"]:not([data-theme="dark"]) {
+    --colour-text:            #9c0000;
+    --colour-muted:           #b20000;
+    --colour-border:          #cc0000;
+    --colour-accent:          #cc0000;
+    --colour-accent-strong:   #9c0000;
+    --colour-accent-contrast: #fff8f8;
+}
+html[data-theme="dark"][data-palette="red"] {
+    --colour-text:            #ff4040;
+    --colour-muted:           #f02020;
+    --colour-border:          #cc0000;
+    --colour-accent:          #ff4040;
+    --colour-accent-strong:   #cc0000;
+    --colour-accent-contrast: #200808;
+}
+
+/* ── orange ── */
+html[data-palette="orange"]:not([data-theme="dark"]) {
+    --colour-text:            #7a3000;
+    --colour-muted:           #963c00;
+    --colour-border:          #be4800;
+    --colour-accent:          #ae4200;
+    --colour-accent-strong:   #8a3200;
+    --colour-accent-contrast: #fff7ef;
+}
+html[data-theme="dark"][data-palette="orange"] {
+    --colour-text:            #f06000;
+    --colour-muted:           #e05600;
+    --colour-border:          #be4800;
+    --colour-accent:          #e05600;
+    --colour-accent-strong:   #a03800;
+    --colour-accent-contrast: #231004;
+}
+
+/* ── purple ── */
+html[data-palette="purple"]:not([data-theme="dark"]) {
+    --colour-text:            #6a00a8;
+    --colour-muted:           #7c00c0;
+    --colour-border:          #8c00dc;
+    --colour-accent:          #8c00dc;
+    --colour-accent-strong:   #6200a0;
+    --colour-accent-contrast: #fbf7ff;
+}
+html[data-theme="dark"][data-palette="purple"] {
+    --colour-text:            #c060ff;
+    --colour-muted:           #b048f0;
+    --colour-border:          #8c00dc;
+    --colour-accent:          #c060ff;
+    --colour-accent-strong:   #8c00dc;
+    --colour-accent-contrast: #12081e;
+}
+
+/* ── pink ── */
+html[data-palette="pink"]:not([data-theme="dark"]) {
+    --colour-text:            #a80090;
+    --colour-muted:           #c000a8;
+    --colour-border:          #d800bc;
+    --colour-accent:          #d800bc;
+    --colour-accent-strong:   #900078;
+    --colour-accent-contrast: #fff7fe;
+}
+html[data-theme="dark"][data-palette="pink"] {
+    --colour-text:            #ff40e0;
+    --colour-muted:           #f030d0;
+    --colour-border:          #d800bc;
+    --colour-accent:          #ff40e0;
+    --colour-accent-strong:   #c000a8;
+    --colour-accent-contrast: #1e081c;
+}
+
+
+/* ============================================================
+   CONTRAST AXIS
+   html[data-contrast]
+   minus levels: soften structural noise for light-sensitivity.
+   plus levels: thicken borders, separate surfaces, dim images.
+   Token values only — physical rules live in accessibility.css.
+============================================================ */
+
+html[data-contrast="minus-1"] {
+    --gm-border-width: 1px;
+    --colour-border:   color-mix(in srgb, var(--colour-text) 12%, transparent);
+    --gm-shadow-soft:  0 1px 6px rgba(0, 0, 0, 0.07);
+    --gm-shadow-panel: 0 2px 10px rgba(0, 0, 0, 0.09);
+}
+html[data-contrast="minus-2"] {
+    --gm-border-width: 1px;
+    --colour-border:   color-mix(in srgb, var(--colour-text) 8%, transparent);
+    --gm-shadow-soft:  0 1px 4px rgba(0, 0, 0, 0.05);
+    --gm-shadow-panel: 0 1px 6px rgba(0, 0, 0, 0.06);
+}
+html[data-contrast="minus-3"] {
+    --gm-border-width: 1px;
+    --colour-border:   color-mix(in srgb, var(--colour-text) 5%, transparent);
+    --gm-shadow-soft:  0 1px 3px rgba(0, 0, 0, 0.04);
+    --gm-shadow-panel: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+html[data-contrast="minus-4"] {
+    --gm-border-width: 1px;
+    --colour-border:   color-mix(in srgb, var(--colour-text) 3%, transparent);
+    --gm-shadow-soft:  none;
+    --gm-shadow-panel: none;
+}
+html[data-contrast="minus-5"] {
+    --gm-border-width: 0px;
+    --colour-border:   transparent;
+    --gm-shadow-soft:  none;
+    --gm-shadow-panel: none;
+}
+
+html[data-contrast="plus-1"] {
+    --gm-border-width: 2px;
+    --colour-border:   color-mix(in srgb, var(--colour-text) 36%, var(--colour-surface));
+    --media-saturation: 0.86;
+}
+html[data-contrast="plus-2"] {
+    --gm-border-width: 2px;
+    --colour-border:   color-mix(in srgb, var(--colour-text) 50%, var(--colour-surface));
+    --media-saturation: 0.70;
+}
+html[data-contrast="plus-3"] {
+    --gm-border-width: 3px;
+    --colour-border:   color-mix(in srgb, var(--colour-text) 62%, var(--colour-surface));
+    --media-saturation: 0.52;
+    --gm-filter-brightness: 0.96;
+}
+html[data-contrast="plus-4"] {
+    --gm-border-width: 3px;
+    --colour-border:   color-mix(in srgb, var(--colour-text) 74%, var(--colour-surface));
+    --media-saturation: 0.36;
+    --gm-filter-brightness: 0.92;
+}
+html[data-contrast="plus-5"] {
+    --gm-border-width: 4px;
+    --colour-border:   color-mix(in srgb, var(--colour-text) 88%, var(--colour-surface));
+    --media-saturation: 0.18;
+    --gm-filter-brightness: 0.88;
+}
+
+
+/* ============================================================
+   TINT AXIS
+   html[data-tint], html[data-filter-strength]
+   Component filter tokens auto-compose into --gm-visual-filter.
+   default filterStrength = moderate intensity.
+============================================================ */
+
+/* ── warm — amber overlay, significant blue-light reduction, night-use ── */
+html[data-tint="warm"]                              { --gm-filter-sepia: 0.22; --gm-filter-brightness: 1.02; }
+html[data-tint="warm"][data-filter-strength="low"]   { --gm-filter-sepia: 0.12; --gm-filter-brightness: 1.01; }
+html[data-tint="warm"][data-filter-strength="medium"]{ --gm-filter-sepia: 0.36; --gm-filter-brightness: 1.03; }
+html[data-tint="warm"][data-filter-strength="high"]  { --gm-filter-sepia: 0.52; --gm-filter-brightness: 1.04; --viewport-filter-overlay: rgba(255,160,30,1); --viewport-filter-opacity: 0.07; }
+
+/* ── cool — desaturated, calming for scotopic sensitivity and visual stress ── */
+html[data-tint="cool"]                              { --gm-filter-saturate: 0.82; --gm-filter-brightness: 1.01; }
+html[data-tint="cool"][data-filter-strength="low"]   { --gm-filter-saturate: 0.92; }
+html[data-tint="cool"][data-filter-strength="medium"]{ --gm-filter-saturate: 0.70; --gm-filter-brightness: 1.02; }
+html[data-tint="cool"][data-filter-strength="high"]  { --gm-filter-saturate: 0.55; --gm-filter-brightness: 1.02; --viewport-filter-overlay: rgba(180,220,255,1); --viewport-filter-opacity: 0.06; }
+
+/* ── soft — lifted and desaturated, minimum eye-strain ── */
+html[data-tint="soft"]                              { --gm-filter-brightness: 1.05; --gm-filter-saturate: 0.76; }
+html[data-tint="soft"][data-filter-strength="low"]   { --gm-filter-brightness: 1.02; --gm-filter-saturate: 0.88; }
+html[data-tint="soft"][data-filter-strength="medium"]{ --gm-filter-brightness: 1.08; --gm-filter-saturate: 0.64; }
+html[data-tint="soft"][data-filter-strength="high"]  { --gm-filter-brightness: 1.12; --gm-filter-saturate: 0.50; }
+
+/* ── monochrome — greyscale filter (visual-only, not the palette change) ── */
+html[data-tint="monochrome"]                              { --gm-filter-grayscale: 0.80; }
+html[data-tint="monochrome"][data-filter-strength="low"]   { --gm-filter-grayscale: 0.48; }
+html[data-tint="monochrome"][data-filter-strength="medium"]{ --gm-filter-grayscale: 0.88; }
+html[data-tint="monochrome"][data-filter-strength="high"]  { --gm-filter-grayscale: 1; }
+
+/* ── dim — significant darkening for glare and photosensitivity ── */
+html[data-tint="dim"]                              { --gm-filter-brightness: 0.82; }
+html[data-tint="dim"][data-filter-strength="low"]   { --gm-filter-brightness: 0.90; }
+html[data-tint="dim"][data-filter-strength="medium"]{ --gm-filter-brightness: 0.74; }
+html[data-tint="dim"][data-filter-strength="high"]  { --gm-filter-brightness: 0.62; }
+
+/* ── bright — strong lift for low-vision and low-light environments ── */
+html[data-tint="bright"]                              { --gm-filter-brightness: 1.18; --gm-filter-saturate: 1.08; }
+html[data-tint="bright"][data-filter-strength="low"]   { --gm-filter-brightness: 1.10; --gm-filter-saturate: 1.04; }
+html[data-tint="bright"][data-filter-strength="medium"]{ --gm-filter-brightness: 1.26; --gm-filter-saturate: 1.14; }
+html[data-tint="bright"][data-filter-strength="high"]  { --gm-filter-brightness: 1.38; --gm-filter-saturate: 1.22; }
+
+
+/* ============================================================
+   MOTION AXIS OVERRIDES
+   html[data-motion], @media prefers-reduced-motion
+============================================================ */
+
+html[data-motion="reduced"],
+html[data-motion="off"] {
+    --gm-transition-short: 0ms;
+    --gm-transition-base:  0ms;
+    --gm-transition-long:  0ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --gm-transition-short: 0ms;
+        --gm-transition-base:  0ms;
+        --gm-transition-long:  0ms;
+    }
+}
+
+
+/* ============================================================
+   FONT AXIS OVERRIDES
+   html[data-font]
+============================================================ */
+
+html[data-font="legible"] { --gm-font-active: var(--gm-font-legible); }
+html[data-font="dyslexia"] {
+    --gm-font-active:    var(--gm-font-dyslexia);
+    --gm-letter-spacing: 0.12em;
+    --gm-word-spacing:   0.16em;
+    --gm-line-height:    1.65;
+}
+html[data-font="system"] { --gm-font-active: var(--gm-font-system); }
+
+
+/* ============================================================
+   FOCUS AXIS OVERRIDES
+   html[data-focus]
+   default = 3px ring; medium = 5px ring; high = 7px ring
+============================================================ */
+
+html[data-focus="medium"] {
+    --focus-ring-width:  5px;
+    --gm-focus-offset:   3px;
+}
+html[data-focus="high"] {
+    --focus-ring-width:  7px;
+    --gm-focus-offset:   4px;
+}
+
+
+/* ============================================================
+   DEPTH AXIS OVERRIDES
+   html[data-depth]
+============================================================ */
+
+html[data-depth="reduced"] {
+    --gm-shadow-soft:  0 1px 4px rgba(0, 0, 0, 0.08);
+    --gm-shadow-panel: 0 2px 8px rgba(0, 0, 0, 0.10);
+    --gm-shadow-raise: none;
+    --gm-shadow-float: 0 4px 12px rgba(0, 0, 0, 0.10);
+}
+html[data-depth="off"] {
+    --gm-shadow-soft:  none;
+    --gm-shadow-panel: none;
+    --gm-shadow-raise: none;
+    --gm-shadow-float: none;
+    --radius-xs:       0.125rem;
+    --radius-sm:       0.25rem;
+    --radius-md:       0.375rem;
+    --radius-lg:       0.5rem;
+    --radius-xl:       0.625rem;
+}
+
+
+/* ============================================================
+   TRANSPARENCY AXIS OVERRIDES
+   html[data-transparency]
+============================================================ */
+
+html[data-transparency="reduced"] { --gm-surface-opacity: 0.94; }
+html[data-transparency="off"]     { --gm-surface-opacity: 1;    }
+
+
+/* ============================================================
+   MEDIA DIM AXIS OVERRIDES
+   html[data-media]
+   Physical rules targeting img/video live in accessibility.css.
+============================================================ */
+
+html[data-media="medium"] {
+    --media-dim-opacity:   0.18;
+    --media-saturation:    0.80;
+    --media-blur-strength: 0px;
+}
+html[data-media="high"] {
+    --media-dim-opacity:   0.36;
+    --media-saturation:    0.50;
+    --media-blur-strength: 0px;
+}
+
+
+/* ============================================================
+   LINK UNDERLINE AXIS OVERRIDES
+   html[data-links]
+============================================================ */
+
+html[data-links="medium"] { --link-underline-thickness: 3px; }
+html[data-links="high"] {
+    --link-underline-thickness: 4px;
+    --gm-link-highlight:        color-mix(in srgb, var(--colour-accent) 14%, transparent);
+}
+
+
+/* ============================================================
+   LANDMARK AXIS OVERRIDES
+   html[data-landmark]
+   soft  — left border stripe only. Zero layout shift.
+   clear — stripe + dashed outline. Still zero layout shift
+           because `outline` does not affect document flow.
+   Physical CSS rules live in themes/accessibility.css.
+============================================================ */
+
+html[data-landmark="soft"] {
+    --gm-landmark-stripe-opacity:  0.44;
+    --gm-landmark-outline-opacity: 0;
+}
+
+html[data-landmark="clear"] {
+    --gm-landmark-stripe-opacity:  0.52;
+    --gm-landmark-outline-opacity: 0.30;
+}
+
+
+/* ============================================================
+   PALETTE × CONTRAST CONJUNCTION
+   When a non-default palette is active alongside high contrast,
+   interactive elements escalate from palette-coloured wireframes
+   to solid colour fills with contrasting text.
+   This is an intentional user state — the engine executes it
+   fully and never suppresses any tool combination.
+============================================================ */
+
+/* plus-3 + palette: primary buttons and interactive elements solidify */
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-3"] {
+    --button-bg-primary:       var(--colour-accent);
+    --button-text-primary:     var(--colour-accent-contrast);
+    --button-border-primary:   var(--colour-accent-strong);
+    --button-shadow-primary:   none;
+    --focus-ring-colour:       var(--colour-accent);
+    --focus-ring-width:        4px;
+    --gm-focus-offset:         3px;
+    --colour-speaking-highlight: color-mix(in srgb, var(--colour-accent) 24%, var(--colour-surface));
+    --colour-speaking-border:    var(--colour-accent);
+    --gm-guide-band:             color-mix(in srgb, var(--colour-accent) 22%, var(--colour-surface));
+    --gm-guide-band-border:      var(--colour-accent);
+}
+
+/* plus-4 and plus-5 + palette: hierarchy sharpens further.
+   Primary actions stay solid; secondary surfaces flatten to the current
+   page surface with accent borders so users still have role contrast. */
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"],
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] {
+    --button-bg-primary:         var(--colour-accent);
+    --button-bg-primary-hover:   var(--colour-accent-strong);
+    --button-text-primary:       var(--colour-accent-contrast);
+    --button-border-primary:     var(--colour-accent-strong);
+    --button-shadow-primary:     none;
+    --button-bg-secondary:       var(--colour-surface);
+    --button-bg-secondary-hover: color-mix(in srgb, var(--colour-surface) 78%, var(--colour-accent) 22%);
+    --button-text-secondary:     var(--colour-accent);
+    --button-border-secondary:   var(--colour-accent);
+    --button-shadow-secondary:   none;
+    --focus-ring-colour:         var(--colour-accent);
+    --focus-ring-width:          5px;
+    --gm-focus-offset:           3px;
+    --colour-speaking-highlight: color-mix(in srgb, var(--colour-accent) 30%, var(--colour-surface));
+    --colour-speaking-border:    var(--colour-accent);
+    --gm-guide-band:             color-mix(in srgb, var(--colour-accent) 28%, var(--colour-surface));
+    --gm-guide-band-border:      var(--colour-accent);
+}
+
+
+/* ============================================================
+   OS PREFERENCE RESPONDERS
+   Mirror OS-level settings so the engine stays useful even
+   when accessibility tools have been applied at the OS level.
+   These sit below engine axes in specificity — engine always wins.
+============================================================ */
+
+@media (prefers-contrast: more) {
+    :root {
+        --gm-border-width: 2px;
+        --colour-border:   color-mix(in srgb, var(--colour-text) 50%, var(--colour-surface));
+        --media-saturation: 0.70;
+        --focus-ring-width: 4px;
+        --gm-focus-offset:  3px;
+    }
+}
+
+@media (prefers-contrast: forced) {
+    :root {
+        --gm-border-width: 3px;
+        --colour-border:   var(--colour-text);
+        --focus-ring-width: 5px;
+        --gm-focus-offset:  3px;
+    }
+}
+
+@media (prefers-reduced-transparency) {
+    :root {
+        --gm-surface-opacity:   1;
+        --colour-speaking-highlight: color-mix(in srgb, var(--colour-accent) 22%, var(--colour-surface));
+        --gm-guide-band:        color-mix(in srgb, var(--colour-accent) 20%, var(--colour-surface));
+    }
+}

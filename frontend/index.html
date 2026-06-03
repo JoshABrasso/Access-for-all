@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<!--
+  Access for All Engine Starter
+  File: frontend/index.html
+  Purpose: Minimal clean starting point. Keep this page — it ships with every project.
+           Full engine modal/drawer HTML is here; JS builds the mobile panel at runtime.
+           Replace placeholder content, brand, nav, and footer with real project values.
+           The demo.html and engine.html pages in /pages/ are optional scaffolding.
+-->
+<html lang="en-GB" data-theme="default" data-font="default" data-motion="default">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Your site description here." />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#223667" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <!-- Favicons — replace with project assets -->
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png" /> -->
+    <!-- <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png" /> -->
+    <!-- <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png" /> -->
+    <!-- <link rel="manifest" href="/site.webmanifest" /> -->
+    <link rel="stylesheet" href="styles/master.css" />
+    <title>Site Name</title>
+  </head>
+  <body id="page-top">
+
+    <!-- Skip Link start -->
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <!-- Skip Link end -->
+
+    <!-- Engine status live region — announced to screen readers on every state change -->
+    <span
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      class="sr-only"
+      data-engine-status
+    ></span>
+
+    <!-- Site Shell start -->
+    <div class="site-shell">
+
+      <!-- Header start -->
+      <header class="site-header" data-site-header>
+        <div class="utility-bar container">
+          <!-- Brand start
+               Text-only lockup is the default template baseline.
+               If your project uses image logos, add an <img> with
+               data-logo-default and data-logo-dark so the engine can
+               switch variants on appearance change. -->
+          <div class="header-brand">
+            <a class="brand-mark" href="index.html">
+              <span class="brand-mark__lockup">
+                <span class="brand-mark__name">Site Name</span>
+                <span class="brand-mark__eyebrow">Accessibility-ready starter</span>
+              </span>
+            </a>
+          </div>
+          <!-- Brand end -->
+
+          <!-- Navigation start -->
+          <nav class="primary-nav" aria-label="Primary navigation" data-primary-nav>
+            <ul id="primary-navigation" class="nav-list">
+              <li><a href="index.html" aria-current="page">Home</a></li>
+              <li><a href="pages/demo.html">Demo</a></li>
+              <li><a href="pages/engine.html">Engine docs</a></li>
+            </ul>
+          </nav>
+          <!-- Navigation end -->
+
+          <div class="header-actions">
+            <!-- Accessibility Trigger start -->
+            <div class="header-accessibility">
+              <button
+                class="accessibility-trigger"
+                type="button"
+                data-accessibility-open
+                aria-haspopup="dialog"
+                aria-controls="accessibility-panel"
+                aria-expanded="false"
+                aria-label="Open accessibility settings"
+              >
+                <span class="accessibility-trigger__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" focusable="false">
+                    <path
+                      d="M10.5 2h3l.5 2.1a7.95 7.95 0 0 1 1.83.76l1.88-1.04 2.12 2.12-1.04 1.88c.32.58.58 1.19.76 1.83L22 10.5v3l-2.1.5a7.95 7.95 0 0 1-.76 1.83l1.04 1.88-2.12 2.12-1.88-1.04a7.95 7.95 0 0 1-1.83.76L13.5 22h-3l-.5-2.1a7.95 7.95 0 0 1-1.83-.76l-1.88 1.04-2.12-2.12 1.04-1.88a7.95 7.95 0 0 1-.76-1.83L2 13.5v-3l2.1-.5c.18-.64.44-1.25.76-1.83L3.82 6.29l2.12-2.12 1.88 1.04c.58-.32 1.19-.58 1.83-.76L10.5 2Zm1.5 6.25A3.75 3.75 0 1 0 12 15.75a3.75 3.75 0 0 0 0-7.5Z"
+                    />
+                  </svg>
+                </span>
+                <span class="accessibility-trigger__label">Accessibility</span>
+              </button>
+            </div>
+            <!-- Accessibility Trigger end -->
+
+            <!-- Mobile Menu Toggle start -->
+            <button
+              class="menu-toggle"
+              type="button"
+              data-nav-toggle
+              aria-expanded="false"
+              aria-controls="primary-navigation"
+              aria-label="Open menu"
+            >
+              Open menu
+            </button>
+            <!-- Mobile Menu Toggle end -->
+          </div>
+        </div>
+
+      </header>
+      <!-- Header end -->
+
+      <!-- Main start -->
+      <main id="main-content" class="site-main">
+
+        <!-- Hero start -->
+        <section class="section section-hero section-hero-bleed">
+          <div class="hero-stage">
+            <!-- Replace with a real hero image -->
+            <!-- <img
+              class="hero-stage__image"
+              src="assets/images/hero/hero.webp"
+              alt="Descriptive alt text for the hero image."
+              data-speech-description="Spoken description of the hero image for talkback users."
+              width="1536"
+              height="737"
+              decoding="async"
+              fetchpriority="high"
+            /> -->
+            <div class="hero-stage__overlay">
+              <div class="reading-surface">
+                <p class="eyebrow">Your tagline or category label</p>
+                <h1>Your headline goes here.</h1>
+                <p class="hero-stage__headline-support">
+                  A single supporting sentence that reinforces the headline.
+                </p>
+                <p>
+                  A short paragraph explaining what this site or service does.
+                  Keep it clear and focused — one or two sentences is enough here.
+                </p>
+              </div>
+              <div class="button-row button-row--hero">
+                <a class="button button-primary button--hero" href="#intro-title">Explore the template</a>
+                <button
+                  class="button button-secondary button--hero"
+                  type="button"
+                  data-accessibility-open
+                >
+                  Try accessibility controls
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Hero end -->
+
+        <!-- Intro section start -->
+        <section class="section section-muted" aria-labelledby="intro-title">
+          <div class="container">
+            <div class="section-heading">
+              <p class="eyebrow">What we do</p>
+              <h2 id="intro-title">A concise section heading.</h2>
+              <p class="section-heading__support">
+                One or two sentences of supporting copy that set up the content below.
+              </p>
+            </div>
+            <div class="card-grid">
+              <article class="card">
+                <div class="reading-surface">
+                  <p class="eyebrow">Topic one</p>
+                  <h3>Card heading</h3>
+                  <p>
+                    A brief description of this service, feature, or piece of content.
+                    Two or three sentences.
+                  </p>
+                </div>
+                <a class="button button-primary button--main" href="#engine-cta-title">Learn more</a>
+              </article>
+              <article class="card">
+                <div class="reading-surface">
+                  <p class="eyebrow">Topic two</p>
+                  <h3>Card heading</h3>
+                  <p>
+                    A brief description of this service, feature, or piece of content.
+                    Two or three sentences.
+                  </p>
+                </div>
+                <a class="button button-primary button--main" href="#engine-cta-title">Learn more</a>
+              </article>
+              <article class="card">
+                <div class="reading-surface">
+                  <p class="eyebrow">Topic three</p>
+                  <h3>Card heading</h3>
+                  <p>
+                    A brief description of this service, feature, or piece of content.
+                    Two or three sentences.
+                  </p>
+                </div>
+                <a class="button button-primary button--main" href="#engine-cta-title">Learn more</a>
+              </article>
+            </div>
+          </div>
+        </section>
+        <!-- Intro section end -->
+
+        <!-- Accessibility callout start
+             Shows the engine is live. Invite the visitor to explore it. Keep or adapt. -->
+        <section class="section" aria-labelledby="engine-cta-title">
+          <div class="container">
+            <div class="manifesto-band manifesto-band--split">
+              <div class="manifesto-band__lead">
+                <div class="reading-surface">
+                  <p class="eyebrow">Built for everyone</p>
+                  <h2 id="engine-cta-title">Make this page work for you.</h2>
+                </div>
+              </div>
+              <div class="manifesto-band__detail manifesto-band__detail--right">
+                <div class="reading-surface">
+                  <p>
+                    This site includes an accessibility engine. Change the colours,
+                    text size, font, contrast, motion, and more — your preferences
+                    are saved so every page remembers them.
+                  </p>
+                </div>
+                <div class="button-row">
+                  <button
+                    class="button button-primary"
+                    type="button"
+                    data-accessibility-open
+                  >
+                    Open accessibility settings
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Accessibility callout end -->
+
+      </main>
+      <!-- Main end -->
+
+      <!-- Footer start -->
+      <footer class="site-footer">
+        <div class="container footer-inner">
+          <section class="footer-brand" aria-labelledby="footer-brand-title">
+            <p class="eyebrow">Site Name</p>
+            <h2 id="footer-brand-title">This page is the minimal starting point for every new project.</h2>
+            <p>
+              Replace the content, links, and brand assets when this template is turned into a real site.
+            </p>
+          </section>
+
+          <section class="footer-nav-group" aria-labelledby="footer-sitemap-title">
+            <h2 class="footer-nav-heading" id="footer-sitemap-title">Pages</h2>
+            <ul class="footer-nav-list">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="pages/demo.html">Demo</a></li>
+              <li><a href="pages/engine.html">Engine docs</a></li>
+              <li><a href="#page-top">Back to top</a></li>
+            </ul>
+          </section>
+
+          <section class="footer-nav-group" aria-labelledby="footer-tools-title">
+            <h2 class="footer-nav-heading" id="footer-tools-title">Tools</h2>
+            <ul class="footer-nav-list">
+              <li>
+                <button class="footer-link-button" type="button" data-accessibility-open>
+                  Accessibility settings
+                </button>
+              </li>
+              <li>
+                <button class="footer-link-button" type="button" data-consent-manage-open>
+                  Cookie settings
+                </button>
+              </li>
+            </ul>
+          </section>
+
+          <section class="footer-nav-group" aria-labelledby="footer-reference-title">
+            <h2 class="footer-nav-heading" id="footer-reference-title">Reference</h2>
+            <ul class="footer-nav-list">
+              <li><a href="#intro-title">Overview</a></li>
+              <li><a href="pages/demo.html">Live showcase</a></li>
+              <li><a href="pages/engine.html">Implementation reference</a></li>
+            </ul>
+          </section>
+
+          <div class="footer-meta">
+            <small>© 2026 Site Name</small>
+            <p>Built on the Access for All engine starter.</p>
+          </div>
+        </div>
+      </footer>
+      <!-- Footer end -->
+
+    </div>
+    <!-- Site Shell end -->
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         ACCESSIBILITY ENGINE MODAL
+         Keep this block. It is the engine UI — desktop modal + mobile
+         drawer shell (the .ac-mobile-panel is JS-injected at runtime).
+         The form fields map directly to engine state keys.
+         ═══════════════════════════════════════════════════════════════ -->
+
+    <!-- Modal backdrop — darkens site when engine is open -->
+    <div class="modal-backdrop" data-modal-backdrop hidden></div>
+
+    <!-- Engine dialog -->
+    <div
+      class="accessibility-modal"
+      data-accessibility-modal
+      id="accessibility-panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="accessibility-title"
+      aria-describedby="accessibility-description"
+      hidden
+    >
+      <!-- Desktop modal panel -->
+      <div class="modal-panel">
+
+        <div class="modal-header">
+          <div class="engine-intro engine-intro--streamlined">
+            <p class="eyebrow">Accessibility engine</p>
+            <h2 id="accessibility-title">Make this page easier to use</h2>
+            <p id="accessibility-description">Change this page to suit you.</p>
+          </div>
+          <button
+            class="modal-close"
+            type="button"
+            data-accessibility-close
+            aria-label="Close accessibility settings"
+          >
+            <span class="modal-close__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path d="m6.4 5 5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4L12 13.4 6.4 19 5 17.6l5.6-5.6L5 6.4z"></path>
+              </svg>
+            </span>
+          </button>
+        </div>
+
+        <div class="modal-content">
+          <form class="engine-form" data-accessibility-form>
+            <div class="control-groups">
+
+              <!-- ── Talkback ── -->
+              <fieldset class="control-group">
+                <legend>Talkback</legend>
+                <p class="control-group__description">
+                  Turn talkback on when you want spoken support, then choose how it follows you.
+                </p>
+                <div class="control-grid-3">
+                  <label class="control-stack">
+                    <span>Talkback</span>
+                    <select name="talkbackEnabled">
+                      <option value="off">Off</option>
+                      <option value="on">On</option>
+                    </select>
+                    <small>Turn spoken support on only when you want it.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Invocation</span>
+                    <select name="talkbackInvocation">
+                      <option value="hover">Mouse Only</option>
+                      <option value="focus">Keyboard Only</option>
+                      <option value="both">Mouse and Keyboard</option>
+                    </select>
+                    <small>Choose whether speech follows mouse, keyboard, or both.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Voice speed</span>
+                    <select name="speechRate">
+                      <option value="85">Slower</option>
+                      <option value="100">Steady</option>
+                      <option value="115">Quicker</option>
+                      <option value="130">Fast</option>
+                    </select>
+                    <small>Set how quickly talkback reads the current item.</small>
+                  </label>
+                </div>
+                <div class="tool-button-row">
+                  <button class="button button-primary"   type="button" data-speech-play>Read page aloud</button>
+                  <button class="button button-secondary" type="button" data-speech-pause>Pause</button>
+                  <button class="button button-secondary" type="button" data-speech-stop>Stop</button>
+                </div>
+                <p class="engine-note" data-speech-status aria-live="polite">
+                  Talkback is ready when your browser supports it.
+                </p>
+              </fieldset>
+
+              <!-- ── Display ── -->
+              <fieldset class="control-group">
+                <legend>Display</legend>
+                <div class="control-grid-4">
+                  <label class="control-stack">
+                    <span>Theme</span>
+                    <select name="appearance">
+                      <option value="default">Default</option>
+                      <option value="light">Light</option>
+                      <option value="dark">Dark</option>
+                    </select>
+                    <small>Switch between the site default, light, or dark presentation.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Colour</span>
+                    <select name="palette">
+                      <option value="default">Site colours</option>
+                      <option value="monochrome">Monochrome</option>
+                      <option value="blue">Blue</option>
+                      <option value="aqua">Aqua</option>
+                      <option value="green">Green</option>
+                      <option value="orange">Orange</option>
+                      <option value="purple">Purple</option>
+                      <option value="pink">Pink</option>
+                      <option value="yellow">Yellow</option>
+                      <option value="red">Red</option>
+                    </select>
+                    <small>Change the site palette without changing the page structure.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Contrast</span>
+                    <select name="contrast">
+                      <option value="minus-5">-5</option>
+                      <option value="minus-4">-4</option>
+                      <option value="minus-3">-3</option>
+                      <option value="minus-2">-2</option>
+                      <option value="minus-1">-1</option>
+                      <option value="default">Default</option>
+                      <option value="plus-1">+1</option>
+                      <option value="plus-2">+2</option>
+                      <option value="plus-3">+3</option>
+                      <option value="plus-4">+4</option>
+                      <option value="plus-5">+5</option>
+                    </select>
+                    <small>Raise or lower overall contrast strength.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Depth</span>
+                    <select name="depth">
+                      <option value="default">Default</option>
+                      <option value="reduced">Reduced</option>
+                      <option value="off">Off</option>
+                    </select>
+                    <small>Reduce or remove layered visual depth.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Transparency</span>
+                    <select name="transparency">
+                      <option value="default">Default</option>
+                      <option value="reduced">Reduced</option>
+                      <option value="off">Off</option>
+                    </select>
+                    <small>Tone down transparency and frosted surfaces.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Motion</span>
+                    <select name="motion">
+                      <option value="default">Default</option>
+                      <option value="reduced">Reduced</option>
+                      <option value="off">Off</option>
+                    </select>
+                    <small>Reduce moving effects and animated transitions.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Filter type</span>
+                    <select name="tint">
+                      <option value="default">None</option>
+                      <option value="warm">Warm</option>
+                      <option value="cool">Cool</option>
+                      <option value="soft">Soft glare filter</option>
+                      <option value="monochrome">Monochrome</option>
+                      <option value="dim">Dim</option>
+                      <option value="bright">Bright</option>
+                    </select>
+                    <small>Choose a whole-site visual filter.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Strength</span>
+                    <select name="filterStrength">
+                      <option value="default">Default</option>
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                    </select>
+                    <small>Set how strong the selected filter should feel.</small>
+                  </label>
+                </div>
+              </fieldset>
+
+              <!-- ── Text and reading ── -->
+              <fieldset class="control-group">
+                <legend>Text and reading</legend>
+                <div class="control-grid-4">
+                  <label class="control-stack">
+                    <span>Font</span>
+                    <select name="font">
+                      <option value="default">Site font</option>
+                      <option value="legible">Hyperlegible</option>
+                      <option value="dyslexia">Dyslexia-friendly</option>
+                      <option value="system">System sans</option>
+                    </select>
+                    <small>Swap to a more comfortable reading typeface.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Bold</span>
+                    <select name="boldText">
+                      <option value="default">Default</option>
+                      <option value="level-1">Level 1</option>
+                      <option value="level-2">Level 2</option>
+                      <option value="level-3">Level 3</option>
+                      <option value="level-4">Level 4</option>
+                    </select>
+                    <small>Increase text weight for stronger character definition.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Reading view</span>
+                    <select name="readingMode">
+                      <option value="default">Standard page</option>
+                      <option value="focused">Focused reading</option>
+                    </select>
+                    <small>Narrow the reading measure for calmer scanning.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Ruler</span>
+                    <select name="readingGuide">
+                      <option value="off">Off</option>
+                      <option value="1">1 line</option>
+                      <option value="3">3 lines</option>
+                      <option value="5">5 lines</option>
+                    </select>
+                    <small>Add a reading guide to help track lines on the page.</small>
+                  </label>
+                </div>
+                <div class="control-grid-4 control-grid-2--spacing">
+                  <label class="control-stack">
+                    <span>Text size</span>
+                    <select name="fontScale">
+                      <option value="90">90%</option>
+                      <option value="100">100%</option>
+                      <option value="110">110%</option>
+                      <option value="120">120%</option>
+                      <option value="130">130%</option>
+                      <option value="140">140%</option>
+                      <option value="150">150%</option>
+                      <option value="160">160%</option>
+                    </select>
+                    <small>Scale text without zooming the whole interface.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Line spacing</span>
+                    <select name="lineSpacing">
+                      <option value="80">80%</option>
+                      <option value="90">90%</option>
+                      <option value="100">100%</option>
+                      <option value="110">110%</option>
+                      <option value="120">120%</option>
+                      <option value="140">140%</option>
+                      <option value="160">160%</option>
+                      <option value="180">180%</option>
+                    </select>
+                    <small>Adjust the space between each line of text.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Paragraph spacing</span>
+                    <select name="paragraphSpacing">
+                      <option value="80">80%</option>
+                      <option value="90">90%</option>
+                      <option value="100">100%</option>
+                      <option value="110">110%</option>
+                      <option value="120">120%</option>
+                      <option value="140">140%</option>
+                      <option value="160">160%</option>
+                      <option value="180">180%</option>
+                    </select>
+                    <small>Increase the gap between paragraph blocks.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Letter spacing</span>
+                    <select name="letterSpacing">
+                      <option value="-8">-8%</option>
+                      <option value="-6">-6%</option>
+                      <option value="-4">-4%</option>
+                      <option value="-2">-2%</option>
+                      <option value="0">0%</option>
+                      <option value="2">+2%</option>
+                      <option value="4">+4%</option>
+                      <option value="6">+6%</option>
+                      <option value="8">+8%</option>
+                      <option value="10">+10%</option>
+                      <option value="12">+12%</option>
+                    </select>
+                    <small>Tighten or loosen spacing between letters.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Word spacing</span>
+                    <select name="wordSpacing">
+                      <option value="-10">-10%</option>
+                      <option value="-8">-8%</option>
+                      <option value="-5">-5%</option>
+                      <option value="-2">-2%</option>
+                      <option value="0">0%</option>
+                      <option value="2">+2%</option>
+                      <option value="4">+4%</option>
+                      <option value="8">+8%</option>
+                      <option value="12">+12%</option>
+                      <option value="14">+14%</option>
+                    </select>
+                    <small>Tighten or loosen spacing between words.</small>
+                  </label>
+                </div>
+              </fieldset>
+
+              <!-- ── Extra support ── -->
+              <fieldset class="control-group">
+                <legend>Extra support</legend>
+                <p class="control-group__description">Set how strong each support layer should be.</p>
+                <div class="control-grid-4">
+                  <label class="control-stack">
+                    <span>Focus highlight</span>
+                    <select name="focusBoost">
+                      <option value="default">Default</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                    </select>
+                    <small>Stronger focus rings around the item you are on.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Underline links</span>
+                    <select name="underlineLinks">
+                      <option value="default">Default</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                    </select>
+                    <small>Make links more obvious without changing the whole palette.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Landmark regions</span>
+                    <select name="landmark">
+                      <option value="off">Off</option>
+                      <option value="soft">Soft outline</option>
+                      <option value="clear">Clear outline</option>
+                    </select>
+                    <small>Highlight page regions with a visual border to aid navigation.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Soften images</span>
+                    <select name="dimMedia">
+                      <option value="default">Default</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                    </select>
+                    <small>Reduce glare and visual pressure from imagery.</small>
+                  </label>
+                </div>
+              </fieldset>
+
+            </div>
+
+            <div class="engine-form__footer">
+              <p
+                class="engine-form__status"
+                data-accessibility-status
+                aria-live="polite"
+              >
+                Changes show up straight away. Save them if you want to keep them.
+              </p>
+              <div class="button-row">
+                <button
+                  class="button button-primary"
+                  type="submit"
+                  data-accessibility-save
+                >
+                  Save these settings
+                </button>
+                <button
+                  class="button button-secondary"
+                  type="button"
+                  data-accessibility-reset
+                >
+                  Use site default
+                </button>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+      <!-- .ac-mobile-panel is injected here by site-ui.js at runtime -->
+    </div>
+    <!-- Accessibility Engine Modal end -->
+
+    <script src="scripts/accessibility-engine.js"></script>
+    <script src="scripts/site-ui.js"></script>
+  </body>
+</html>

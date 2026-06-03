@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<!--
+  Access for All Engine Demo
+  Purpose: Compact proof page that exercises shared primitives honestly.
+  Optional in production builds.
+-->
+<html lang="en-GB" data-theme="default" data-font="default" data-motion="default">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Compact design-system and accessibility-engine proof page for the Access for All starter."
+    />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+    <link rel="stylesheet" href="../styles/master.css" />
+    <title>Engine Demo | Access for All</title>
+    <style>
+      .demo-banner {
+        background: var(--gm-callout-error-surface);
+        border-bottom: 1px solid var(--gm-callout-error-border);
+        color: var(--colour-text);
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        padding: 0.7rem 1rem;
+        position: sticky;
+        text-align: center;
+        text-transform: uppercase;
+        top: 0;
+        z-index: 80;
+      }
+
+      .demo-hero {
+        background:
+          radial-gradient(
+            circle at top right,
+            color-mix(in srgb, var(--colour-brand-100) 72%, transparent),
+            transparent 52%
+          ),
+          linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--colour-surface-strong) 84%, transparent),
+            var(--colour-surface)
+          );
+      }
+
+      .demo-hero__grid,
+      .demo-proof-grid,
+      .demo-media-grid {
+        display: grid;
+        gap: var(--space-md);
+      }
+
+      .demo-hero__grid {
+        align-items: start;
+        grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+      }
+
+      .demo-proof-grid,
+      .demo-media-grid {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+      }
+
+      .demo-stage {
+        background:
+          linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--colour-surface) 92%, transparent),
+            color-mix(in srgb, var(--colour-surface-strong) 94%, transparent)
+          );
+        border: var(--border-standard);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--gm-shadow-panel);
+        display: grid;
+        gap: var(--space-md);
+        padding: clamp(1.25rem, 2.4vw, 2rem);
+      }
+
+      .demo-stat-copy {
+        color: var(--colour-muted);
+        font-size: 0.92rem;
+        margin: 0;
+      }
+
+      .demo-media {
+        display: block;
+        height: 100%;
+        object-fit: cover;
+        width: 100%;
+      }
+
+      .demo-media-frame {
+        aspect-ratio: 4 / 3;
+        border-radius: var(--radius-md);
+        display: block;
+        margin: 0;
+        overflow: hidden;
+        width: 100%;
+      }
+
+      .demo-chip-row,
+      .demo-tablist {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .demo-chip {
+        background: color-mix(in srgb, var(--colour-surface-strong) 84%, transparent);
+        border: 1px solid color-mix(in srgb, var(--colour-border) 76%, transparent);
+        border-radius: 999px;
+        color: var(--colour-text);
+        font-size: 0.84rem;
+        font-weight: 700;
+        padding: 0.65rem 0.95rem;
+      }
+
+      .demo-tablist [role="tab"][aria-selected="true"] {
+        background: var(--button-bg-primary);
+        border-color: var(--button-border-primary);
+        color: var(--button-text-primary);
+      }
+
+      .demo-panel-copy {
+        color: var(--colour-muted);
+        margin: 0;
+      }
+
+      .demo-carousel {
+        display: grid;
+        gap: var(--space-md);
+      }
+
+      .demo-carousel__viewport {
+        background: var(--colour-surface);
+        border: var(--border-standard);
+        border-radius: var(--radius-lg);
+        overflow: clip;
+      }
+
+      .demo-carousel__slide {
+        display: grid;
+        gap: var(--space-md);
+        grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
+        padding: clamp(1rem, 2vw, 1.35rem);
+      }
+
+      .demo-carousel__media {
+        aspect-ratio: 16 / 10;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+      }
+
+      .demo-carousel__controls {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        justify-content: space-between;
+      }
+
+      .demo-carousel__status {
+        color: var(--colour-muted);
+        font-size: 0.92rem;
+        margin: 0;
+      }
+
+      .demo-motion-grid {
+        display: grid;
+        gap: var(--space-md);
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+      }
+
+      .demo-motion-card {
+        background: var(--colour-surface);
+        border: var(--border-standard);
+        border-radius: var(--radius-lg);
+        display: grid;
+        gap: 0.9rem;
+        min-height: 15rem;
+        padding: 1.1rem;
+      }
+
+      .demo-motion-card p {
+        margin: 0;
+      }
+
+      .demo-animate-pulse {
+        align-items: center;
+        background: color-mix(in srgb, var(--colour-accent) 18%, var(--colour-surface));
+        border: 1px solid color-mix(in srgb, var(--colour-accent) 54%, var(--colour-border));
+        border-radius: 999px;
+        display: inline-flex;
+        justify-content: center;
+        min-height: 3.4rem;
+        padding: 0.6rem 1rem;
+        width: fit-content;
+        animation: demo-pulse 2.2s infinite ease-in-out;
+      }
+
+      .demo-animate-scan {
+        background: var(--colour-surface-strong);
+        border: 1px solid color-mix(in srgb, var(--colour-border) 76%, transparent);
+        border-radius: var(--radius-md);
+        min-height: 4.5rem;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .demo-animate-scan::after {
+        background: linear-gradient(
+          90deg,
+          transparent 0%,
+          color-mix(in srgb, var(--colour-accent) 34%, transparent) 50%,
+          transparent 100%
+        );
+        content: "";
+        inset: 0;
+        position: absolute;
+        transform: translateX(-100%);
+        animation: demo-scan 2.8s infinite linear;
+      }
+
+      .demo-animate-float {
+        align-items: center;
+        display: flex;
+        gap: 0.75rem;
+      }
+
+      .demo-animate-orb {
+        animation: demo-float 3.1s infinite alternate var(--gm-ease-out);
+        background: color-mix(in srgb, var(--colour-accent) 24%, var(--colour-surface));
+        border: 1px solid color-mix(in srgb, var(--colour-accent) 52%, var(--colour-border));
+        border-radius: 50%;
+        box-shadow: var(--gm-shadow-soft);
+        height: 3.3rem;
+        width: 3.3rem;
+      }
+
+      .demo-progress {
+        background: color-mix(in srgb, var(--colour-surface-strong) 84%, transparent);
+        border-radius: 999px;
+        height: 0.8rem;
+        overflow: clip;
+      }
+
+      .demo-progress__bar {
+        background: linear-gradient(
+          90deg,
+          var(--colour-accent),
+          color-mix(in srgb, var(--colour-accent-strong) 74%, var(--colour-accent))
+        );
+        border-radius: inherit;
+        height: 100%;
+        width: 68%;
+        animation: demo-progress 2.6s infinite alternate ease-in-out;
+      }
+
+      .demo-motion-note {
+        color: var(--colour-muted);
+        font-size: 0.92rem;
+        margin: 0;
+      }
+
+      @keyframes demo-pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.04);
+        }
+      }
+
+      @keyframes demo-scan {
+        from {
+          transform: translateX(-100%);
+        }
+        to {
+          transform: translateX(100%);
+        }
+      }
+
+      @keyframes demo-float {
+        from {
+          transform: translate3d(0, 0.2rem, 0);
+        }
+        to {
+          transform: translate3d(0, -0.35rem, 0);
+        }
+      }
+
+      @keyframes demo-progress {
+        from {
+          width: 44%;
+        }
+        to {
+          width: 82%;
+        }
+      }
+
+      .demo-list {
+        display: grid;
+        gap: 0.75rem;
+        margin: 0;
+        padding-left: 1.2rem;
+      }
+
+      .demo-divider {
+        margin: 0;
+      }
+
+      @media (max-width: 48rem) {
+        .demo-hero__grid {
+          grid-template-columns: 1fr;
+        }
+
+        .demo-carousel__slide {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body id="page-top">
+    <div class="demo-banner" role="status" aria-live="polite">
+      Optional demo page — use it to verify the engine before launch
+    </div>
+
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <span
+      class="sr-only"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      data-engine-status
+    ></span>
+
+    <div class="site-shell">
+      <header class="site-header" data-site-header>
+        <div class="utility-bar container">
+          <div class="header-brand">
+            <a class="brand-mark" href="../index.html">
+              <span class="brand-mark__lockup">
+                <span class="brand-mark__name">Access for All</span>
+                <span class="brand-mark__eyebrow">Compact demo</span>
+              </span>
+            </a>
+          </div>
+
+          <nav class="primary-nav" aria-label="Primary navigation" data-primary-nav>
+            <ul id="primary-navigation" class="nav-list">
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="demo.html" aria-current="page">Demo</a></li>
+              <li><a href="engine.html">Engine docs</a></li>
+            </ul>
+          </nav>
+
+          <div class="header-actions">
+            <div class="header-accessibility">
+              <button
+                class="accessibility-trigger"
+                type="button"
+                data-accessibility-open
+                aria-haspopup="dialog"
+                aria-controls="accessibility-panel"
+                aria-expanded="false"
+                aria-label="Open accessibility settings"
+              >
+                <span class="accessibility-trigger__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" focusable="false">
+                    <path
+                      d="M10.5 2h3l.5 2.1a7.95 7.95 0 0 1 1.83.76l1.88-1.04 2.12 2.12-1.04 1.88c.32.58.58 1.19.76 1.83L22 10.5v3l-2.1.5a7.95 7.95 0 0 1-.76 1.83l1.04 1.88-2.12 2.12-1.88-1.04a7.95 7.95 0 0 1-1.83.76L13.5 22h-3l-.5-2.1a7.95 7.95 0 0 1-1.83-.76l-1.88 1.04-2.12-2.12 1.04-1.88a7.95 7.95 0 0 1-.76-1.83L2 13.5v-3l2.1-.5c.18-.64.44-1.25.76-1.83L3.82 6.29l2.12-2.12 1.88 1.04c.58-.32 1.19-.58 1.83-.76L10.5 2Zm1.5 6.25A3.75 3.75 0 1 0 12 15.75a3.75 3.75 0 0 0 0-7.5Z"
+                    />
+                  </svg>
+                </span>
+                <span class="accessibility-trigger__label">Accessibility</span>
+              </button>
+            </div>
+
+            <button
+              class="menu-toggle"
+              type="button"
+              data-nav-toggle
+              aria-expanded="false"
+              aria-controls="primary-navigation"
+              aria-label="Open menu"
+            >
+              Open menu
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main id="main-content" class="site-main">
+        <section class="section section--hero demo-hero">
+          <div class="container demo-hero__grid">
+            <div class="reading-surface">
+              <p class="eyebrow">Delete-me proof page</p>
+              <h1>One smaller demo that tells the truth.</h1>
+              <p>
+                This page is intentionally compact. Every section is built from the
+                shared GM shell, cards, buttons, forms, and token-driven surfaces so
+                the accessibility engine is proving the real template rather than a
+                separate in-page design system.
+              </p>
+              <div class="button-row">
+                <button class="button button-primary" type="button" data-accessibility-open>
+                  Open accessibility settings
+                </button>
+                <a class="button button-secondary" href="#proof-title">Jump to proof sections</a>
+              </div>
+            </div>
+
+            <aside class="demo-stage" aria-labelledby="demo-stage-title">
+              <div class="reading-surface">
+                <p class="eyebrow">What this page covers</p>
+                <h2 id="demo-stage-title">Shared primitives only</h2>
+              </div>
+              <div class="stat-grid">
+                <div class="stat-card">
+                  <p class="stat-card__value">8</p>
+                  <p class="stat-card__label">Proof sections</p>
+                </div>
+                <div class="stat-card">
+                  <p class="stat-card__value">0</p>
+                  <p class="stat-card__label">External dependencies</p>
+                </div>
+                <div class="stat-card">
+                  <p class="stat-card__value">1</p>
+                  <p class="stat-card__label">Runtime engine</p>
+                </div>
+                <div class="stat-card">
+                  <p class="stat-card__value">15+</p>
+                  <p class="stat-card__label">State axes in play</p>
+                </div>
+              </div>
+              <p class="demo-stat-copy">
+                Change theme, palette, contrast, motion, transparency, landmarks,
+                reading mode, spacing, and media dimming to verify the shared system.
+              </p>
+            </aside>
+          </div>
+        </section>
+
+        <section class="section section--muted" aria-labelledby="proof-title">
+          <div class="container">
+            <div class="section-heading">
+              <p class="eyebrow">Proof points</p>
+              <h2 id="proof-title">Each section exercises a different part of the contract.</h2>
+              <p class="section-heading__support">
+                The cards, buttons, and supporting copy below should all respond to
+                the engine without one-off overrides.
+              </p>
+            </div>
+
+            <div class="card-grid">
+              <article class="card card--interactive">
+                <div class="reading-surface">
+                  <p class="card__eyebrow">Reading</p>
+                  <h3 class="card__title">Focused reading and spacing</h3>
+                  <p class="card__body">
+                    Reading mode narrows measure on real content surfaces. Line,
+                    paragraph, letter, and word spacing all inherit from runtime tokens.
+                  </p>
+                </div>
+              </article>
+
+              <article class="card card--interactive card--featured">
+                <div class="reading-surface">
+                  <p class="card__eyebrow">Visual support</p>
+                  <h3 class="card__title">Contrast, depth, transparency</h3>
+                  <p class="card__body">
+                    Shared cards and panels are where these states should be most visible,
+                    because they are the core surfaces every real site will reuse.
+                  </p>
+                </div>
+              </article>
+
+              <article class="card card--interactive card--tint-strong">
+                <div class="reading-surface">
+                  <p class="card__eyebrow">Structure</p>
+                  <h3 class="card__title">Landmarks and focus</h3>
+                  <p class="card__body">
+                    Region highlighting should outline these containers without moving
+                    layout, while focus boost should make navigation states much clearer.
+                  </p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="buttons-title">
+          <div class="container">
+            <div class="content-layout">
+              <div class="content-layout__main stack">
+                <div class="section-heading">
+                  <p class="eyebrow">Core actions</p>
+                  <h2 id="buttons-title">Buttons, callouts, and stateful emphasis</h2>
+                  <p class="section-heading__support">
+                    These are the highest-frequency primitives in the starter. They need to
+                    remain readable under palette swaps, dark mode, contrast changes, and
+                    reduced motion.
+                  </p>
+                </div>
+
+                <div class="panel stack">
+                  <div class="button-row">
+                    <a class="button button-primary" href="#forms-title">Primary action</a>
+                    <a class="button button-secondary" href="#media-title">Secondary action</a>
+                    <button class="button button--ghost" type="button">Ghost action</button>
+                    <button class="button button-primary button--sm" type="button">Small</button>
+                    <button class="button button-secondary button--lg" type="button">Large</button>
+                  </div>
+                  <hr class="demo-divider" />
+                  <div class="stack">
+                    <div class="callout reading-surface">
+                      <strong>Default callout</strong>
+                      <p>Shared informative emphasis using the current accent tone.</p>
+                    </div>
+                    <div class="callout callout--warning reading-surface">
+                      <strong>Warning callout</strong>
+                      <p>Useful for staged content, launch notes, or environment notices.</p>
+                    </div>
+                    <div class="callout callout--success reading-surface">
+                      <strong>Success callout</strong>
+                      <p>Confirms actions without needing a custom page-specific component.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <aside class="content-layout__sidebar">
+                <div class="card card--dark reading-surface">
+                  <p class="card__eyebrow">Why this matters</p>
+                  <h3 class="card__title">The demo is smaller on purpose.</h3>
+                  <p class="card__body">
+                    A proof page earns trust when it uses the same primitives that
+                    production pages will use. Large local style islands hide problems.
+                  </p>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        <section class="section section--alt" aria-labelledby="forms-title">
+          <div class="container">
+            <div class="section-heading">
+              <p class="eyebrow">Forms</p>
+              <h2 id="forms-title">Generic form surfaces with no custom page skin</h2>
+              <p class="section-heading__support">
+                This sample uses the shared contact form classes directly. It is not wired to
+                submit anywhere, but it exercises spacing, labels, inputs, consent UI, and errors styles.
+              </p>
+            </div>
+
+            <form class="contact-form" novalidate>
+              <fieldset class="contact-form__section">
+                <legend>Contact details</legend>
+                <p class="contact-form__section-intro">
+                  Shared fields should stay readable under all visual combinations and
+                  remain comfortable when text size or spacing is increased.
+                </p>
+                <div class="contact-form__grid">
+                  <div class="contact-form__field">
+                    <label for="demo-name">Name</label>
+                    <input id="demo-name" type="text" name="name" />
+                    <small>Example of a standard text field.</small>
+                  </div>
+                  <div class="contact-form__field">
+                    <label for="demo-email">Email</label>
+                    <input id="demo-email" type="email" name="email" />
+                    <small>Uses the shared text input treatment.</small>
+                  </div>
+                  <div class="contact-form__field">
+                    <label for="demo-purpose">Purpose</label>
+                    <select id="demo-purpose" name="purpose">
+                      <option value="">Choose one</option>
+                      <option>Request a walkthrough</option>
+                      <option>Ask about integration</option>
+                      <option>Review the accessibility engine</option>
+                    </select>
+                    <small>Checks select styling across theme and contrast states.</small>
+                  </div>
+                  <div class="contact-form__field">
+                    <label for="demo-phone">Phone</label>
+                    <input id="demo-phone" type="tel" name="phone" />
+                    <small>Optional field with the same shared control shell.</small>
+                  </div>
+                  <div class="contact-form__field contact-form__field--full">
+                    <label for="demo-message">Message</label>
+                    <textarea id="demo-message" name="message">This proof page is smaller, more honest, and easier to maintain.</textarea>
+                    <small>Textarea shows line spacing, paragraph spacing, font, and contrast changes clearly.</small>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset class="contact-form__section">
+                <legend>Consent example</legend>
+                <label class="contact-form__consent" for="demo-consent">
+                  <input id="demo-consent" type="checkbox" checked />
+                  <div class="reading-surface">
+                    <strong>Use this information to respond</strong>
+                    <small>
+                      This is a generic proof of the shared consent field pattern, not a
+                      live submission form.
+                    </small>
+                  </div>
+                </label>
+                <div class="contact-form__actions">
+                  <p class="contact-form__status" data-state="ready">
+                    Example status text using the shared contact-form status styles.
+                  </p>
+                  <div class="button-row">
+                    <button class="button button-primary" type="button">Send message</button>
+                    <button class="button button-secondary" type="reset">Reset</button>
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="media-title">
+          <div class="container">
+            <div class="section-heading">
+              <p class="eyebrow">Media and regions</p>
+              <h2 id="media-title">Images, landmarks, and dark surfaces</h2>
+              <p class="section-heading__support">
+                These examples help verify dim-media, landmark highlighting, and
+                palette changes on a mix of light and dark containers.
+              </p>
+            </div>
+
+            <div class="demo-media-grid">
+              <article class="card" data-accessibility-region="feature">
+                <div class="decorative-image demo-media-frame">
+                  <img
+                    class="demo-media"
+                    src="../assets/images/demo/feature/pic-01.jpg"
+                    alt="Abstract landscape used to test image dimming and contrast changes"
+                    width="960"
+                    height="720"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="reading-surface">
+                  <p class="card__eyebrow">Feature media</p>
+                  <h3 class="card__title">Dim-media should visibly affect this image</h3>
+                  <p class="card__body">
+                    The image uses normal page flow and shared card styling so dimming
+                    and suppression act on a realistic surface instead of a fake demo skin.
+                  </p>
+                </div>
+              </article>
+
+              <article class="card card--dark" data-accessibility-region="announcement">
+                <div class="decorative-image demo-media-frame">
+                  <img
+                    class="demo-media"
+                    src="../assets/images/demo/feature/pic-02.jpg"
+                    alt="Interface composition used inside a dark test card"
+                    width="960"
+                    height="720"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="reading-surface">
+                  <p class="card__eyebrow">Dark variant</p>
+                  <h3 class="card__title">Dark card plus image overlay test</h3>
+                  <p class="card__body">
+                    This checks that panel text, borders, and media still hold together
+                    under dark mode, contrast steps, and palette changes.
+                  </p>
+                </div>
+              </article>
+
+              <article class="panel stack" data-accessibility-region="complementary">
+                <div class="reading-surface">
+                  <p class="eyebrow">Landmark demo</p>
+                  <h3>Region highlighting should not shift this layout</h3>
+                  <p class="demo-panel-copy">
+                    Set landmarks to <code>soft</code> or <code>clear</code> and this
+                    panel should gain clearer structure without changing width or padding.
+                  </p>
+                </div>
+                <div class="demo-chip-row">
+                  <span class="demo-chip">Theme</span>
+                  <span class="demo-chip">Palette</span>
+                  <span class="demo-chip">Contrast</span>
+                  <span class="demo-chip">Focus</span>
+                  <span class="demo-chip">Landmarks</span>
+                </div>
+              </article>
+            </div>
+
+            <div class="panel stack" data-demo-carousel aria-labelledby="carousel-title">
+              <div class="reading-surface">
+                <p class="eyebrow">Autoplaying media proof</p>
+                <h3 id="carousel-title">A revolving image section for motion, dimming, and suppression</h3>
+                <p class="demo-panel-copy">
+                  Default motion should rotate these slides automatically. Reduced motion
+                  slows the cycle. Motion off pauses it completely while media dimming still
+                  affects the imagery.
+                </p>
+              </div>
+
+              <div class="demo-carousel">
+                <div class="demo-carousel__viewport">
+                  <article class="demo-carousel__slide" data-carousel-slide data-active="true">
+                    <div class="decorative-image demo-carousel__media">
+                      <img
+                        class="demo-media"
+                        src="../assets/images/demo/feature/pic-01.jpg"
+                        alt="Wide landscape proof image for the autoplaying carousel"
+                        width="960"
+                        height="720"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div class="reading-surface">
+                      <p class="card__eyebrow">Slide 1</p>
+                      <h4 class="card__title">Motion should move the content, not the layout shell</h4>
+                      <p class="card__body">
+                        This first panel verifies autoplay cadence, image dimming, and
+                        readable text over the same shared card tokens.
+                      </p>
+                    </div>
+                  </article>
+
+                  <article class="demo-carousel__slide" data-carousel-slide hidden>
+                    <div class="decorative-image demo-carousel__media">
+                      <img
+                        class="demo-media"
+                        src="../assets/images/demo/feature/pic-02.jpg"
+                        alt="Interface proof image used to test darker media and contrast combinations"
+                        width="960"
+                        height="720"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div class="reading-surface">
+                      <p class="card__eyebrow">Slide 2</p>
+                      <h4 class="card__title">High-contrast palettes should still keep image support calm</h4>
+                      <p class="card__body">
+                        Contrast and palette changes should strengthen the frame while
+                        dim-media still lowers visual noise in the imagery itself.
+                      </p>
+                    </div>
+                  </article>
+
+                  <article class="demo-carousel__slide" data-carousel-slide hidden>
+                    <div class="decorative-image demo-carousel__media">
+                      <img
+                        class="demo-media"
+                        src="../assets/images/demo/feature/pic-03.jpg"
+                        alt="Third carousel image for testing autoplay and suppression states"
+                        width="960"
+                        height="720"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div class="reading-surface">
+                      <p class="card__eyebrow">Slide 3</p>
+                      <h4 class="card__title">Motion off should stop rotation without breaking the section</h4>
+                      <p class="card__body">
+                        The engine should be able to pause moving content and still leave
+                        a coherent proof surface behind for manual browsing.
+                      </p>
+                    </div>
+                  </article>
+                </div>
+
+                <div class="demo-carousel__controls">
+                  <div class="button-row">
+                    <button class="button button-secondary" type="button" data-carousel-prev>Previous slide</button>
+                    <button class="button button-secondary" type="button" data-carousel-next>Next slide</button>
+                  </div>
+                  <p class="demo-carousel__status" data-carousel-status aria-live="polite">
+                    Slide 1 of 3
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section section--muted" aria-labelledby="motion-title">
+          <div class="container">
+            <div class="section-heading">
+              <p class="eyebrow">Motion proof</p>
+              <h2 id="motion-title">Animated elements that the engine can soften or stop</h2>
+              <p class="section-heading__support">
+                These examples are intentionally obvious so reduced motion and motion off
+                have something real to act on during review.
+              </p>
+            </div>
+
+            <div class="demo-motion-grid">
+              <article class="demo-motion-card">
+                <div class="reading-surface">
+                  <p class="card__eyebrow">Pulse</p>
+                  <h3 class="card__title">Attention badge</h3>
+                </div>
+                <div class="demo-animate-pulse animate-pulse" data-motion-element>
+                  Review-ready state cue
+                </div>
+                <p class="demo-motion-note">
+                  Default motion pulses gently. Reduced motion collapses it. Motion off removes it.
+                </p>
+              </article>
+
+              <article class="demo-motion-card">
+                <div class="reading-surface">
+                  <p class="card__eyebrow">Sweep</p>
+                  <h3 class="card__title">Scanning highlight</h3>
+                </div>
+                <div class="demo-animate-scan animate-scan" data-motion-element></div>
+                <p class="demo-motion-note">
+                  This verifies that decorative motion is suppressed without damaging the container.
+                </p>
+              </article>
+
+              <article class="demo-motion-card">
+                <div class="reading-surface">
+                  <p class="card__eyebrow">Float + progress</p>
+                  <h3 class="card__title">Animated composition</h3>
+                </div>
+                <div class="demo-animate-float">
+                  <div class="demo-animate-orb floating-element" data-motion-element aria-hidden="true"></div>
+                  <div class="reading-surface">
+                    <p>Shared surfaces should stay readable while decorative motion is active.</p>
+                  </div>
+                </div>
+                <div class="demo-progress">
+                  <div class="demo-progress__bar animate-progress" data-motion-element></div>
+                </div>
+                <p class="demo-motion-note" data-demo-motion-note>
+                  Default motion keeps the proof live. Reduced motion softens it. Motion off freezes it.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section section--muted" aria-labelledby="interaction-title">
+          <div class="container">
+            <div class="section-heading">
+              <p class="eyebrow">Interaction</p>
+              <h2 id="interaction-title">A small tabbed widget to exercise shared runtime UI</h2>
+              <p class="section-heading__support">
+                This uses the optional <code>data-platform-explorer</code> behavior from
+                <code>site-ui.js</code> so the proof page still checks one richer interaction.
+              </p>
+            </div>
+
+            <section class="panel stack" data-platform-explorer>
+              <div class="demo-tablist" role="tablist" aria-label="Proof tabs">
+                <button class="button button-secondary" type="button" role="tab" aria-selected="true" aria-controls="demo-tab-overview" id="demo-tab-button-overview">
+                  Overview
+                </button>
+                <button class="button button-secondary" type="button" role="tab" aria-selected="false" aria-controls="demo-tab-engine" id="demo-tab-button-engine">
+                  Engine
+                </button>
+                <button class="button button-secondary" type="button" role="tab" aria-selected="false" aria-controls="demo-tab-ship" id="demo-tab-button-ship">
+                  Ship notes
+                </button>
+              </div>
+
+              <div id="demo-tab-overview" role="tabpanel" aria-labelledby="demo-tab-button-overview" class="reading-surface">
+                <p>
+                  The goal of this page is not breadth for its own sake. It is to show
+                  that the real template primitives respond coherently when the engine state changes.
+                </p>
+              </div>
+
+              <div id="demo-tab-engine" role="tabpanel" aria-labelledby="demo-tab-button-engine" class="reading-surface" hidden>
+                <ul class="demo-list">
+                  <li>The engine writes root <code>data-*</code> attributes and runtime CSS variables.</li>
+                  <li>Shared CSS consumes those tokens across shell, cards, forms, and modal UI.</li>
+                  <li>The page avoids large local style systems that would weaken the proof.</li>
+                </ul>
+              </div>
+
+              <div id="demo-tab-ship" role="tabpanel" aria-labelledby="demo-tab-button-ship" class="reading-surface" hidden>
+                <p>
+                  For handoff, keep <code>index.html</code> as the real starter, keep
+                  <code>engine.html</code> as technical reference if useful, and delete
+                  this page before launch.
+                </p>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="section section--dark" aria-labelledby="finish-title">
+          <div class="container">
+            <div class="section-heading">
+              <p class="eyebrow">Finish line</p>
+              <h2 id="finish-title">A manager-ready proof of concept should feel deliberate.</h2>
+              <p class="section-heading__support">
+                This page now demonstrates the product idea without carrying a second,
+                demo-only visual system inside it.
+              </p>
+            </div>
+            <div class="button-row button-row--center">
+              <a class="button button-primary" href="../index.html">View the starter template</a>
+              <a class="button button-secondary" href="engine.html">Read the engine notes</a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-inner">
+          <section class="footer-brand" aria-labelledby="footer-brand-title">
+            <p class="eyebrow">Access for All</p>
+            <h2 id="footer-brand-title">Compact proof page for the accessibility engine starter.</h2>
+            <p class="reading-surface">
+              Built to verify the shared shell, forms, cards, modal, and engine state model.
+            </p>
+          </section>
+
+          <section class="footer-nav-group" aria-labelledby="footer-sitemap-title">
+            <h2 class="footer-nav-heading" id="footer-sitemap-title">Pages</h2>
+            <ul class="footer-nav-list">
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="demo.html" aria-current="page">Demo</a></li>
+              <li><a href="engine.html">Engine docs</a></li>
+            </ul>
+          </section>
+
+          <section class="footer-nav-group" aria-labelledby="footer-tools-title">
+            <h2 class="footer-nav-heading" id="footer-tools-title">Tools</h2>
+            <ul class="footer-nav-list">
+              <li>
+                <button class="footer-link-button" type="button" data-accessibility-open>
+                  Accessibility settings
+                </button>
+              </li>
+              <li>
+                <button class="footer-link-button" type="button" data-consent-manage-open>
+                  Cookie settings
+                </button>
+              </li>
+            </ul>
+          </section>
+
+          <section class="footer-nav-group" aria-labelledby="footer-reference-title">
+            <h2 class="footer-nav-heading" id="footer-reference-title">Reference</h2>
+            <ul class="footer-nav-list">
+              <li><a href="#proof-title">Proof sections</a></li>
+              <li><a href="../index.html">Starter page</a></li>
+              <li><a href="engine.html">Implementation notes</a></li>
+            </ul>
+          </section>
+
+          <div class="footer-meta">
+            <small>Access for All engine demo page</small>
+            <p>Shared-primitives proof page for the accessibility engine starter.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <div class="modal-backdrop" data-modal-backdrop hidden></div>
+
+    <div
+      class="accessibility-modal"
+      data-accessibility-modal
+      id="accessibility-panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="accessibility-title"
+      aria-describedby="accessibility-description"
+      hidden
+    >
+      <div class="modal-panel">
+        <div class="modal-header">
+          <div class="engine-intro engine-intro--streamlined">
+            <p class="eyebrow">Accessibility engine</p>
+            <h2 id="accessibility-title">Make this page easier to use</h2>
+            <p id="accessibility-description">Change this page to suit you.</p>
+          </div>
+          <button
+            class="modal-close"
+            type="button"
+            data-accessibility-close
+            aria-label="Close accessibility settings"
+          >
+            <span class="modal-close__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path d="m6.4 5 5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4L12 13.4 6.4 19 5 17.6l5.6-5.6L5 6.4z"></path>
+              </svg>
+            </span>
+          </button>
+        </div>
+
+        <div class="modal-content">
+          <form class="engine-form" data-accessibility-form>
+            <div class="control-groups">
+              <fieldset class="control-group">
+                <legend>Talkback</legend>
+                <p class="control-group__description">
+                  Turn talkback on when you want spoken support, then choose how it follows you.
+                </p>
+                <div class="control-grid-3">
+                  <label class="control-stack">
+                    <span>Talkback</span>
+                    <select name="talkbackEnabled">
+                      <option value="off">Off</option>
+                      <option value="on">On</option>
+                    </select>
+                    <small>Turn spoken support on only when you want it.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Invocation</span>
+                    <select name="talkbackInvocation">
+                      <option value="hover">Mouse Only</option>
+                      <option value="focus">Keyboard Only</option>
+                      <option value="both">Mouse and Keyboard</option>
+                    </select>
+                    <small>Choose whether speech follows mouse, keyboard, or both.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Voice speed</span>
+                    <select name="speechRate">
+                      <option value="85">Slower</option>
+                      <option value="100">Steady</option>
+                      <option value="115">Quicker</option>
+                      <option value="130">Fast</option>
+                    </select>
+                    <small>Set how quickly talkback reads the current item.</small>
+                  </label>
+                </div>
+                <div class="tool-button-row">
+                  <button class="button button-primary" type="button" data-speech-play>Read page aloud</button>
+                  <button class="button button-secondary" type="button" data-speech-pause>Pause</button>
+                  <button class="button button-secondary" type="button" data-speech-stop>Stop</button>
+                </div>
+                <p class="engine-note" data-speech-status aria-live="polite">
+                  Talkback is ready when your browser supports it.
+                </p>
+              </fieldset>
+
+              <fieldset class="control-group">
+                <legend>Display</legend>
+                <div class="control-grid-4">
+                  <label class="control-stack">
+                    <span>Theme</span>
+                    <select name="appearance">
+                      <option value="default">Default</option>
+                      <option value="light">Light</option>
+                      <option value="dark">Dark</option>
+                    </select>
+                    <small>Switch between the site default, light, or dark presentation.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Colour</span>
+                    <select name="palette">
+                      <option value="default">Site colours</option>
+                      <option value="monochrome">Monochrome</option>
+                      <option value="blue">Blue</option>
+                      <option value="aqua">Aqua</option>
+                      <option value="green">Green</option>
+                      <option value="orange">Orange</option>
+                      <option value="purple">Purple</option>
+                      <option value="pink">Pink</option>
+                      <option value="yellow">Yellow</option>
+                      <option value="red">Red</option>
+                    </select>
+                    <small>Change the site palette without changing the page structure.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Contrast</span>
+                    <select name="contrast">
+                      <option value="minus-5">-5</option>
+                      <option value="minus-4">-4</option>
+                      <option value="minus-3">-3</option>
+                      <option value="minus-2">-2</option>
+                      <option value="minus-1">-1</option>
+                      <option value="default">Default</option>
+                      <option value="plus-1">+1</option>
+                      <option value="plus-2">+2</option>
+                      <option value="plus-3">+3</option>
+                      <option value="plus-4">+4</option>
+                      <option value="plus-5">+5</option>
+                    </select>
+                    <small>Raise or lower overall contrast strength.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Depth</span>
+                    <select name="depth">
+                      <option value="default">Default</option>
+                      <option value="reduced">Reduced</option>
+                      <option value="off">Off</option>
+                    </select>
+                    <small>Reduce or remove layered visual depth.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Transparency</span>
+                    <select name="transparency">
+                      <option value="default">Default</option>
+                      <option value="reduced">Reduced</option>
+                      <option value="off">Off</option>
+                    </select>
+                    <small>Tone down transparency and frosted surfaces.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Motion</span>
+                    <select name="motion">
+                      <option value="default">Default</option>
+                      <option value="reduced">Reduced</option>
+                      <option value="off">Off</option>
+                    </select>
+                    <small>Reduce moving effects and animated transitions.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Filter type</span>
+                    <select name="tint">
+                      <option value="default">None</option>
+                      <option value="warm">Warm</option>
+                      <option value="cool">Cool</option>
+                      <option value="soft">Soft glare filter</option>
+                      <option value="monochrome">Monochrome</option>
+                      <option value="dim">Dim</option>
+                      <option value="bright">Bright</option>
+                    </select>
+                    <small>Choose a whole-site visual filter.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Strength</span>
+                    <select name="filterStrength">
+                      <option value="default">Default</option>
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                    </select>
+                    <small>Set how strong the selected filter should feel.</small>
+                  </label>
+                </div>
+              </fieldset>
+
+              <fieldset class="control-group">
+                <legend>Text and reading</legend>
+                <div class="control-grid-4">
+                  <label class="control-stack">
+                    <span>Font</span>
+                    <select name="font">
+                      <option value="default">Site font</option>
+                      <option value="legible">Hyperlegible</option>
+                      <option value="dyslexia">Dyslexia-friendly</option>
+                      <option value="system">System sans</option>
+                    </select>
+                    <small>Swap to a more comfortable reading typeface.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Bold</span>
+                    <select name="boldText">
+                      <option value="default">Default</option>
+                      <option value="level-1">Level 1</option>
+                      <option value="level-2">Level 2</option>
+                      <option value="level-3">Level 3</option>
+                      <option value="level-4">Level 4</option>
+                    </select>
+                    <small>Increase text weight for stronger character definition.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Reading view</span>
+                    <select name="readingMode">
+                      <option value="default">Standard page</option>
+                      <option value="focused">Focused reading</option>
+                    </select>
+                    <small>Narrow the reading measure for calmer scanning.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Ruler</span>
+                    <select name="readingGuide">
+                      <option value="off">Off</option>
+                      <option value="1">1 line</option>
+                      <option value="3">3 lines</option>
+                      <option value="5">5 lines</option>
+                    </select>
+                    <small>Add a reading guide to help track lines on the page.</small>
+                  </label>
+                </div>
+                <div class="control-grid-4 control-grid-2--spacing">
+                  <label class="control-stack">
+                    <span>Text size</span>
+                    <select name="fontScale">
+                      <option value="90">90%</option>
+                      <option value="100">100%</option>
+                      <option value="110">110%</option>
+                      <option value="120">120%</option>
+                      <option value="130">130%</option>
+                      <option value="140">140%</option>
+                      <option value="150">150%</option>
+                      <option value="160">160%</option>
+                    </select>
+                    <small>Scale text without zooming the whole interface.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Line spacing</span>
+                    <select name="lineSpacing">
+                      <option value="80">80%</option>
+                      <option value="90">90%</option>
+                      <option value="100">100%</option>
+                      <option value="110">110%</option>
+                      <option value="120">120%</option>
+                      <option value="140">140%</option>
+                      <option value="160">160%</option>
+                      <option value="180">180%</option>
+                    </select>
+                    <small>Adjust the space between each line of text.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Paragraph spacing</span>
+                    <select name="paragraphSpacing">
+                      <option value="80">80%</option>
+                      <option value="90">90%</option>
+                      <option value="100">100%</option>
+                      <option value="110">110%</option>
+                      <option value="120">120%</option>
+                      <option value="140">140%</option>
+                      <option value="160">160%</option>
+                      <option value="180">180%</option>
+                    </select>
+                    <small>Increase the gap between paragraph blocks.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Letter spacing</span>
+                    <select name="letterSpacing">
+                      <option value="-8">-8%</option>
+                      <option value="-6">-6%</option>
+                      <option value="-4">-4%</option>
+                      <option value="-2">-2%</option>
+                      <option value="0">0%</option>
+                      <option value="2">+2%</option>
+                      <option value="4">+4%</option>
+                      <option value="6">+6%</option>
+                      <option value="8">+8%</option>
+                      <option value="10">+10%</option>
+                      <option value="12">+12%</option>
+                    </select>
+                    <small>Tighten or loosen spacing between letters.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Word spacing</span>
+                    <select name="wordSpacing">
+                      <option value="-10">-10%</option>
+                      <option value="-8">-8%</option>
+                      <option value="-5">-5%</option>
+                      <option value="-2">-2%</option>
+                      <option value="0">0%</option>
+                      <option value="2">+2%</option>
+                      <option value="4">+4%</option>
+                      <option value="8">+8%</option>
+                      <option value="12">+12%</option>
+                      <option value="14">+14%</option>
+                    </select>
+                    <small>Tighten or loosen spacing between words.</small>
+                  </label>
+                </div>
+              </fieldset>
+
+              <fieldset class="control-group">
+                <legend>Extra support</legend>
+                <p class="control-group__description">Set how strong each support layer should be.</p>
+                <div class="control-grid-4">
+                  <label class="control-stack">
+                    <span>Focus highlight</span>
+                    <select name="focusBoost">
+                      <option value="default">Default</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                    </select>
+                    <small>Stronger focus rings around the item you are on.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Underline links</span>
+                    <select name="underlineLinks">
+                      <option value="default">Default</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                    </select>
+                    <small>Make links more obvious without changing the whole palette.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Landmark regions</span>
+                    <select name="landmark">
+                      <option value="off">Off</option>
+                      <option value="soft">Soft outline</option>
+                      <option value="clear">Clear outline</option>
+                    </select>
+                    <small>Highlight page regions with a visual border to aid navigation.</small>
+                  </label>
+                  <label class="control-stack">
+                    <span>Soften images</span>
+                    <select name="dimMedia">
+                      <option value="default">Default</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                    </select>
+                    <small>Reduce glare and visual pressure from imagery.</small>
+                  </label>
+                </div>
+              </fieldset>
+            </div>
+
+            <div class="engine-form__footer">
+              <p class="engine-form__status" data-accessibility-status aria-live="polite">
+                Changes show up straight away. Save them if you want to keep them.
+              </p>
+              <div class="button-row">
+                <button class="button button-primary" type="submit" data-accessibility-save>
+                  Save these settings
+                </button>
+                <button class="button button-secondary" type="button" data-accessibility-reset>
+                  Use site default
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="../scripts/accessibility-engine.js"></script>
+    <script src="../scripts/site-ui.js"></script>
+    <script>
+      (function demoProofBootstrap() {
+        function initDemoCarousel() {
+          if (!window.accessibilityEngine) {
+            return;
+          }
+
+          var carousel = document.querySelector("[data-demo-carousel]");
+          if (!carousel) {
+            return;
+          }
+
+          var slides = Array.from(carousel.querySelectorAll("[data-carousel-slide]"));
+          var previousButton = carousel.querySelector("[data-carousel-prev]");
+          var nextButton = carousel.querySelector("[data-carousel-next]");
+          var status = carousel.querySelector("[data-carousel-status]");
+          var motionNote = document.querySelector("[data-demo-motion-note]");
+          var activeIndex = 0;
+          var autoplayTimer = 0;
+
+          function render() {
+            slides.forEach(function syncSlide(slide, index) {
+              var isActive = index === activeIndex;
+              slide.hidden = !isActive;
+              slide.setAttribute("data-active", isActive ? "true" : "false");
+              slide.setAttribute("aria-hidden", isActive ? "false" : "true");
+            });
+
+            if (status) {
+              status.textContent =
+                "Slide " + String(activeIndex + 1) + " of " + String(slides.length);
+            }
+          }
+
+          function stopAutoplay() {
+            if (autoplayTimer) {
+              window.clearInterval(autoplayTimer);
+              autoplayTimer = 0;
+            }
+          }
+
+          function startAutoplay(delay) {
+            stopAutoplay();
+            autoplayTimer = window.setInterval(function advanceSlide() {
+              activeIndex = (activeIndex + 1) % slides.length;
+              render();
+            }, delay);
+          }
+
+          function syncMotionState(state) {
+            carousel.setAttribute("data-demo-motion", state.motion);
+
+            if (motionNote) {
+              motionNote.textContent =
+                state.motion === "off"
+                  ? "Motion off freezes the autoplay section and removes decorative animation."
+                  : state.motion === "reduced"
+                    ? "Reduced motion slows or collapses non-essential movement while keeping the section usable."
+                    : "Default motion keeps the proof live. Reduced motion softens it. Motion off freezes it.";
+            }
+
+            if (state.motion === "off") {
+              stopAutoplay();
+              return;
+            }
+
+            startAutoplay(state.motion === "reduced" ? 9000 : 4800);
+          }
+
+          function moveSlide(direction) {
+            activeIndex = (activeIndex + direction + slides.length) % slides.length;
+            render();
+            syncMotionState(window.accessibilityEngine.getState());
+          }
+
+          if (previousButton) {
+            previousButton.addEventListener("click", function handlePrevious() {
+              moveSlide(-1);
+            });
+          }
+
+          if (nextButton) {
+            nextButton.addEventListener("click", function handleNext() {
+              moveSlide(1);
+            });
+          }
+
+          render();
+          window.accessibilityEngine.subscribe(syncMotionState);
+        }
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", initDemoCarousel, { once: true });
+          return;
+        }
+
+        initDemoCarousel();
+      })();
+    </script>
+  </body>
+</html>

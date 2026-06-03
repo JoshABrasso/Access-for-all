@@ -1,0 +1,811 @@
+/*
+ * File: styles/components/forms.css
+ * Purpose: Accessibility engine form UI and generic contact form patterns.
+ * Scope: Engine control groups, toggles, select/input/textarea, contact form layout.
+ * Truth.md rule: No hard-coded colours. All values from tokens.
+ * Source: cleaned production forms.css (engine patterns retained fully;
+ *         site-specific contact-profile layout dropped — not reusable).
+ */
+
+/* ── Engine form shell ── */
+
+.engine-form {
+    display: grid;
+    gap: var(--space-lg);
+}
+
+.engine-intro {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.engine-intro--streamlined {
+    gap: 0.6rem;
+}
+
+.engine-intro--streamlined .engine-note {
+    background: color-mix(in srgb, var(--colour-surface-strong) 72%, transparent);
+    border: 1px solid color-mix(in srgb, var(--colour-border) 72%, transparent);
+    border-radius: 1rem;
+    padding: 0.85rem 1rem;
+}
+
+/* ── Control groups ── */
+
+.control-groups {
+    display: grid;
+    gap: var(--space-md);
+}
+
+.control-group {
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--colour-surface-strong) 94%, black) 0%,
+            color-mix(in srgb, var(--colour-surface) 90%, black) 100%
+        ),
+        linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--colour-surface) 86%, black) 0%,
+            color-mix(in srgb, var(--colour-surface-strong) 96%, black) 100%
+        );
+    border: var(--border-standard);
+    border-color: color-mix(in srgb, var(--colour-border) 78%, var(--colour-brand-300) 22%);
+    border-radius: var(--radius-lg);
+    display: grid;
+    gap: 0.8rem;
+    padding: 1.15rem;
+}
+
+.control-group legend {
+    background: var(--colour-surface);
+    border-radius: 999px;
+    color: var(--colour-text);
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+    padding-inline: 0.55rem;
+}
+
+.control-group__description {
+    color: var(--colour-muted);
+    font-size: 0.96rem;
+    line-height: 1.5;
+    max-width: none;
+}
+
+.control-group__note {
+    background: color-mix(in srgb, var(--colour-surface) 82%, transparent);
+    border: 1px solid color-mix(in srgb, var(--colour-border) 72%, transparent);
+    border-radius: 1rem;
+    color: var(--colour-muted);
+    font-size: 0.92rem;
+    line-height: 1.5;
+    padding: 0.9rem 1rem;
+}
+
+/* Hidden on mobile when the JS engine switches to direct-choice buttons */
+.control-group[data-mobile-hidden="true"],
+.control-stack[data-mobile-hidden="true"],
+.tool-button-row[data-mobile-hidden="true"],
+.engine-note[data-mobile-hidden="true"] {
+    display: none !important;
+}
+
+/* ── Control stack (label + input + hint unit) ── */
+
+.control-stack {
+    align-content: start;
+    display: grid;
+    gap: 0.45rem;
+    grid-template-rows: auto auto minmax(0, 1fr);
+    height: 100%;
+    min-width: 0;
+}
+
+.control-stack span,
+.toggle-list legend + p + .control-stack span {
+    font-weight: 700;
+}
+
+.control-stack small {
+    color: var(--colour-muted);
+    font-size: 0.9rem;
+    line-height: 1.45;
+    margin-top: -0.2rem;
+}
+
+.control-stack__hint {
+    margin-top: -0.15rem;
+}
+
+/* ── Control grids ── */
+
+.control-grid-2 {
+    align-items: stretch;
+    display: grid;
+    gap: var(--space-sm);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.control-grid-3 {
+    align-items: stretch;
+    display: grid;
+    gap: var(--space-sm);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.control-grid-4 {
+    align-items: stretch;
+    display: grid;
+    gap: var(--space-sm);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.control-grid-2--spacing {
+    margin-top: 0.55rem;
+}
+
+.control-row {
+    display: grid;
+    gap: 0.55rem;
+}
+
+/* Cells inside multi-column grids — card treatment */
+.control-grid-2 > .control-stack,
+.control-grid-3 > .control-stack,
+.control-grid-4 > .control-stack,
+.control-group > .control-grid-2 > .control-stack,
+.control-group > .control-grid-3 > .control-stack,
+.control-group > .control-grid-4 > .control-stack {
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--colour-surface) 94%, black 6%) 0%,
+            color-mix(in srgb, var(--colour-surface-strong) 88%, black 12%) 100%
+    );
+    border: 1px solid color-mix(in srgb, var(--colour-border) 76%, var(--colour-brand-300) 24%);
+    border-radius: var(--radius-md);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--colour-surface) 32%, transparent);
+    min-width: 0;
+    padding: 0.9rem 1rem;
+}
+
+.control-group > .control-grid-2,
+.control-group > .control-grid-3,
+.control-group > .control-grid-4 {
+    grid-auto-rows: 1fr;
+}
+
+.control-grid-2 > .control-stack select,
+.control-grid-3 > .control-stack select,
+.control-grid-4 > .control-stack select,
+.control-group > .control-grid-2 > .control-stack select,
+.control-group > .control-grid-3 > .control-stack select,
+.control-group > .control-grid-4 > .control-stack select {
+    width: 100%;
+}
+
+.control-grid-2 > .control-stack span,
+.control-grid-3 > .control-stack span,
+.control-grid-4 > .control-stack span,
+.control-group > .control-grid-2 > .control-stack span,
+.control-group > .control-grid-3 > .control-stack span,
+.control-group > .control-grid-4 > .control-stack span {
+    font-size: 0.98rem;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.control-grid-2 > .control-stack small,
+.control-grid-3 > .control-stack small,
+.control-grid-4 > .control-stack small,
+.control-group > .control-grid-2 > .control-stack small,
+.control-group > .control-grid-3 > .control-stack small,
+.control-group > .control-grid-4 > .control-stack small {
+    color: var(--colour-muted);
+    font-size: 0.92rem;
+    line-height: 1.45;
+    margin-top: 0.1rem;
+}
+
+/* ── Native form controls ── */
+
+select,
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+textarea {
+    appearance: none;
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--colour-surface-strong) 68%, white 32%) 0%,
+            color-mix(in srgb, var(--colour-surface) 76%, white 24%) 100%
+        );
+    border: var(--border-standard);
+    border-color: color-mix(in srgb, var(--colour-border) 62%, white 38%);
+    border-radius: 1rem;
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--colour-surface) 72%, transparent);
+    color: var(--colour-text);
+    display: block;
+    line-height: 1.2;
+    min-height: 3rem;
+    outline: none;
+    padding: 0.62rem 0.95rem;
+    width: 100%;
+}
+
+select:focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+textarea:focus {
+    border-color: color-mix(in srgb, var(--colour-brand-300) 58%, white 42%);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, var(--colour-surface) 82%, transparent),
+        0 0 0 0.18rem color-mix(in srgb, var(--colour-brand-300) 28%, transparent);
+}
+
+select[aria-invalid="true"],
+input[type="text"][aria-invalid="true"],
+input[type="email"][aria-invalid="true"],
+input[type="tel"][aria-invalid="true"],
+input[type="url"][aria-invalid="true"],
+textarea[aria-invalid="true"] {
+    border-color: color-mix(in srgb, var(--gm-status-error) 72%, var(--colour-border));
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, var(--colour-surface) 64%, transparent),
+        0 0 0 0.18rem color-mix(in srgb, var(--gm-status-error) 22%, transparent);
+}
+
+textarea {
+    min-height: 11rem;
+    resize: vertical;
+}
+
+/* ── Toggle list (checkbox/radio engine controls) ── */
+
+.toggle-list {
+    display: grid;
+    gap: 0.85rem;
+}
+
+.toggle-list--compact {
+    gap: 0.65rem;
+}
+
+.toggle {
+    align-items: start;
+    display: grid;
+    gap: 0.85rem;
+    grid-template-columns: auto minmax(0, 1fr);
+}
+
+.toggle__body {
+    display: grid;
+    gap: 0;
+}
+
+.toggle__body strong {
+    color: var(--colour-text);
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.toggle__body small {
+    color: var(--colour-muted);
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
+.toggle input {
+    accent-color: var(--colour-accent);
+    block-size: 1.25rem;
+    inline-size: 1.25rem;
+    margin-top: 0.15rem;
+}
+
+/* ── Engine form footer ── */
+
+.engine-form__footer {
+    align-items: center;
+    border-top: var(--border-standard);
+    border-color: var(--colour-border);
+    display: grid;
+    gap: var(--space-sm);
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding-top: var(--space-md);
+}
+
+.engine-form__status {
+    color: var(--colour-muted);
+    font-size: 0.96rem;
+}
+
+/* ── Expandable engine details section ── */
+
+.engine-details {
+    background: color-mix(in srgb, var(--colour-surface) 84%, transparent);
+    border: 1px solid color-mix(in srgb, var(--colour-border) 74%, transparent);
+    border-radius: var(--radius-md);
+    margin-top: 0.35rem;
+    overflow: clip;
+}
+
+.engine-details summary {
+    align-items: center;
+    cursor: pointer;
+    display: grid;
+    font-size: 0.98rem;
+    font-weight: 800;
+    grid-template-columns: minmax(0, 1fr) auto;
+    list-style: none;
+    padding: 0.95rem 1rem;
+}
+
+.engine-details summary::-webkit-details-marker {
+    display: none;
+}
+
+.engine-details summary::after {
+    content: "+";
+    font-size: 1.15rem;
+    line-height: 1;
+}
+
+.engine-details[open] summary::after {
+    content: "\2212";
+}
+
+.engine-details__summary-copy {
+    display: grid;
+    gap: 0;
+}
+
+.engine-details__summary-copy small {
+    color: var(--colour-muted);
+    font-size: 0.84rem;
+    font-weight: 500;
+    line-height: 1.45;
+}
+
+.engine-details__content {
+    border-top: 1px solid color-mix(in srgb, var(--colour-border) 60%, transparent);
+    display: grid;
+    gap: var(--space-sm);
+    padding: 1rem;
+}
+
+/* ── Tool button row (3-up quick action buttons in engine panel) ── */
+
+.tool-button-row {
+    align-items: stretch;
+    display: grid;
+    gap: var(--space-sm);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.tool-button-row .button {
+    min-height: 3rem;
+    min-inline-size: 0;
+    padding-block: 0.52rem;
+    width: 100%;
+}
+
+/* ── Engine notes ── */
+
+.engine-note,
+.engine-form__status {
+    color: var(--colour-muted);
+    font-size: 0.95rem;
+}
+
+/* ── Mobile: direct-choice button group replaces select ── */
+
+.mobile-direct-choice-group {
+    display: none;
+}
+
+/* ── Form validation error ── */
+
+.form-error {
+    color: var(--gm-status-error);
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+/* ── Generic contact form ── */
+
+.contact-form {
+    display: grid;
+    gap: var(--space-md);
+}
+
+.contact-form__legend-note {
+    color: var(--colour-muted);
+    font-size: 0.9rem;
+    margin: -0.2rem 0 0;
+}
+
+.contact-form__required-note {
+    color: var(--colour-muted);
+    font-size: 0.86rem;
+    font-weight: 600;
+}
+
+.contact-form__section {
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--colour-surface) 97%, transparent) 0%,
+            color-mix(in srgb, var(--colour-surface-strong) 94%, var(--colour-frame) 6%) 100%
+        );
+    border: var(--border-standard);
+    border-color: color-mix(in srgb, var(--colour-border) 82%, transparent);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--gm-shadow-soft);
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: clamp(1.15rem, 2vw, 1.7rem);
+}
+
+.contact-form__section legend {
+    color: var(--colour-text);
+    font-size: 1.08rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 0.9rem;
+    padding: 0;
+}
+
+.contact-form__section-intro {
+    color: var(--colour-muted);
+    font-size: 0.94rem;
+    line-height: 1.5;
+    margin: -0.3rem 0 0.2rem;
+}
+
+.contact-form__grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.contact-form__grid--triple {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.contact-form__field {
+    display: grid;
+    gap: 0.45rem;
+}
+
+.contact-form__field--full {
+    grid-column: 1 / -1;
+}
+
+.contact-form__field label,
+.contact-form__consent strong {
+    color: var(--colour-text);
+    font-size: 0.98rem;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.contact-form__field small,
+.contact-form__consent small {
+    color: var(--colour-muted);
+    font-size: 0.92rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.contact-form__consent {
+    align-items: start;
+    background: color-mix(in srgb, var(--colour-surface-strong) 82%, transparent);
+    border: 1px solid color-mix(in srgb, var(--colour-border) 72%, transparent);
+    border-radius: var(--radius-md);
+    display: grid;
+    gap: 0.85rem;
+    grid-template-columns: auto minmax(0, 1fr);
+    padding: 1rem 1rem 1rem 0.95rem;
+}
+
+.contact-form__consent input {
+    accent-color: var(--colour-accent);
+    block-size: 1.2rem;
+    inline-size: 1.2rem;
+    margin-top: 0.18rem;
+}
+
+.contact-form__actions {
+    align-items: center;
+    display: grid;
+    gap: var(--space-sm);
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding-top: 0.2rem;
+}
+
+.contact-form__status {
+    color: var(--colour-muted);
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.contact-form__status[data-state="ready"]   { color: var(--colour-text); }
+.contact-form__status[data-state="success"] { color: var(--gm-status-success); }
+.contact-form__status[data-state="error"]   { color: var(--gm-status-error); }
+
+/* ── Hover states (pointer devices) ── */
+
+@media (hover: hover) and (pointer: fine) {
+    .contact-form__section {
+        transition:
+            box-shadow var(--gm-transition-base),
+            border-color var(--gm-transition-base);
+    }
+}
+
+/* ── Responsive (max 80rem — 4-col becomes 2-col) ── */
+
+@media (max-width: 72rem) {
+    .control-grid-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* ── Responsive (max 48rem — mobile engine drawer layout) ── */
+
+@media (max-width: 48rem) {
+
+    .modal-header .engine-intro {
+        display: none !important;
+    }
+
+    .engine-form {
+        gap: var(--space-md);
+    }
+
+    .engine-intro {
+        gap: 0.35rem;
+    }
+
+    .engine-intro .eyebrow {
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+    }
+
+    .engine-intro h2 {
+        font-size: clamp(1.3rem, 4.8vw, 1.7rem);
+        line-height: 1.02;
+        margin: 0;
+    }
+
+    .engine-intro p:not(.eyebrow) {
+        color: var(--colour-muted);
+        font-size: 0.92rem;
+        line-height: 1.4;
+        margin: 0;
+    }
+
+    /* Flatten control groups in mobile drawer */
+    .control-group {
+        background: transparent;
+        border: 0;
+        border-bottom: 1px solid color-mix(in srgb, var(--colour-border) 88%, transparent);
+        border-radius: 0;
+        box-shadow: none;
+        gap: 1rem;
+        padding: 0 0 1.1rem;
+    }
+
+    .control-groups {
+        gap: 0.75rem;
+    }
+
+    .control-group legend {
+        background: none;
+        border-radius: 0;
+        font-size: 1rem;
+        letter-spacing: 0.05em;
+        margin-bottom: 0;
+        padding: 0;
+        text-transform: uppercase;
+    }
+
+    /* Hide descriptions/hints on mobile — space is precious */
+    .control-group__description,
+    .control-stack small,
+    .engine-note {
+        display: none;
+    }
+
+    .control-stack {
+        gap: 0.55rem;
+        grid-template-rows: auto auto;
+        height: auto;
+    }
+
+    /* Grids collapse to single column */
+    .control-grid-2,
+    .control-grid-3,
+    .control-grid-4,
+    .control-grid-2--spacing {
+        gap: 0.85rem;
+        grid-template-columns: 1fr;
+    }
+
+    /* Grid cells get a mobile-friendly card treatment */
+    .control-grid-2 > .control-stack,
+    .control-grid-3 > .control-stack,
+    .control-grid-4 > .control-stack,
+    .control-group > .control-grid-2 > .control-stack,
+    .control-group > .control-grid-3 > .control-stack,
+    .control-group > .control-grid-4 > .control-stack {
+        background: color-mix(in srgb, var(--colour-surface) 72%, transparent);
+        border: 1px solid color-mix(in srgb, var(--colour-border) 74%, transparent);
+        border-radius: 1.1rem;
+        box-shadow: var(--gm-shadow-soft);
+        padding: 0.95rem 1rem 1rem;
+    }
+
+    .control-grid-2 > .control-stack span,
+    .control-grid-3 > .control-stack span,
+    .control-grid-4 > .control-stack span,
+    .control-group > .control-grid-2 > .control-stack span,
+    .control-group > .control-grid-3 > .control-stack span,
+    .control-group > .control-grid-4 > .control-stack span {
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+    }
+
+    /* Native inputs at mobile scale */
+    select,
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="url"],
+    textarea {
+        background: color-mix(in srgb, var(--colour-surface-strong) 42%, transparent);
+        border: 1px solid color-mix(in srgb, var(--colour-border) 72%, transparent);
+        border-radius: 0.95rem;
+        box-shadow: none;
+        font-size: 1.08rem;
+        font-weight: 700;
+        min-height: 3.45rem;
+        padding: 0.78rem 0.95rem;
+    }
+
+    select:focus,
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="tel"]:focus,
+    input[type="url"]:focus,
+    textarea:focus {
+        border-color: color-mix(in srgb, var(--colour-brand-300) 64%, white 36%);
+        box-shadow: 0 0 0 0.18rem color-mix(in srgb, var(--colour-brand-300) 22%, transparent);
+    }
+
+    /* Mobile: hide select, show direct-choice buttons instead */
+    .control-stack--mobile-direct select {
+        border: 0;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+    .mobile-direct-choice-group {
+        display: grid;
+        gap: 0.75rem;
+        margin-top: 0;
+    }
+
+    .mobile-direct-choice {
+        align-items: center;
+        background: color-mix(in srgb, var(--colour-surface-strong) 34%, transparent);
+        border: 1px solid color-mix(in srgb, var(--colour-border) 74%, transparent);
+        border-radius: 0.95rem;
+        cursor: pointer;
+        display: grid;
+        font: inherit;
+        font-size: 1.02rem;
+        font-weight: 700;
+        gap: 0.5rem;
+        grid-template-columns: minmax(0, 1fr) auto;
+        justify-content: flex-start;
+        min-height: 3.7rem;
+        padding: 1rem 1.05rem;
+        text-align: left;
+        text-transform: none;
+        width: 100%;
+    }
+
+    .mobile-direct-choice::after {
+        color: color-mix(in srgb, var(--colour-muted) 78%, transparent);
+        content: "";
+        font-size: 0.98rem;
+        font-weight: 800;
+        justify-self: end;
+        line-height: 1;
+    }
+
+    .mobile-direct-choice.is-active,
+    .mobile-direct-choice[aria-pressed="true"] {
+        background: var(--button-bg-primary);
+        border-color: var(--button-border-primary);
+        color: var(--button-text-primary);
+    }
+
+    .mobile-direct-choice.is-active::after,
+    .mobile-direct-choice[aria-pressed="true"]::after {
+        color: color-mix(in srgb, var(--button-text-primary) 72%, transparent);
+        content: "Selected";
+        font-size: 0.84rem;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+    }
+
+    .ac-mobile-content[data-ac-branch="theme"] .control-stack--mobile-direct > span {
+        display: none;
+    }
+
+    .ac-mobile-content[data-ac-branch="theme"] .control-stack--mobile-direct {
+        gap: 0.75rem;
+    }
+
+    /* Tool button row — single column on mobile */
+    .tool-button-row {
+        grid-template-columns: 1fr;
+    }
+
+    .tool-button-row .button,
+    .engine-form__footer .button {
+        min-height: 3.4rem;
+        width: 100%;
+    }
+
+    /* Engine form footer — stacked on mobile */
+    .engine-form__footer {
+        align-items: stretch;
+        border-color: color-mix(in srgb, var(--colour-border) 88%, transparent);
+        gap: 0.75rem;
+        grid-template-columns: 1fr;
+        padding-top: 0.85rem;
+    }
+
+    .engine-form__status {
+        font-size: 0.9rem;
+        line-height: 1.4;
+        order: 3;
+    }
+
+    /* Inside mobile drawer actions strip — footer border handled by drawer */
+    .ac-mobile-actions .engine-form__footer {
+        border-top: 0;
+        margin: 0;
+        padding-top: 0;
+    }
+
+    .ac-mobile-actions .engine-form__status {
+        display: none;
+    }
+
+    /* Contact form — collapse grids on mobile */
+    .contact-form__grid,
+    .contact-form__grid--triple,
+    .contact-form__actions {
+        grid-template-columns: 1fr;
+    }
+}

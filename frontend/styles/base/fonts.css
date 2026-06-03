@@ -1,0 +1,84 @@
+/*
+ * File: styles/base/fonts.css
+ * Purpose: Register bundled accessibility fonts. Scope: @font-face only.
+ *
+ * These fonts are loaded by the engine when the user selects
+ * "Legible" or "Dyslexia-friendly" in the font control.
+ * font-display: swap ensures no invisible text during load.
+ *
+ * Bundled font files live at: frontend/assets/fonts/accessibility/
+ * License files live beside the fonts:
+ *   AtkinsonHyperlegible-OFL.txt
+ *   OpenDyslexic-OFL.txt
+ * Source references:
+ *   Atkinson Hyperlegible — Braille Institute / Google Fonts
+ *   OpenDyslexic — opendyslexic.org / antijingoist source repo
+ */
+
+@font-face {
+    font-family: "Atkinson Hyperlegible";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("../../assets/fonts/accessibility/AtkinsonHyperlegible-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Atkinson Hyperlegible";
+    font-style: italic;
+    font-weight: 400;
+    font-display: swap;
+    src: url("../../assets/fonts/accessibility/AtkinsonHyperlegible-Italic.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Atkinson Hyperlegible";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url("../../assets/fonts/accessibility/AtkinsonHyperlegible-Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Atkinson Hyperlegible";
+    font-style: italic;
+    font-weight: 700;
+    font-display: swap;
+    src: url("../../assets/fonts/accessibility/AtkinsonHyperlegible-BoldItalic.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "OpenDyslexic";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("../../assets/fonts/accessibility/OpenDyslexic-Regular.woff2") format("woff2"),
+         url("../../assets/fonts/accessibility/OpenDyslexic-Regular.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "OpenDyslexic";
+    font-style: italic;
+    font-weight: 400;
+    font-display: swap;
+    src: url("../../assets/fonts/accessibility/OpenDyslexic-Italic.woff2") format("woff2"),
+         url("../../assets/fonts/accessibility/OpenDyslexic-Italic.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "OpenDyslexic";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url("../../assets/fonts/accessibility/OpenDyslexic-Bold.woff2") format("woff2"),
+         url("../../assets/fonts/accessibility/OpenDyslexic-Bold.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "OpenDyslexic";
+    font-style: italic;
+    font-weight: 700;
+    font-display: swap;
+    src: url("../../assets/fonts/accessibility/OpenDyslexic-BoldItalic.woff2") format("woff2"),
+         url("../../assets/fonts/accessibility/OpenDyslexic-BoldItalic.otf") format("opentype");
+}

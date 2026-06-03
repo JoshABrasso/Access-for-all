@@ -1,0 +1,1123 @@
+/*
+ * File: styles/themes/accessibility.css
+ * Purpose: All visual rules driven by html[data-*] engine attributes.
+ * Truth.md rule: Themes override tokens. Do not put page fixes here.
+ *
+ * Load order: must be last CSS file loaded (see master.css).
+ * Source: cleaned production engine build with retained filter/control behavior.
+ *
+ * Sections:
+ *   1.  Theme modes (default, light, dark, auto)
+ *   2.  Font/typeface modes
+ *   3.  Bold/weight modes
+ *   4.  Motion modes
+ *   5.  Transparency modes
+ *   6.  Focus ring
+ *   7.  Link underline
+ *   8.  Contrast modes (surface adjustments for components)
+ *   9.  Depth modes
+ *   10. Media dimming
+ *   11. Visual filter application
+ *   12. Reading guide
+ *   13. Read-aloud speaking highlight
+ *   14. Landmark axis (data-landmark — redesigned, no ::before labels)
+ */
+
+
+/* ============================================================
+   1. THEME MODES
+   color-scheme tells the browser which scrollbar/form colours to use.
+   data-theme="default" follows prefers-color-scheme.
+============================================================ */
+
+html[data-theme="default"] {
+    color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="default"] {
+        color-scheme: dark;
+    }
+}
+
+html[data-theme="light"] {
+    color-scheme: light;
+    --colour-page:           #f8fafc;
+    --colour-surface:        #ffffff;
+    --colour-surface-strong: #f3f7fb;
+    --colour-surface-deep:   #eaf1f8;
+    --colour-frame:          #e2ecf4;
+    --colour-frame-strong:   #d8e6f0;
+    --colour-text:           #0f1b30;
+    --colour-muted:          #3b5275;
+    --colour-border:         #b8cee0;
+    --colour-accent:         #1d6ec4;
+    --colour-accent-strong:  #1050a0;
+    --colour-accent-contrast: #ffffff;
+    --colour-shadow:         rgba(16, 40, 80, 0.12);
+    --colour-overlay:        rgba(12, 24, 48, 0.68);
+}
+
+html[data-theme="dark"] {
+    color-scheme: dark;
+    --colour-page:           #0d1117;
+    --colour-surface:        #161b22;
+    --colour-surface-strong: #1c2330;
+    --colour-surface-deep:   #222a38;
+    --colour-frame:          #1a2030;
+    --colour-frame-strong:   #141a26;
+    --colour-text:           #e6edf3;
+    --colour-muted:          #8b949e;
+    --colour-border:         #30363d;
+    --colour-accent:         #6b9fff;
+    --colour-accent-strong:  #4d84ff;
+    --colour-accent-contrast: #0a1020;
+    --colour-panel-dark:         #0d1117;
+    --colour-panel-dark-strong:  #090d13;
+    --colour-panel-text:         #e6edf3;
+    --colour-panel-text-muted:   rgba(230, 237, 243, 0.78);
+    --colour-shadow:         rgba(0, 0, 0, 0.36);
+    --colour-overlay:        rgba(0, 0, 0, 0.72);
+    --gm-shadow-soft:        0 4px 16px rgba(0, 0, 0, 0.42);
+    --gm-shadow-panel:       0 8px 32px rgba(0, 0, 0, 0.52);
+    --gm-guide-overlay:      rgba(255, 255, 255, 0.08);
+    --gm-guide-band:         color-mix(in srgb, var(--colour-accent) 14%, transparent);
+    --gm-guide-band-border:  color-mix(in srgb, var(--colour-accent) 44%, transparent);
+    --colour-speaking-highlight: color-mix(in srgb, var(--colour-accent) 14%, transparent);
+    --colour-speaking-border:    color-mix(in srgb, var(--colour-accent) 58%, transparent);
+    --gm-callout-warning-surface: color-mix(in srgb, var(--gm-signal-warning) 26%, var(--colour-surface));
+    --gm-callout-success-surface: color-mix(in srgb, var(--gm-signal-success) 26%, var(--colour-surface));
+    --gm-callout-error-surface:   color-mix(in srgb, var(--gm-signal-error) 26%, var(--colour-surface));
+}
+
+
+/* ============================================================
+   2. FONT / TYPEFACE MODES
+   html[data-font] — variables.css owns the token switch.
+   This file handles any structural side-effects (e.g. dyslexia spacing).
+============================================================ */
+
+html[data-font="dyslexia"] .nav-list a {
+    letter-spacing: 0.10em;
+    text-transform: none;
+}
+
+
+/* ============================================================
+   3. BOLD / WEIGHT MODES
+   html[data-bold] — stepped weight increases.
+   Applied to all text-bearing elements in one pass.
+============================================================ */
+
+html[data-bold="level-1"] {
+    --font-weight-body-accessibility:   560;
+    --font-weight-strong-accessibility: 760;
+}
+html[data-bold="level-2"] {
+    --font-weight-body-accessibility:   620;
+    --font-weight-strong-accessibility: 820;
+}
+html[data-bold="level-3"] {
+    --font-weight-body-accessibility:   680;
+    --font-weight-strong-accessibility: 880;
+}
+html[data-bold="level-4"] {
+    --font-weight-body-accessibility:   740;
+    --font-weight-strong-accessibility: 920;
+}
+
+html[data-bold]:not([data-bold="default"]) p,
+html[data-bold]:not([data-bold="default"]) li,
+html[data-bold]:not([data-bold="default"]) dd,
+html[data-bold]:not([data-bold="default"]) dt,
+html[data-bold]:not([data-bold="default"]) figcaption,
+html[data-bold]:not([data-bold="default"]) label,
+html[data-bold]:not([data-bold="default"]) input,
+html[data-bold]:not([data-bold="default"]) select,
+html[data-bold]:not([data-bold="default"]) textarea,
+html[data-bold]:not([data-bold="default"]) button,
+html[data-bold]:not([data-bold="default"]) a,
+html[data-bold]:not([data-bold="default"]) .eyebrow,
+html[data-bold]:not([data-bold="default"]) .tool-panel__label,
+html[data-bold]:not([data-bold="default"]) .toggle__body strong {
+    font-weight: var(--font-weight-body-accessibility);
+}
+
+html[data-bold]:not([data-bold="default"]) strong,
+html[data-bold]:not([data-bold="default"]) b,
+html[data-bold]:not([data-bold="default"]) h1,
+html[data-bold]:not([data-bold="default"]) h2,
+html[data-bold]:not([data-bold="default"]) h3,
+html[data-bold]:not([data-bold="default"]) h4,
+html[data-bold]:not([data-bold="default"]) h5,
+html[data-bold]:not([data-bold="default"]) h6 {
+    font-weight: var(--font-weight-strong-accessibility);
+}
+
+
+/* ============================================================
+   4. MOTION MODES
+   html[data-motion] + prefers-reduced-motion.
+   Zero-duration all animations and transitions globally.
+============================================================ */
+
+html[data-motion="reduced"],
+html[data-motion="off"] {
+    scroll-behavior: auto;
+}
+
+html[data-motion="reduced"] *,
+html[data-motion="reduced"] *::before,
+html[data-motion="reduced"] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+}
+
+html[data-motion="off"] *,
+html[data-motion="off"] *::before,
+html[data-motion="off"] *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+}
+
+
+/* ============================================================
+   5. TRANSPARENCY MODES
+   html[data-transparency] — flatten shared surfaces and disable backdrop-filter.
+   The GM token --gm-surface-opacity must produce visible container changes.
+============================================================ */
+
+html[data-transparency="reduced"] {
+    --gm-surface-opacity: 0.94;
+}
+
+html[data-transparency="off"] {
+    --gm-surface-opacity: 1;
+}
+
+html[data-transparency="reduced"] .site-header,
+html[data-transparency="reduced"] .primary-nav,
+html[data-transparency="reduced"] .ac-mobile-panel .nav-drawer__shell,
+html[data-transparency="reduced"] .modal-panel,
+html[data-transparency="reduced"] .card,
+html[data-transparency="reduced"] .stat-card,
+html[data-transparency="reduced"] .panel,
+html[data-transparency="reduced"] .callout,
+html[data-transparency="reduced"] .nav-list a,
+html[data-transparency="reduced"] .button--secondary,
+html[data-transparency="reduced"] .button-secondary,
+html[data-transparency="reduced"] .accessibility-trigger,
+html[data-transparency="reduced"] .modal-close,
+html[data-transparency="off"] .site-header,
+html[data-transparency="off"] .primary-nav,
+html[data-transparency="off"] .ac-mobile-panel .nav-drawer__shell,
+html[data-transparency="off"] .modal-panel,
+html[data-transparency="off"] .card,
+html[data-transparency="off"] .stat-card,
+html[data-transparency="off"] .panel,
+html[data-transparency="off"] .callout,
+html[data-transparency="off"] .nav-list a,
+html[data-transparency="off"] .button--secondary,
+html[data-transparency="off"] .button-secondary,
+html[data-transparency="off"] .accessibility-trigger,
+html[data-transparency="off"] .modal-close {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+html[data-transparency="reduced"] .site-header,
+html[data-transparency="off"] .site-header,
+html[data-transparency="reduced"] .primary-nav,
+html[data-transparency="off"] .primary-nav,
+html[data-transparency="reduced"] .ac-mobile-panel .nav-drawer__shell,
+html[data-transparency="off"] .ac-mobile-panel .nav-drawer__shell {
+    background: color-mix(
+        in srgb,
+        var(--colour-surface) calc(var(--gm-surface-opacity) * 100%),
+        transparent
+    ) !important;
+}
+
+html[data-transparency="reduced"] .modal-panel,
+html[data-transparency="off"] .modal-panel {
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(
+                in srgb,
+                var(--colour-surface-strong) calc(var(--gm-surface-opacity) * 100%),
+                transparent
+            ) 0%,
+            color-mix(
+                in srgb,
+                var(--colour-surface) calc(var(--gm-surface-opacity) * 100%),
+                transparent
+            ) 100%
+        ) !important;
+}
+
+html[data-transparency="reduced"] .card,
+html[data-transparency="reduced"] .stat-card,
+html[data-transparency="reduced"] .panel,
+html[data-transparency="reduced"] .callout,
+html[data-transparency="reduced"] .ds-shell-card,
+html[data-transparency="reduced"] .ds-pane-card,
+html[data-transparency="reduced"] .ds-links-card,
+html[data-transparency="reduced"] .ds-bento-panel,
+html[data-transparency="reduced"] .ds-testimonial-slider,
+html[data-transparency="reduced"] .ds-faq-shell,
+html[data-transparency="reduced"] .ds-search-side__card,
+html[data-transparency="reduced"] .ds-effect-card,
+html[data-transparency="reduced"] .ds-card-showcase,
+html[data-transparency="reduced"] .ds-bento-card,
+html[data-transparency="reduced"] .ds-search-suite__result,
+html[data-transparency="reduced"] .ds-search-result,
+html[data-transparency="reduced"] .ds-search-side__stat,
+html[data-transparency="reduced"] .ds-accordion-card,
+html[data-transparency="off"] .card,
+html[data-transparency="off"] .stat-card,
+html[data-transparency="off"] .panel,
+html[data-transparency="off"] .callout,
+html[data-transparency="off"] .ds-shell-card,
+html[data-transparency="off"] .ds-pane-card,
+html[data-transparency="off"] .ds-links-card,
+html[data-transparency="off"] .ds-bento-panel,
+html[data-transparency="off"] .ds-testimonial-slider,
+html[data-transparency="off"] .ds-faq-shell,
+html[data-transparency="off"] .ds-search-side__card,
+html[data-transparency="off"] .ds-effect-card,
+html[data-transparency="off"] .ds-card-showcase,
+html[data-transparency="off"] .ds-bento-card,
+html[data-transparency="off"] .ds-search-suite__result,
+html[data-transparency="off"] .ds-search-result,
+html[data-transparency="off"] .ds-search-side__stat,
+html[data-transparency="off"] .ds-accordion-card {
+    background: linear-gradient(
+        180deg,
+        color-mix(
+            in srgb,
+            var(--colour-surface) calc(var(--gm-surface-opacity) * 100%),
+            transparent
+        ) 0%,
+        color-mix(
+            in srgb,
+            var(--colour-surface-strong) calc(var(--gm-surface-opacity) * 100%),
+            transparent
+        ) 100%
+    );
+}
+
+html[data-transparency="reduced"] .nav-list a,
+html[data-transparency="off"] .nav-list a,
+html[data-transparency="reduced"] .button--secondary,
+html[data-transparency="reduced"] .button-secondary,
+html[data-transparency="reduced"] .accessibility-trigger,
+html[data-transparency="reduced"] .modal-close,
+html[data-transparency="reduced"] .ds-shell-topbar,
+html[data-transparency="reduced"] .ds-shell-action,
+html[data-transparency="reduced"] .ds-login-card,
+html[data-transparency="reduced"] .ds-login-socials a,
+html[data-transparency="reduced"] .ds-slider-nav,
+html[data-transparency="reduced"] .ds-link-swatch,
+html[data-transparency="off"] .button--secondary,
+html[data-transparency="off"] .button-secondary,
+html[data-transparency="off"] .accessibility-trigger,
+html[data-transparency="off"] .modal-close,
+html[data-transparency="off"] .ds-shell-topbar,
+html[data-transparency="off"] .ds-shell-action,
+html[data-transparency="off"] .ds-login-card,
+html[data-transparency="off"] .ds-login-socials a,
+html[data-transparency="off"] .ds-slider-nav,
+html[data-transparency="off"] .ds-link-swatch {
+    background: color-mix(
+        in srgb,
+        var(--colour-surface) calc(var(--gm-surface-opacity) * 100%),
+        transparent
+    );
+}
+
+html[data-transparency="reduced"] .ds-shell-topbar,
+html[data-transparency="reduced"] .ds-login-card,
+html[data-transparency="reduced"] .ds-search-side__card--glass,
+html[data-transparency="reduced"] .ds-effect-card--glass,
+html[data-transparency="off"] .ds-shell-topbar,
+html[data-transparency="off"] .ds-login-card,
+html[data-transparency="off"] .ds-search-side__card--glass,
+html[data-transparency="off"] .ds-effect-card--glass {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Universal catch-all for data-transparency="off" —
+   no backdrop-filter anywhere regardless of component name.
+   Any future glass surface is automatically covered. */
+html[data-transparency="off"] * {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+
+/* ============================================================
+   6. FOCUS RING
+   html[data-focus] — token values in variables.css.
+   This file applies the ring to all interactive elements.
+============================================================ */
+
+*:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-colour);
+    outline-offset: var(--gm-focus-offset);
+}
+
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+
+/* ============================================================
+   7. LINK UNDERLINE
+   html[data-links] — token updated in variables.css.
+   The rule is already in typography.css via text-decoration-thickness.
+   Stepped compound selectors here for specificity against resets.
+============================================================ */
+
+html[data-links="medium"] a,
+html[data-links="high"] a {
+    text-decoration-line: underline;
+    text-decoration-thickness: var(--link-underline-thickness);
+    text-underline-offset: 0.18em;
+}
+
+/* links=high: background highlight on inline text links only
+   Excluded: navigation, buttons, triggers — they have their own visual affordance. */
+html[data-links="high"] p a,
+html[data-links="high"] li a,
+html[data-links="high"] dd a,
+html[data-links="high"] blockquote a,
+html[data-links="high"] figcaption a {
+    background: var(--gm-link-highlight);
+    border-radius: var(--radius-xs);
+    padding-inline: 0.15em;
+}
+
+/* Ensure link highlight works in dark and palette modes — token is already adapted */
+
+
+/* ============================================================
+   8. CONTRAST MODES — component surface adjustments
+   Token overrides live in variables.css.
+   Physical component adjustments (box-shadow, backdrop-filter) here.
+============================================================ */
+
+html[data-contrast^="plus-"] .card,
+html[data-contrast^="plus-"] .panel,
+html[data-contrast^="plus-"] .modal-panel {
+    box-shadow: none;
+}
+
+html[data-contrast^="plus-"] .site-header,
+html[data-contrast^="plus-"] .modal-panel {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+html[data-contrast="plus-2"] body {
+    background-color: color-mix(in srgb, var(--colour-frame) 90%, black);
+}
+
+html[data-contrast="plus-3"] body {
+    background-color: color-mix(in srgb, var(--colour-frame) 82%, black);
+}
+
+html[data-contrast="plus-4"] body {
+    background-color: color-mix(in srgb, var(--colour-frame) 74%, black);
+}
+
+html[data-contrast="plus-5"] body {
+    background-color: color-mix(in srgb, var(--colour-frame) 66%, black);
+}
+
+html[data-theme="dark"][data-contrast="plus-2"] body {
+    background-color: color-mix(in srgb, var(--colour-frame) 94%, black);
+}
+
+html[data-theme="dark"][data-contrast="plus-3"] body {
+    background-color: color-mix(in srgb, var(--colour-frame) 96%, black);
+}
+
+html[data-theme="dark"][data-contrast="plus-4"] body {
+    background-color: var(--colour-frame-strong);
+}
+
+html[data-theme="dark"][data-contrast="plus-5"] body {
+    background-color: color-mix(in srgb, var(--colour-frame-strong) 82%, black);
+}
+
+html[data-contrast="plus-3"] .border-standard,
+html[data-contrast="plus-3"] input,
+html[data-contrast="plus-3"] select,
+html[data-contrast="plus-3"] textarea,
+html[data-contrast="plus-4"] .border-standard,
+html[data-contrast="plus-4"] input,
+html[data-contrast="plus-4"] select,
+html[data-contrast="plus-4"] textarea,
+html[data-contrast="plus-5"] .border-standard,
+html[data-contrast="plus-5"] input,
+html[data-contrast="plus-5"] select,
+html[data-contrast="plus-5"] textarea {
+    border-width: var(--gm-border-width);
+}
+
+html[data-contrast="plus-2"] .card,
+html[data-contrast="plus-2"] .panel,
+html[data-contrast="plus-2"] .modal-panel,
+html[data-contrast="plus-2"] .site-header,
+html[data-contrast="plus-3"] .card,
+html[data-contrast="plus-3"] .panel,
+html[data-contrast="plus-3"] .modal-panel,
+html[data-contrast="plus-3"] .site-header,
+html[data-contrast="plus-4"] .card,
+html[data-contrast="plus-4"] .panel,
+html[data-contrast="plus-4"] .modal-panel,
+html[data-contrast="plus-4"] .site-header,
+html[data-contrast="plus-5"] .card,
+html[data-contrast="plus-5"] .panel,
+html[data-contrast="plus-5"] .modal-panel,
+html[data-contrast="plus-5"] .site-header {
+    border-color: var(--colour-border);
+}
+
+
+/* ============================================================
+   9. DEPTH MODES
+   html[data-depth] — remove shadow depth from all surfaces.
+============================================================ */
+
+html[data-depth="reduced"] .card,
+html[data-depth="reduced"] .panel,
+html[data-depth="reduced"] .modal-panel,
+html[data-depth="reduced"] .ds-shell-card,
+html[data-depth="reduced"] .ds-pane-card,
+html[data-depth="reduced"] .ds-links-card,
+html[data-depth="reduced"] .ds-bento-panel,
+html[data-depth="reduced"] .ds-testimonial-slider,
+html[data-depth="reduced"] .ds-faq-shell,
+html[data-depth="reduced"] .ds-search-side__card,
+html[data-depth="reduced"] .ds-effect-card,
+html[data-depth="reduced"] .ds-card-showcase,
+html[data-depth="reduced"] .ds-bento-card,
+html[data-depth="reduced"] .ds-slider-nav {
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--colour-shadow) 42%, transparent);
+}
+
+html[data-depth="off"] .card,
+html[data-depth="off"] .panel,
+html[data-depth="off"] .modal-panel,
+html[data-depth="off"] .site-header,
+html[data-depth="off"] .button,
+html[data-depth="off"] .primary-nav,
+html[data-depth="off"] .ds-shell-card,
+html[data-depth="off"] .ds-pane-card,
+html[data-depth="off"] .ds-links-card,
+html[data-depth="off"] .ds-bento-panel,
+html[data-depth="off"] .ds-testimonial-slider,
+html[data-depth="off"] .ds-faq-shell,
+html[data-depth="off"] .ds-search-side__card,
+html[data-depth="off"] .ds-effect-card,
+html[data-depth="off"] .ds-card-showcase,
+html[data-depth="off"] .ds-bento-card,
+html[data-depth="off"] .ds-slider-nav {
+    box-shadow: none !important;
+}
+
+html[data-depth="off"] .site-header,
+html[data-depth="off"] .modal-panel {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Suppress gradient overlays and glow effects — depth=off is a fully flat surface */
+html[data-depth="off"] [class*="gradient"],
+html[data-depth="off"] [class*="glow"],
+html[data-depth="off"] [class*="halo"],
+html[data-depth="off"] .hero-art::after,
+html[data-depth="off"] .section::before,
+html[data-depth="off"] .panel::before,
+html[data-depth="off"] .card::before {
+    background: none !important;
+    box-shadow: none !important;
+    opacity: 0 !important;
+}
+
+
+/* ============================================================
+   10. MEDIA DIMMING
+   html[data-media] — reduce visual weight of decorative imagery.
+   Applies saturation filter and optional brightness dim.
+   Token values (--media-dim-opacity, --media-saturation) are in variables.css.
+============================================================ */
+
+main img:not([data-logo]),
+main picture,
+main video,
+main figure > img,
+.hero-art,
+.decorative-image {
+    transition:
+        filter var(--gm-transition-base),
+        opacity var(--gm-transition-base);
+}
+
+html[data-media="medium"] main img:not([data-logo]),
+html[data-media="medium"] main picture,
+html[data-media="medium"] main video,
+html[data-media="medium"] .hero-art,
+html[data-media="medium"] .decorative-image,
+html[data-media="medium"] .demo-media,
+html[data-media="high"] main img:not([data-logo]),
+html[data-media="high"] main picture,
+html[data-media="high"] main video,
+html[data-media="high"] .hero-art,
+html[data-media="high"] .decorative-image,
+html[data-media="high"] .demo-media {
+    filter:
+        saturate(var(--media-saturation))
+        blur(var(--media-blur-strength)) !important;
+    opacity: calc(1 - var(--media-dim-opacity)) !important;
+}
+
+/* Adaptive icon filter — inverts monochrome icons in dark mode */
+html[data-theme="dark"] [data-icon-adaptive],
+html[data-theme="dark"] .icon--adaptive {
+    filter: brightness(0) invert(1) saturate(var(--media-saturation));
+}
+
+
+/* ============================================================
+   11. VISUAL FILTER APPLICATION
+   Applies --gm-visual-filter to the main site areas.
+   The filter is composed from --gm-filter-* tokens in variables.css
+   which are set per html[data-tint] + html[data-filter-strength].
+   Using filter on .site-main/.site-header/.site-footer (not body)
+   to avoid filtering the engine panel itself.
+============================================================ */
+
+.site-header,
+.site-main,
+.site-footer {
+    filter: var(--gm-visual-filter);
+    transition: filter var(--gm-transition-base);
+}
+
+/* Viewport overlay — separate rgba wash for warm/cool/soft/dim/bright tints.
+   A ::after pseudo on .site-main covers the content area only. */
+.site-main::after {
+    background: var(--viewport-filter-overlay);
+    content: "";
+    inset: 0;
+    opacity: var(--viewport-filter-opacity);
+    pointer-events: none;
+    position: fixed;
+    transition:
+        background var(--gm-transition-base),
+        opacity var(--gm-transition-base);
+    z-index: 1;
+}
+
+
+/* ============================================================
+   12. FOCUSED READING MODE
+   Strips decorative weight, enforces a single reading column,
+   and gives the user just the text — no surface theatre.
+============================================================ */
+
+/* Base measure that JS writes when data-reader="focused" is active */
+html[data-reader="focused"] {
+    --gm-reading-measure: 68ch;
+}
+
+/* Constrain all reading surfaces to the measure — left-aligned */
+html[data-reader="focused"] main :is(
+    p, ul, ol, blockquote, figcaption, dd,
+    .section-heading, .hero-stage__overlay, .manifesto-band__detail,
+    .engine-intro, .engine-copy, .engine-note, .engine-form__status,
+    .ds-lead, .ds-shell-copy, .ds-search-suite__body,
+    .doc-note, .doc-law
+) {
+    max-inline-size: min(var(--gm-reading-measure), 100%);
+    text-align: left !important;
+}
+
+/* Headings follow the same measure */
+html[data-reader="focused"] main :is(h1, h2, h3, h4, h5, h6) {
+    max-inline-size: min(var(--gm-reading-measure), 100%);
+    text-align: left;
+}
+
+/* Generous paragraph rhythm */
+html[data-reader="focused"] main p + p {
+    margin-top: 1.4em;
+}
+
+/* Strip decorative section backgrounds — pure content surface only */
+html[data-reader="focused"] section,
+html[data-reader="focused"] .panel-alt,
+html[data-reader="focused"] .section-panel,
+html[data-reader="focused"] .hero-banner {
+    background: var(--colour-surface) !important;
+    background-image: none !important;
+}
+
+/* Hide hero art and decorative imagery — they distract from reading */
+html[data-reader="focused"] .hero-art,
+html[data-reader="focused"] .hero-banner__bg,
+html[data-reader="focused"] .decorative-image,
+html[data-reader="focused"] [data-decorative] {
+    display: none !important;
+}
+
+/* Flatten cards and panels to plain content surfaces */
+html[data-reader="focused"] .card,
+html[data-reader="focused"] .panel,
+html[data-reader="focused"] .stat-card {
+    background: transparent !important;
+    border-color: var(--colour-border) !important;
+    box-shadow: none !important;
+}
+
+/* Remove CSS background gradients that would bleed through flat surfaces */
+html[data-reader="focused"] .hero-art::after,
+html[data-reader="focused"] .hero-banner::before,
+html[data-reader="focused"] .hero-banner::after {
+    display: none !important;
+}
+
+
+/* ============================================================
+   13. READING GUIDE
+   Positioned element moved by the engine JS.
+   Height set by --gm-guide-height (0rem = invisible).
+============================================================ */
+
+.accessibility-reading-guide {
+    background: var(--gm-guide-band);
+    border-bottom: 1px solid var(--gm-guide-band-border);
+    border-top: 1px solid var(--gm-guide-band-border);
+    box-shadow: 0 0 0 100vmax var(--gm-guide-overlay);
+    height: var(--gm-guide-height);
+    left: 0;
+    pointer-events: none;
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    transition:
+        height var(--gm-transition-base),
+        top var(--gm-transition-base);
+    z-index: 40;
+}
+
+
+/* ============================================================
+   14. READ-ALOUD SPEAKING HIGHLIGHT
+   .is-speaking applied/removed by engine JS per word.
+============================================================ */
+
+.is-speaking {
+    background: var(--colour-speaking-highlight);
+    border-radius: var(--radius-sm);
+    box-shadow: inset 0 0 0 2px var(--colour-speaking-border);
+    scroll-margin-top: calc(var(--header-offset) + 1rem);
+}
+
+
+/* ============================================================
+   15. LANDMARK AXIS — redesigned
+   html[data-landmark] — values: off (default) | soft | clear
+
+   DESIGN DECISION (replacing Blueprint One's data-regions/data-controls):
+   The old approach used ::before pseudo-element labels with position:absolute
+   that overlapped page content. The old separate "controls" and "regions"
+   toggles were too heavy in the engine panel.
+
+   This redesign:
+   - ONE control instead of two
+   - 'soft': inset outline used as an interior stripe. Zero layout shift.
+             No labels, no padding changes. Just quiet visual separation.
+   - 'clear': stronger dashed outer outline via `outline`.
+              No borders, box-shadow overrides, or padding changes.
+              Still zero layout shift.
+   - NO ::before labels. NO position:absolute. NO content overlap.
+   - The page map already names regions. Users wanting names use that tool.
+   - All colours flow through --gm-landmark-colour which tracks --colour-accent,
+     so the landmark stripe works correctly under all 9 palette modes.
+============================================================ */
+
+html[data-landmark="soft"] [data-accessibility-region],
+html[data-landmark="clear"] [data-accessibility-region] {
+    outline:
+        var(--gm-landmark-stripe-width)
+        solid
+        color-mix(
+            in srgb,
+            var(--gm-landmark-colour)
+            calc(var(--gm-landmark-stripe-opacity) * 100%),
+            transparent
+        );
+    outline-offset: calc(var(--gm-landmark-stripe-width) * -1);
+    transition: outline-color var(--gm-transition-base);
+}
+
+html[data-landmark="clear"] [data-accessibility-region] {
+    outline:
+        2px dashed
+        color-mix(
+            in srgb,
+            var(--gm-landmark-colour)
+            calc(var(--gm-landmark-outline-opacity) * 100%),
+            transparent
+        );
+    outline-offset: 0.75rem;
+}
+
+html[data-landmark="clear"] [data-accessibility-region]:focus-within {
+    outline-color: color-mix(
+        in srgb,
+        var(--gm-landmark-colour)
+        100%,
+        transparent
+    );
+}
+
+
+/* ============================================================
+   16. PALETTE × CONTRAST CONJUNCTION — physical component rules
+   Token axis values live in variables.css palette × contrast block.
+   Physical element rules are here.
+   No combination suppression. Every user state is intentional.
+============================================================ */
+
+/* Cards and structural containers — accent border escalation */
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .card,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .panel,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .stat-card,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .card,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .panel,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .stat-card {
+    border: var(--gm-border-width) solid var(--colour-accent);
+    background: var(--colour-surface);
+    box-shadow: none;
+}
+
+/* Form inputs — solid accent border */
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] input,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] select,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] textarea,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] input,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] select,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] textarea {
+    background: var(--colour-surface) !important;
+    border-color: var(--colour-accent);
+    border-width: var(--gm-border-width);
+    box-shadow: none !important;
+    color: var(--colour-text);
+}
+
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] select:focus,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] input:focus,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] textarea:focus,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] select:focus,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] input:focus,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] textarea:focus {
+    border-color: var(--colour-accent-strong);
+    box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--colour-accent) 24%, transparent) !important;
+}
+
+/* Focus ring inversion on solid-fill interactive elements —
+   the accent fill IS the element background, so ring must be the contrast colour */
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .button:focus-visible,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .button:focus-visible,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] button:focus-visible,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] button:focus-visible {
+    outline-color: var(--colour-accent-contrast);
+}
+
+/* Ensure text colour within solid-fill buttons is the contrast value */
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .button,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .button {
+    box-shadow: none;
+}
+
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .button--primary,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .button-primary,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .nav-list a[aria-current="page"],
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .button--primary,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .button-primary,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .nav-list a[aria-current="page"] {
+    background: var(--colour-accent) !important;
+    color: var(--colour-accent-contrast) !important;
+    border-color: var(--colour-accent-strong) !important;
+}
+
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .button--secondary,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .button-secondary,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .button--ghost,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .accessibility-trigger,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .modal-close,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .nav-list a:not([aria-current="page"]),
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .doc-toc__list a,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .button--secondary,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .button-secondary,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .button--ghost,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .accessibility-trigger,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .modal-close,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .nav-list a:not([aria-current="page"]),
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .doc-toc__list a {
+    background: var(--colour-surface) !important;
+    color: var(--colour-accent) !important;
+    border-color: var(--colour-accent) !important;
+}
+
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .button::before,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .accessibility-trigger::before,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .modal-close::before,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .card::before,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .button::before,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .accessibility-trigger::before,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .modal-close::before,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .card::before {
+    display: none;
+}
+
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .accessibility-trigger__icon,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .accessibility-trigger__icon {
+    opacity: 1;
+}
+
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .control-group,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .control-grid-2 > .control-stack,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .control-grid-3 > .control-stack,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .control-grid-4 > .control-stack,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .control-group > .control-grid-2 > .control-stack,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .control-group > .control-grid-3 > .control-stack,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .control-group > .control-grid-4 > .control-stack,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .control-group__note,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .engine-intro--streamlined .engine-note,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .demo-stage,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .demo-hero,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .doc-toc,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .doc-law,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .doc-note,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .doc-table th,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .demo-chip,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .callout,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .callout--warning,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .callout--success,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .callout--error,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .control-group,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .control-grid-2 > .control-stack,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .control-grid-3 > .control-stack,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .control-grid-4 > .control-stack,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .control-group > .control-grid-2 > .control-stack,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .control-group > .control-grid-3 > .control-stack,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .control-group > .control-grid-4 > .control-stack,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .control-group__note,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .engine-intro--streamlined .engine-note,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .demo-stage,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .demo-hero,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .doc-toc,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .doc-law,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .doc-note,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .doc-table th,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .demo-chip,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .callout,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .callout--warning,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .callout--success,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .callout--error {
+    background: var(--colour-surface) !important;
+    background-image: none !important;
+    border-color: var(--colour-accent) !important;
+    box-shadow: none !important;
+}
+
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .callout,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .callout--warning,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .callout--success,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .callout--error,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .callout,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .callout--warning,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .callout--success,
+html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .callout--error {
+    border-left-color: var(--colour-accent) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .button--primary:hover,
+    html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .button-primary:hover,
+    html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .nav-list a[aria-current="page"]:hover,
+    html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .button--primary:hover,
+    html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .button-primary:hover,
+    html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .nav-list a[aria-current="page"]:hover {
+        background: var(--colour-accent-strong) !important;
+        border-color: var(--colour-accent-strong) !important;
+        color: var(--colour-accent-contrast) !important;
+    }
+
+    html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .button--secondary:hover,
+    html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .button-secondary:hover,
+    html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .button--ghost:hover,
+    html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .accessibility-trigger:hover,
+    html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .modal-close:hover,
+    html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .nav-list a:not([aria-current="page"]):hover,
+    html[data-palette]:not([data-palette="default"])[data-contrast="plus-4"] .doc-toc__list a:hover,
+    html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .button--secondary:hover,
+    html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .button-secondary:hover,
+    html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .button--ghost:hover,
+    html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .accessibility-trigger:hover,
+    html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .modal-close:hover,
+    html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .nav-list a:not([aria-current="page"]):hover,
+    html[data-palette]:not([data-palette="default"])[data-contrast="plus-5"] .doc-toc__list a:hover {
+        background: color-mix(in srgb, var(--colour-accent) 18%, var(--colour-surface)) !important;
+        border-color: var(--colour-accent-strong) !important;
+        color: var(--colour-accent-strong) !important;
+        transform: none;
+    }
+}
+
+
+/* ============================================================
+   17. MOTION=OFF — billboard and animation completeness
+   Section 4 handles * transitions. This section ensures
+   keyframe-driven billboard animations and demo animations
+   are also explicitly paused, not just slowed.
+============================================================ */
+
+html[data-motion="off"] [class*="billboard"],
+html[data-motion="off"] [class*="animate"],
+html[data-motion="off"] [class*="anim-"],
+html[data-motion="off"] .orb,
+html[data-motion="off"] .orb-ring,
+html[data-motion="off"] .floating-element,
+html[data-motion="off"] [data-motion-element] {
+    animation: none !important;
+    transform: none !important;
+}
+
+html[data-motion="reduced"] [class*="billboard"],
+html[data-motion="reduced"] [class*="animate"],
+html[data-motion="reduced"] .orb,
+html[data-motion="reduced"] .orb-ring {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    [class*="billboard"],
+    [class*="animate"],
+    [class*="anim-"],
+    .orb,
+    .orb-ring,
+    .floating-element,
+    [data-motion-element] {
+        animation: none !important;
+    }
+}
+
+
+/* ============================================================
+   18. FORCED COLOURS (Windows High Contrast / forced-colors: active)
+   When OS forced colours are active: disable engine filters,
+   disable the viewport overlay, and restore OS semantic colour
+   keywords so the page reads correctly under system high contrast.
+   The engine panel remains functional — users can still switch
+   axes but the OS colour overrides take precedence visually.
+============================================================ */
+
+@media (forced-colors: active) {
+
+    /* Disable engine visual filters — OS is the authority under forced colours */
+    .site-header,
+    .site-main,
+    .site-footer {
+        filter: none !important;
+    }
+
+    /* Remove viewport tint overlay */
+    .site-main::after {
+        display: none !important;
+    }
+
+    /* Restore OS semantic colours */
+    :root {
+        --colour-text:            CanvasText;
+        --colour-surface:         Canvas;
+        --colour-border:          ButtonBorder;
+        --colour-accent:          LinkText;
+        --colour-accent-contrast: Canvas;
+        --focus-ring-colour:      Highlight;
+        --gm-guide-band:          Highlight;
+        --gm-guide-band-border:   HighlightText;
+    }
+
+    /* Focus ring — use OS Highlight colour, always visible */
+    *:focus-visible {
+        outline: 3px solid Highlight !important;
+        outline-offset: 2px !important;
+    }
+
+    /* Buttons use OS ButtonFace/ButtonText */
+    .button,
+    button,
+    [role="button"] {
+        background: ButtonFace !important;
+        color: ButtonText !important;
+        border: 2px solid ButtonBorder !important;
+        forced-color-adjust: auto;
+    }
+
+    /* Links */
+    a:not([class*="button"]):not([class*="btn"]) {
+        color: LinkText !important;
+        forced-color-adjust: auto;
+    }
+
+    a:visited {
+        color: VisitedText !important;
+    }
+
+    /* Images — don't dim or filter under forced colours */
+    img,
+    picture source,
+    video {
+        filter: none !important;
+        opacity: 1 !important;
+        forced-color-adjust: auto;
+    }
+
+    /* Reading guide — use system Highlight colour */
+    .accessibility-reading-guide {
+        background: Highlight !important;
+        border-color: HighlightText !important;
+        box-shadow: none !important;
+    }
+
+    /* Speaking highlight — use system Highlight */
+    .is-speaking {
+        background: Highlight !important;
+        color: HighlightText !important;
+        box-shadow: none !important;
+    }
+
+    /* Landmark stripes — use Highlight, always visible */
+    html[data-landmark="soft"] [data-accessibility-region],
+    html[data-landmark="clear"] [data-accessibility-region] {
+        outline-color: Highlight !important;
+    }
+
+    /* Callouts — restore OS-appropriate semantic colours */
+    .callout--warning { border-color: ButtonBorder; background: Canvas; }
+    .callout--success { border-color: ButtonBorder; background: Canvas; }
+    .callout--error   { border-color: ButtonBorder; background: Canvas; }
+}

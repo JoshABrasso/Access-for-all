@@ -1,0 +1,323 @@
+/*
+ * File: styles/components/buttons.css
+ * Purpose: Button primitives — all variants, all states.
+ * Truth.md rule: Colour values must come from tokens, not hard-coded.
+ * Source: cleaned production engine build, adapted to the shared --gm-* namespace.
+ */
+
+/* ── Button row layouts ── */
+
+.button-row {
+    align-items: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+}
+
+.button-row--hero {
+    gap: clamp(0.75rem, 1.5vw, 1.1rem);
+}
+
+.button-row--center {
+    justify-content: center;
+}
+
+.button-row--stack {
+    flex-direction: column;
+}
+
+/* ── Base button ── */
+
+.button,
+.accessibility-trigger,
+.modal-close {
+    align-items: center;
+    border: var(--gm-border-width, 1px) solid var(--button-border-secondary);
+    border-radius: var(--button-radius);
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: var(--gm-font-active);
+    font-size: var(--button-font-size);
+    font-weight: var(--button-font-weight);
+    gap: 0.55rem;
+    justify-content: center;
+    letter-spacing: var(--button-letter-spacing);
+    line-height: 1.15;
+    min-height: var(--button-min-height);
+    min-inline-size: var(--button-min-inline);
+    overflow: hidden;
+    padding: 0.8rem var(--button-padding-inline);
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    transition:
+        transform var(--gm-transition-base),
+        background var(--gm-transition-base),
+        border-color var(--gm-transition-base),
+        color var(--gm-transition-base),
+        box-shadow var(--gm-transition-base);
+    white-space: nowrap;
+}
+
+/* Shine sweep on hover */
+.button::before,
+.accessibility-trigger::before,
+.modal-close::before {
+    background: color-mix(in srgb, var(--colour-surface) 18%, transparent);
+    border-radius: inherit;
+    content: "";
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+    transform: translate3d(0, 100%, 0);
+    transition: transform 280ms var(--gm-ease-out);
+}
+
+.button > *,
+.accessibility-trigger > *,
+.modal-close > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* ── Primary ── */
+
+.button--primary,
+.button-primary {
+    background: var(--button-bg-primary);
+    border-color: var(--button-border-primary);
+    box-shadow: var(--button-shadow-primary);
+    color: var(--button-text-primary);
+}
+
+/* ── Secondary ── */
+
+.button--secondary,
+.button-secondary,
+.accessibility-trigger,
+.modal-close {
+    background: var(--button-bg-secondary);
+    box-shadow: var(--button-shadow-secondary);
+    color: var(--button-text-secondary);
+}
+
+/* ── Ghost ── */
+
+.button--ghost {
+    background: transparent;
+    border-color: color-mix(in srgb, var(--colour-border) 72%, transparent);
+    box-shadow: none;
+    color: var(--colour-accent);
+}
+
+/* ── Icon-only ── */
+
+.button--icon {
+    min-inline-size: var(--button-min-height);
+    padding: 0;
+    width: var(--button-min-height);
+}
+
+/* ── Size variants ── */
+
+.button--sm {
+    font-size: 0.875rem;
+    min-height: 2.75rem;
+    min-inline-size: 0;
+    padding-inline: 1rem;
+}
+
+.button--lg {
+    font-size: 1.05rem;
+    min-height: 4.25rem;
+    min-inline-size: 16rem;
+    padding-inline: 1.75rem;
+}
+
+/* ── Accessibility trigger specifics ── */
+
+.accessibility-trigger {
+    min-inline-size: 0;
+    padding: 0.75rem 0.95rem;
+}
+
+.accessibility-trigger__icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    height: 1.2rem;
+    width: 1.2rem;
+}
+
+.accessibility-trigger__icon svg {
+    fill: currentColor;
+    height: 100%;
+    width: 100%;
+}
+
+/* ── Modal close specifics ── */
+
+.modal-close {
+    min-inline-size: 0;
+    padding: 0.65rem 0.95rem;
+}
+
+.modal-close__icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    height: 1.1rem;
+    width: 1.1rem;
+}
+
+.modal-close__icon svg {
+    fill: currentColor;
+    height: 100%;
+    width: 100%;
+}
+
+/* ── Hover states (pointer devices only) ── */
+
+@media (hover: hover) and (pointer: fine) {
+    .button:hover,
+    .accessibility-trigger:hover,
+    .modal-close:hover {
+        border-color: var(--button-border-primary);
+        transform: translate3d(0, -0.05rem, 0);
+    }
+
+    .button:hover::before,
+    .accessibility-trigger:hover::before,
+    .modal-close:hover::before {
+        transform: translate3d(0, 0, 0);
+    }
+
+    .button--primary:hover,
+    .button-primary:hover {
+        background: var(--button-bg-primary-hover);
+        box-shadow: var(--gm-shadow-float);
+    }
+
+    .button--secondary:hover,
+    .button-secondary:hover,
+    .accessibility-trigger:hover,
+    .modal-close:hover {
+        background: var(--button-bg-secondary-hover);
+    }
+
+    .button--ghost:hover {
+        background: color-mix(in srgb, var(--colour-brand-100) 22%, transparent);
+        border-color: color-mix(in srgb, var(--colour-accent) 34%, var(--colour-border));
+    }
+}
+
+/* ── Active / pressed ── */
+
+.button:active,
+.accessibility-trigger:active,
+.modal-close:active,
+.button[aria-pressed="true"],
+.button[aria-current="page"] {
+    box-shadow: var(--gm-shadow-raise);
+    transform: translateY(0);
+}
+
+.button--secondary:active,
+.button-secondary:active,
+.accessibility-trigger:active,
+.modal-close:active {
+    background: var(--button-bg-secondary-hover);
+}
+
+.button--primary:active,
+.button-primary:active,
+.button--primary[aria-pressed="true"],
+.button-primary[aria-pressed="true"] {
+    background: var(--button-bg-primary-hover);
+}
+
+/* ── Disabled ── */
+
+.button:disabled,
+.accessibility-trigger:disabled,
+.modal-close:disabled,
+.button[aria-disabled="true"] {
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: 1;
+    pointer-events: none;
+    transform: none;
+}
+
+.button--primary:disabled,
+.button-primary:disabled,
+.button--primary[aria-disabled="true"],
+.button-primary[aria-disabled="true"] {
+    background: color-mix(in srgb, var(--button-bg-primary) 46%, var(--colour-surface));
+    border-color: color-mix(in srgb, var(--button-border-primary) 48%, var(--colour-border));
+    color: color-mix(in srgb, var(--button-text-primary) 66%, transparent);
+}
+
+.button--secondary:disabled,
+.button-secondary:disabled,
+.button--secondary[aria-disabled="true"],
+.button-secondary[aria-disabled="true"],
+.accessibility-trigger:disabled,
+.modal-close:disabled {
+    background: color-mix(in srgb, var(--button-bg-secondary) 84%, var(--colour-surface));
+    border-color: color-mix(in srgb, var(--button-border-secondary) 62%, var(--colour-border));
+    color: color-mix(in srgb, var(--button-text-secondary) 58%, transparent);
+}
+
+.button--ghost:disabled,
+.button--ghost[aria-disabled="true"] {
+    background: transparent;
+    border-color: color-mix(in srgb, var(--colour-border) 58%, transparent);
+    color: color-mix(in srgb, var(--colour-text) 44%, transparent);
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 48rem) {
+    .button,
+    .button--lg {
+        min-inline-size: 0;
+    }
+
+    .button-row--hero {
+        flex-direction: column;
+    }
+
+    .button-row--hero .button {
+        width: 100%;
+    }
+
+    .accessibility-trigger {
+        background: none;
+        border: 0;
+        border-radius: var(--radius-md);
+        box-shadow: none;
+        font-size: 0;
+        min-height: 3.25rem;
+        min-width: 3.25rem;
+        padding: 0.8rem;
+    }
+
+    .accessibility-trigger::before {
+        display: none;
+    }
+
+    .accessibility-trigger:hover,
+    .accessibility-trigger:active,
+    .accessibility-trigger:focus-visible {
+        background: color-mix(in srgb, var(--colour-brand-100) 22%, transparent);
+        border: 0;
+        box-shadow: none;
+        transform: none;
+    }
+
+    .accessibility-trigger__icon {
+        height: 1.4rem;
+        width: 1.4rem;
+    }
+}

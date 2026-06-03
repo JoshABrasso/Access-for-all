@@ -1,0 +1,257 @@
+/*
+ * File: styles/components/cards.css
+ * Purpose: Reusable surface components — cards, panels, stat blocks.
+ * Truth.md rule: Components must remain readable under all theme/palette/contrast states.
+ *                No hard-coded colours. All values from tokens.
+ */
+
+/* ── Base card ── */
+
+.card {
+    align-content: start;
+    background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--colour-surface) 96%, transparent) 0%,
+        color-mix(in srgb, var(--colour-surface-strong) 92%, transparent) 100%
+    );
+    border: var(--border-standard);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--gm-shadow-soft);
+    display: grid;
+    gap: var(--space-sm);
+    overflow: clip;
+    padding: var(--space-lg);
+    position: relative;
+    transition:
+        border-color var(--gm-transition-base),
+        box-shadow var(--gm-transition-base),
+        transform var(--gm-transition-base);
+}
+
+/* Subtle shine overlay — hidden at plus-contrast via accessibility.css */
+.card::before {
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        color-mix(in srgb, var(--colour-surface) 22%, transparent) 50%,
+        transparent 100%
+    );
+    content: "";
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+}
+
+.card > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* ── Entrance animation ── */
+
+@keyframes gm-rise-in {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 0.5rem, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.card {
+    animation: gm-rise-in 400ms var(--gm-ease-out) both;
+}
+
+html[data-motion="reduced"] .card,
+html[data-motion="off"] .card {
+    animation: none;
+}
+
+.card-grid .card:nth-child(1) { animation-delay: 0ms; }
+.card-grid .card:nth-child(2) { animation-delay: 60ms; }
+.card-grid .card:nth-child(3) { animation-delay: 120ms; }
+.card-grid .card:nth-child(4) { animation-delay: 180ms; }
+.card-grid .card:nth-child(5) { animation-delay: 240ms; }
+.card-grid .card:nth-child(6) { animation-delay: 300ms; }
+
+/* ── Interactive / clickable card ── */
+
+@media (hover: hover) and (pointer: fine) {
+    .card--interactive:hover {
+        border-color: color-mix(in srgb, var(--colour-accent) 32%, var(--colour-border));
+        box-shadow: var(--gm-shadow-panel);
+        transform: translate3d(0, -0.1rem, 0);
+    }
+}
+
+.card--interactive:active {
+    box-shadow: var(--gm-shadow-raise);
+    transform: translateY(0);
+}
+
+/* ── Tinted card variants ── */
+
+.card--tint-blue   { background: color-mix(in srgb, var(--colour-brand-100) 22%, var(--colour-surface)); }
+.card--tint-strong { background: color-mix(in srgb, var(--colour-surface-deep) 72%, var(--colour-surface)); }
+.card--tint-muted  { background: color-mix(in srgb, var(--colour-surface-strong) 94%, transparent); }
+
+/* ── Featured / highlighted card ── */
+
+.card--featured {
+    border-color: color-mix(in srgb, var(--colour-accent) 44%, var(--colour-border));
+    border-width: 2px;
+    box-shadow:
+        var(--gm-shadow-panel),
+        0 0 0 1px color-mix(in srgb, var(--colour-accent) 12%, transparent);
+}
+
+/* ── Dark card ── */
+
+.card--dark {
+    background: var(--colour-panel-dark);
+    border-color: color-mix(in srgb, var(--colour-panel-dark-strong) 72%, transparent);
+    color: var(--colour-panel-text);
+}
+
+.card--dark h1,
+.card--dark h2,
+.card--dark h3,
+.card--dark p {
+    color: inherit;
+}
+
+/* ── Compact card ── */
+
+.card--compact {
+    gap: var(--space-xs);
+    padding: var(--space-md);
+}
+
+/* ── Card header ── */
+
+.card__header {
+    align-items: center;
+    display: flex;
+    gap: var(--space-xs);
+    justify-content: space-between;
+}
+
+.card__eyebrow {
+    color: var(--colour-muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.card__title {
+    font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.card__body {
+    color: var(--colour-muted);
+    font-size: 0.96rem;
+    line-height: 1.6;
+}
+
+/* ── Icon card ── */
+
+.card--icon {
+    align-content: start;
+    justify-items: start;
+}
+
+.card__icon {
+    align-items: center;
+    background: color-mix(in srgb, var(--colour-brand-100) 32%, var(--colour-surface));
+    border: 1px solid color-mix(in srgb, var(--colour-accent) 16%, var(--colour-border));
+    border-radius: var(--radius-md);
+    color: var(--colour-accent);
+    display: flex;
+    height: 3rem;
+    justify-content: center;
+    width: 3rem;
+}
+
+.card__icon svg {
+    fill: currentColor;
+    height: 1.4rem;
+    width: 1.4rem;
+}
+
+/* ── Stat card ── */
+
+.stat-card {
+    background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--colour-surface) 96%, transparent) 0%,
+        color-mix(in srgb, var(--colour-surface-strong) 92%, transparent) 100%
+    );
+    border: var(--border-standard);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--gm-shadow-soft);
+    display: grid;
+    gap: var(--space-xs);
+    padding: var(--space-md);
+}
+
+.stat-card__value {
+    color: var(--colour-accent-strong);
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1;
+}
+
+.stat-card__label {
+    color: var(--colour-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* ── Stat grid ── */
+
+.stat-grid {
+    display: grid;
+    gap: var(--space-md);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+}
+
+/* ── Panel — card with stronger visual separation ── */
+
+.panel {
+    background: var(--colour-surface);
+    border: var(--border-standard);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--gm-shadow-panel);
+    overflow: clip;
+    padding: clamp(1.5rem, 2.5vw, 2.5rem);
+}
+
+/* ── Callout ── */
+
+.callout {
+    background: color-mix(in srgb, var(--colour-brand-100) 18%, var(--colour-surface));
+    border-left: 4px solid var(--colour-accent);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+}
+
+.callout--warning {
+    border-left-color: var(--gm-callout-warning-border);
+    background: var(--gm-callout-warning-surface);
+}
+
+.callout--success {
+    border-left-color: var(--gm-callout-success-border);
+    background: var(--gm-callout-success-surface);
+}
+
+.callout--error {
+    border-left-color: var(--gm-callout-error-border);
+    background: var(--gm-callout-error-surface);
+}

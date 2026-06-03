@@ -1,0 +1,302 @@
+/*
+ * File: styles/layout/shell.css
+ * Purpose: Global page shell — site-header, site-main, site-footer, backdrop.
+ * Truth.md rule: layout/ owns page-wide structure. No button or form styling here.
+ * Visual filter (--gm-visual-filter) applied here, not on body.
+ */
+
+body {
+    background-color: var(--colour-frame);
+    margin: 0;
+    position: relative;
+}
+
+/* ── Site shell — the framed page card ── */
+
+.site-shell {
+    background: var(--colour-surface);
+    margin-inline: auto;
+    min-height: 100svh;
+    overflow: clip;
+    width: 100%;
+}
+
+/* ── Header ── */
+
+.site-header {
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    background: color-mix(in srgb, var(--colour-surface) 82%, transparent);
+    border-bottom: var(--border-standard);
+    inset: 0 0 auto 0;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    box-shadow: var(--gm-shadow-raise);
+    transition:
+        background var(--gm-transition-base),
+        border-color var(--gm-transition-base),
+        box-shadow var(--gm-transition-base);
+}
+
+.utility-bar {
+    align-items: center;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: minmax(0, auto) minmax(0, 1fr) auto;
+    min-height: var(--gm-header-height);
+    padding-inline: var(--gm-container-gutter);
+}
+
+.header-accessibility {
+    align-items: center;
+    display: flex;
+    justify-self: start;
+}
+
+.header-brand {
+    align-items: center;
+    display: flex;
+    justify-content: flex-start;
+    justify-self: start;
+}
+
+.header-actions {
+    align-items: center;
+    display: flex;
+    gap: 0.8rem;
+    justify-content: end;
+    justify-self: end;
+}
+
+.brand-mark {
+    align-items: center;
+    background:
+        linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--colour-brand-100) 50%, transparent),
+            transparent
+        );
+    border-radius: var(--radius-md);
+    display: inline-flex;
+    max-width: min(24rem, 100%);
+    padding: 0.45rem 0.6rem;
+    text-decoration: none;
+    transition:
+        background var(--gm-transition-short),
+        box-shadow var(--gm-transition-short),
+        transform var(--gm-transition-short);
+}
+
+.brand-mark:focus-visible {
+    outline-offset: 3px;
+}
+
+.brand-mark:hover {
+    background:
+        linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--colour-brand-200) 56%, transparent),
+            transparent
+        );
+    transform: translateY(-1px);
+}
+
+.brand-mark__lockup {
+    display: grid;
+    gap: 0.12rem;
+}
+
+.brand-mark__eyebrow {
+    color: var(--colour-muted);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.brand-mark__name {
+    color: var(--colour-text);
+    font-size: clamp(1.1rem, 1.4vw, 1.35rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+}
+
+/* ── Skip link ── */
+
+.skip-link {
+    background: var(--colour-accent);
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    color: var(--colour-accent-contrast);
+    font-size: 0.9rem;
+    font-weight: 700;
+    left: 50%;
+    padding: 0.65rem 1.25rem;
+    position: fixed;
+    top: 0;
+    transform: translateX(-50%) translateY(-120%);
+    transition: transform var(--gm-transition-short);
+    z-index: 100;
+}
+
+.skip-link:focus {
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ── Main content area ── */
+
+.site-main {
+    position: relative;
+}
+
+/* ── Footer ── */
+
+.site-footer {
+    background:
+        linear-gradient(
+            180deg,
+            var(--colour-surface-strong) 0%,
+            color-mix(in srgb, var(--colour-surface-deep) 62%, var(--colour-surface)) 100%
+        );
+    border-top: var(--border-standard);
+    padding-block: var(--space-xl) var(--space-lg);
+}
+
+.footer-inner {
+    align-items: start;
+    display: grid;
+    gap: var(--space-lg);
+    grid-template-columns: minmax(0, 1.35fr) repeat(3, minmax(0, 0.8fr));
+}
+
+.footer-brand {
+    display: grid;
+    gap: var(--space-sm);
+}
+
+.footer-brand h2 {
+    font-size: clamp(1.4rem, 2vw, 2rem);
+    max-width: 20ch;
+}
+
+.footer-nav-group {
+    display: grid;
+    gap: var(--space-xs);
+}
+
+.footer-nav-heading {
+    color: var(--colour-muted);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.footer-nav-list {
+    display: grid;
+    gap: 0.6rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.footer-nav-list a {
+    color: var(--colour-text);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color var(--gm-transition-short);
+}
+
+.footer-nav-list a:hover,
+.footer-nav-list a:focus-visible {
+    color: var(--colour-accent);
+}
+
+.footer-link-button {
+    align-items: center;
+    background: none;
+    border: 0;
+    color: var(--colour-text);
+    cursor: pointer;
+    display: inline-flex;
+    font: inherit;
+    font-weight: 600;
+    padding: 0;
+    text-align: left;
+}
+
+.footer-link-button:hover,
+.footer-link-button:focus-visible {
+    color: var(--colour-accent);
+}
+
+.footer-meta {
+    border-top: var(--border-standard);
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    justify-content: space-between;
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+}
+
+.footer-meta small,
+.footer-meta p {
+    color: var(--colour-muted);
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+/* ── Backdrop — used behind nav and engine drawers on mobile ── */
+
+.site-backdrop {
+    background: var(--colour-overlay);
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    position: fixed;
+    transition:
+        opacity var(--gm-transition-base);
+    z-index: 70;
+}
+
+body[data-drawer-open="true"] .site-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 48rem) {
+    .site-header {
+        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(12px);
+    }
+
+    .utility-bar {
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        min-height: 4.75rem;
+        padding-inline: clamp(0.875rem, 4vw, 1.25rem);
+    }
+
+    .header-actions {
+        gap: 0.35rem;
+    }
+
+    .footer-inner {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-brand {
+        justify-items: center;
+        text-align: center;
+    }
+
+    .footer-meta {
+        justify-content: center;
+        text-align: center;
+    }
+}

@@ -1,0 +1,213 @@
+/*
+ * File: styles/layout/navigation.css
+ * Purpose: Desktop nav list and mobile right-side drawer.
+ * Truth.md rule: Nav and engine interactions must be keyboard-safe.
+ *               Mobile behavior matters more than desktop window guesses.
+ */
+
+/* ── Desktop nav bar ── */
+
+.primary-nav {
+    align-items: center;
+    display: flex;
+    justify-self: stretch;
+    min-width: 0;
+}
+
+.primary-nav.nav-drawer__shell {
+    justify-content: center;
+}
+
+.nav-drawer__top {
+    display: none;
+}
+
+.nav-drawer__main {
+    display: flex;
+    min-width: 0;
+}
+
+.nav-list {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-list a {
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    color: var(--colour-muted);
+    display: inline-flex;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 0.7rem 0.82rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+        background var(--gm-transition-short),
+        border-color var(--gm-transition-short),
+        color var(--gm-transition-short);
+    white-space: nowrap;
+}
+
+.nav-list a:hover {
+    background: color-mix(in srgb, var(--colour-brand-100) 22%, transparent);
+    border-color: color-mix(in srgb, var(--colour-brand-200) 34%, var(--colour-border));
+    color: var(--colour-text);
+}
+
+.nav-list a[aria-current="page"] {
+    background: var(--colour-accent-strong);
+    border-color: var(--colour-accent-strong);
+    color: var(--colour-accent-contrast);
+}
+
+/* ── Nav close button (mobile only, inside drawer) ── */
+
+.nav-close {
+    display: none;
+}
+
+/* ── Mobile: right-side drawer ── */
+
+@media (max-width: 48rem) {
+    .primary-nav {
+        -webkit-backdrop-filter: blur(18px);
+        backdrop-filter: blur(18px);
+        background: color-mix(in srgb, var(--colour-surface) 88%, transparent);
+        border: 0;
+        border-inline-start: 1px solid color-mix(in srgb, var(--colour-border) 72%, transparent);
+        box-shadow: var(--gm-shadow-panel);
+        display: block;
+        height: 100dvh;
+        inset: 0 0 0 auto;
+        max-width: min(30rem, 80vw);
+        opacity: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        overscroll-behavior: contain;
+        pointer-events: none;
+        position: fixed;
+        transform: translateX(100%);
+        transition:
+            transform 360ms var(--gm-ease-out),
+            opacity 200ms ease;
+        width: 100%;
+        z-index: 80;
+    }
+
+    .site-header[data-nav-open="true"] .primary-nav {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateX(0);
+    }
+
+    .nav-drawer-shell,
+    .nav-drawer__shell {
+        display: grid;
+        gap: var(--space-md);
+        min-height: 100dvh;
+        padding:
+            calc(env(safe-area-inset-top, 0rem) + var(--space-sm))
+            clamp(1rem, 5vw, 1.5rem)
+            calc(env(safe-area-inset-bottom, 0rem) + var(--space-lg));
+    }
+
+    .nav-drawer-header,
+    .nav-drawer__top {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .nav-drawer__main {
+        display: block;
+    }
+
+    .nav-drawer__brand {
+        color: var(--colour-text);
+        display: inline-flex;
+        font-size: 1rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        text-decoration: none;
+    }
+
+    .nav-close {
+        align-items: center;
+        background: none;
+        border: 0;
+        border-radius: var(--radius-md);
+        color: var(--colour-text);
+        cursor: pointer;
+        display: inline-flex;
+        height: 3rem;
+        justify-content: center;
+        padding: 0;
+        position: relative;
+        width: 3rem;
+    }
+
+    .nav-close::before,
+    .nav-close::after {
+        background: currentColor;
+        border-radius: 999px;
+        content: "";
+        height: 2px;
+        position: absolute;
+        width: 1.1rem;
+    }
+
+    .nav-close::before {
+        transform: rotate(45deg);
+    }
+
+    .nav-close::after {
+        transform: rotate(-45deg);
+    }
+
+    .nav-list {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 0;
+        justify-content: start;
+        padding: 0;
+    }
+
+    .nav-list a {
+        border: 0;
+        border-bottom: 1px solid color-mix(in srgb, var(--colour-border) 68%, transparent);
+        border-radius: 0;
+        color: var(--colour-text);
+        font-size: 1rem;
+        font-weight: 800;
+        justify-content: flex-start;
+        letter-spacing: 0.01em;
+        min-height: 3.25rem;
+        padding: 0.75rem 0.25rem;
+        text-transform: none;
+        width: 100%;
+    }
+
+    .nav-list a::after {
+        color: color-mix(in srgb, var(--colour-muted) 72%, transparent);
+        content: "›";
+        font-size: 1.1rem;
+        margin-left: auto;
+    }
+
+    .nav-list a[aria-current="page"] {
+        background: color-mix(in srgb, var(--colour-brand-100) 32%, transparent);
+        color: var(--colour-accent-strong);
+    }
+
+    .nav-list a[aria-current="page"]::after {
+        color: currentColor;
+    }
+}

@@ -1,0 +1,213 @@
+/*
+ * File: styles/base/typography.css
+ * Purpose: Apply baseline typography from shared tokens.
+ * Scope: Text elements only. No layout rules, no component-specific styling.
+ * Truth.md rule: Components consume tokens. This file sets the typographic baseline.
+ */
+
+html {
+    font-size: var(--gm-font-size-root);
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--colour-page);
+    color: var(--colour-text);
+    font-family: var(--gm-font-active);
+    font-size: 1rem;
+    font-weight: var(--gm-font-weight-body);
+    letter-spacing: var(--gm-letter-spacing);
+    line-height: var(--gm-line-height);
+    word-spacing: var(--gm-word-spacing);
+}
+
+/* ── Headings ── */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--colour-text);
+    font-family: var(--gm-font-active);
+    font-weight: var(--gm-font-weight-heading);
+    line-height: 1.1;
+    letter-spacing: var(--gm-letter-spacing);
+    word-spacing: var(--gm-word-spacing);
+}
+
+h1 {
+    font-size: clamp(2.4rem, 4vw, 3.5rem);
+    line-height: 1.05;
+}
+
+h2 {
+    font-size: clamp(1.75rem, 2.8vw, 2.4rem);
+    line-height: 1.1;
+}
+
+h3 {
+    font-size: clamp(1.25rem, 1.8vw, 1.6rem);
+    line-height: 1.2;
+}
+
+h4 {
+    font-size: clamp(1.05rem, 1.3vw, 1.2rem);
+    line-height: 1.3;
+}
+
+h5,
+h6 {
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+/* ── Body text ── */
+
+p,
+li,
+dd,
+dt,
+blockquote {
+    font-size: 1rem;
+    letter-spacing: var(--gm-letter-spacing);
+    word-spacing: var(--gm-word-spacing);
+}
+
+p + p {
+    margin-top: var(--gm-paragraph-gap);
+}
+
+/* ── Inline elements ── */
+
+a {
+    color: var(--colour-accent);
+    text-decoration-line: underline;
+    text-decoration-thickness: var(--link-underline-thickness);
+    text-underline-offset: 0.18em;
+    transition: color var(--gm-transition-short),
+                text-decoration-color var(--gm-transition-short);
+}
+
+a:hover {
+    color: var(--colour-accent-strong);
+}
+
+strong,
+b {
+    font-weight: var(--gm-font-weight-heading);
+}
+
+small {
+    font-size: 0.875rem;
+}
+
+/* ── Labels and controls ── */
+
+label,
+input,
+button,
+select,
+textarea,
+output,
+legend {
+    font-size: 1rem;
+    font-family: var(--gm-font-active);
+    letter-spacing: var(--gm-letter-spacing);
+    word-spacing: var(--gm-word-spacing);
+}
+
+/* ── Blockquote ── */
+
+blockquote {
+    border-left: 3px solid var(--colour-accent);
+    padding-left: var(--space-md);
+    color: var(--colour-muted);
+    font-style: italic;
+}
+
+/* ── Code ── */
+
+code,
+kbd,
+samp,
+pre {
+    font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+    font-size: 0.9em;
+}
+
+pre {
+    background: var(--colour-surface-deep);
+    border: var(--border-standard);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    padding: var(--space-md);
+}
+
+code {
+    background: var(--colour-surface-deep);
+    border-radius: var(--radius-xs);
+    padding: 0.1em 0.35em;
+}
+
+pre code {
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+}
+
+/* ── Eyebrow / label utility ── */
+
+.eyebrow {
+    color: var(--colour-muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+/* ── Reading surfaces — focused reading measure ── */
+
+.prose,
+.reading-surface {
+    max-width: var(--gm-reading-measure);
+}
+
+.prose > * + *,
+.reading-surface > * + * {
+    margin-top: var(--gm-paragraph-gap);
+}
+
+.prose h2,
+.prose h3,
+.prose h4,
+.reading-surface h2,
+.reading-surface h3,
+.reading-surface h4 {
+    margin-top: var(--space-xl);
+}
+
+.section-heading {
+    max-width: min(52rem, var(--gm-reading-measure));
+}
+
+.section-heading--wide {
+    max-width: min(80rem, var(--gm-reading-measure));
+}
+
+.doc-section > p,
+.doc-section > ul,
+.doc-section > ol,
+.doc-note,
+.doc-law {
+    max-width: var(--gm-reading-measure);
+}
+
+/* ── Horizontal rule ── */
+
+hr {
+    border: 0;
+    border-top: var(--border-standard);
+    margin: var(--space-xl) 0;
+}

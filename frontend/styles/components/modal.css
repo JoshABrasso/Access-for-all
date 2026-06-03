@@ -1,0 +1,321 @@
+/*
+ * File: styles/components/modal.css
+ * Purpose: Accessibility engine modal (desktop) and left-side drawer (mobile).
+ * Truth.md rule: No hard-coded colours. All values from tokens.
+ *               Modal must never receive the --gm-visual-filter (applied to site, not engine).
+ * Source: cleaned production modal.css (92rem desktop width retained from earlier audits).
+ */
+
+/* ── Backdrop ── */
+
+.modal-backdrop {
+    background: var(--colour-overlay);
+    inset: 0;
+    position: fixed;
+    z-index: 78;
+}
+
+/* ── Desktop modal container ── */
+
+.accessibility-modal {
+    inset: 50% auto auto 50%;
+    max-height: min(92dvh, 60rem);
+    position: fixed;
+    transform: translate(-50%, -50%);
+    width: min(92rem, calc(100vw - 0.75rem));
+    z-index: 81;
+}
+
+.accessibility-modal[hidden] {
+    display: none;
+}
+
+/* ── Modal panel — the visible chrome ── */
+
+.modal-panel {
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--colour-surface-strong) 92%, black) 0%,
+            color-mix(in srgb, var(--colour-surface) 88%, black) 100%
+        ),
+        linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--colour-surface) 84%, black) 0%,
+            color-mix(in srgb, var(--colour-surface-strong) 96%, black) 100%
+        );
+    border: var(--border-standard);
+    border-color: var(--colour-border);
+    border-radius: 1.75rem;
+    box-shadow: 0 22px 64px color-mix(in srgb, var(--colour-shadow) 280%, transparent);
+    display: grid;
+    filter: var(--site-visual-filter);
+    grid-template-rows: auto minmax(0, 1fr);
+    max-height: inherit;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Viewport tint overlay — follows the tint axis, same as site surfaces */
+.modal-panel::before {
+    background: var(--viewport-filter-overlay);
+    content: "";
+    inset: 0;
+    mix-blend-mode: multiply;
+    opacity: var(--viewport-filter-opacity);
+    pointer-events: none;
+    position: absolute;
+    z-index: 0;
+}
+
+.modal-panel > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* ── Modal header ── */
+
+.modal-header {
+    align-items: start;
+    display: grid;
+    gap: var(--space-sm);
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: 1.35rem 1.35rem 0;
+}
+
+/* ── Modal scrollable body ── */
+
+.modal-content {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0 1.35rem 1.35rem;
+}
+
+/* ── Mobile panel — hidden by default, shown in @media below ── */
+
+.ac-mobile-panel {
+    display: none;
+}
+
+/* ── Responsive: slightly narrower at mid-breakpoint ── */
+
+@media (max-width: 80rem) and (min-width: 56.0625rem) {
+    .accessibility-modal {
+        width: min(84rem, calc(100vw - 0.75rem));
+    }
+}
+
+/* ── Mobile mode: left-side drawer replaces desktop modal ── */
+
+@media (max-width: 48rem) {
+
+    .accessibility-modal {
+        inset: 0;
+        max-height: 100dvh;
+        pointer-events: none;
+        transform: none;
+        width: 100vw;
+        z-index: 82;
+    }
+
+    /* Desktop panel disappears on mobile */
+    .modal-panel {
+        display: none;
+    }
+
+    /* Mobile drawer container */
+    .ac-mobile-panel {
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        color: var(--colour-text);
+        display: block;
+        height: 100dvh;
+        inset: 0 auto 0 0;
+        max-width: min(30rem, 75vw);
+        overflow: hidden;
+        pointer-events: auto;
+        position: fixed;
+        width: 100%;
+    }
+
+    /* The drawer shell — actual frosted-glass surface */
+    .ac-mobile-panel .nav-drawer__shell {
+        -webkit-backdrop-filter: blur(18px);
+        backdrop-filter: blur(18px);
+        background: color-mix(in srgb, var(--colour-surface) 92%, transparent);
+        border-inline-end: 1px solid color-mix(in srgb, var(--colour-border) 72%, transparent);
+        box-shadow: var(--gm-shadow-panel);
+        display: grid;
+        gap: 0.65rem;
+        grid-template-rows: auto auto minmax(0, 1fr) auto;
+        height: 100dvh;
+        min-height: 100dvh;
+        padding:
+            calc(env(safe-area-inset-top, 0rem) + 0.4rem)
+            clamp(0.95rem, 4vw, 1.2rem)
+            calc(env(safe-area-inset-bottom, 0rem) + 1.1rem);
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Top bar: back arrow | brand | close */
+    .ac-mobile-panel .nav-drawer__top {
+        align-items: center;
+        display: grid;
+        gap: 0.75rem;
+        grid-template-columns: 3rem minmax(0, 1fr) 3rem;
+        margin-top: -0.1rem;
+    }
+
+    .ac-mobile-panel .nav-drawer__brand {
+        grid-column: 2;
+        justify-self: center;
+        min-width: 0;
+    }
+
+    .ac-mobile-panel .nav-drawer__brand .brand-mark {
+        background: none;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        max-width: 14rem;
+        padding: 0;
+    }
+
+    .ac-mobile-panel .nav-drawer__brand .brand-mark__image-long {
+        max-height: 3.6rem;
+    }
+
+    /* Section menu buttons (section index view) */
+    .ac-mobile-menu {
+        display: grid;
+        gap: 0.45rem;
+        margin-top: 0.1rem;
+    }
+
+    .ac-mobile-menu__button {
+        align-items: center;
+        appearance: none;
+        background: transparent;
+        border: 0;
+        border-bottom: 1px solid color-mix(in srgb, var(--colour-border) 88%, transparent);
+        border-radius: 0;
+        box-shadow: none;
+        color: var(--colour-text);
+        cursor: pointer;
+        display: flex;
+        font: inherit;
+        font-size: 0.95rem;
+        font-weight: 800;
+        justify-content: space-between;
+        letter-spacing: 0.03em;
+        min-height: 3.1rem;
+        padding: 0.75rem 0.2rem 0.8rem;
+        text-align: left;
+        text-transform: uppercase;
+        width: 100%;
+    }
+
+    .ac-mobile-menu__button[aria-current="page"] {
+        background: var(--button-bg-primary);
+        border-bottom-color: var(--button-border-primary);
+        color: var(--button-text-primary);
+    }
+
+    .ac-mobile-menu__chevron {
+        color: color-mix(in srgb, var(--colour-muted) 78%, transparent);
+        font-size: 1rem;
+        margin-left: auto;
+    }
+
+    /* Back and close icon buttons */
+    .ac-mobile-back,
+    .ac-mobile-close {
+        align-items: center;
+        appearance: none;
+        background: none;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        color: var(--colour-text);
+        cursor: pointer;
+        display: inline-flex;
+        font-size: 0;
+        height: 3rem;
+        justify-content: center;
+        min-height: 3rem;
+        min-inline-size: 3rem;
+        padding: 0;
+        position: relative;
+        width: 3rem;
+    }
+
+    .ac-mobile-back {
+        grid-column: 1;
+        justify-self: start;
+    }
+
+    .ac-mobile-back__icon {
+        display: inline-flex;
+        height: 1.2rem;
+        width: 1.2rem;
+    }
+
+    .ac-mobile-back__icon svg {
+        display: block;
+        fill: currentColor;
+        height: 100%;
+        width: 100%;
+    }
+
+    .ac-mobile-close {
+        grid-column: 3;
+        justify-self: end;
+    }
+
+    /* X mark via pseudo-elements */
+    .ac-mobile-close::before,
+    .ac-mobile-close::after {
+        background: currentColor;
+        border-radius: 999px;
+        content: "";
+        height: 2px;
+        position: absolute;
+        width: 1rem;
+    }
+
+    .ac-mobile-close::before { transform: rotate(45deg); }
+    .ac-mobile-close::after  { transform: rotate(-45deg); }
+
+    /* Scrollable content pane */
+    .ac-mobile-content {
+        background: transparent;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .ac-mobile-content[hidden] {
+        display: none;
+    }
+
+    .ac-mobile-content .modal-content {
+        background: transparent;
+        height: 100%;
+        min-height: 0;
+        overflow-y: auto;
+        padding: 0 0 calc(1.35rem + env(safe-area-inset-bottom, 0px));
+    }
+
+    .ac-mobile-content .modal-content .engine-form {
+        gap: var(--space-md);
+    }
+
+    /* Bottom action strip (save/reset) */
+    .ac-mobile-actions {
+        border-top: 1px solid color-mix(in srgb, var(--colour-border) 88%, transparent);
+        margin-top: auto;
+        padding-top: 0.85rem;
+    }
+}
