@@ -1,5 +1,7 @@
 # Access for All
 
+![Access for All banner](.github/banner.png)
+
 > An accessibility engine built to help reopen digital doors that checkbox accessibility has quietly closed.
 
 Access for All is an MIT-licensed accessibility engine designed to be built into a site from the start, not bolted on afterwards.
