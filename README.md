@@ -2,76 +2,130 @@
 
 ![Access for All banner](.github/banner.png)
 
-> An accessibility engine built to help reopen digital doors that checkbox accessibility has quietly closed.
+> A self-contained accessibility runtime built to help reopen digital doors that checkbox accessibility has quietly closed.
 
-Access for All is an MIT-licensed accessibility engine designed to be built into a site from the start, not bolted on afterwards.
+Access for All is an MIT-licensed accessibility engine that runs inside the page itself.
 
-It gives people meaningful control over presentation, readability, comfort, and orientation without breaking the design, without forcing a framework, and without requiring a build step just to get started.
+It is not a static-site concept, not a framework package, and not an overlay that tries to patch a finished product from the outside. It is a runtime preference system that writes live state to the root document, updates rendering immediately, and gives people real control over how a digital surface behaves for them.
 
-## Why It Matters
+It is built for teams who want accessibility to be part of the interface itself:
 
-Most websites still treat accessibility as a checklist item.
+- real runtime controls, not a compliance badge
+- real user preference combinations, not one-size-fits-all modes
+- real portability across websites, apps, portals, kiosks, and digital services
 
-That leaves people stuck with interfaces that may technically pass a standard while still being hard to read, tiring to use, or impossible to adapt to individual needs.
+## The Pitch
 
-Access for All starts from a harder truth: many digital doors have been closed again.
+Access for All gives people the power to reshape a digital interface around their own needs while keeping the product intact.
 
-Tick-box accessibility has too often helped create a world where digital surfaces, public interactions, sign-ins, forms, kiosks, booking journeys, and service touchpoints are called accessible while still shutting people out in practice.
+Instead of replacing the experience, it adapts the experience. Instead of asking people to accept whatever the browser, device, or operating system happens to offer, it brings a consistent accessibility control layer directly into the product.
 
-We want those doors reopened.
+## Why This Exists
 
-Access for All takes a different approach:
+Many digital doors have been closed again.
 
-- Let people change the page to suit them
-- Keep those preferences consistent across pages
-- Preserve the site structure instead of replacing it with a separate experience
-- Make accessibility part of the product, not an apology after launch
-- Treat accessibility as practical access, not paperwork
+Tick-box accessibility has helped create a world where websites, sign-in flows, kiosks, booking journeys, forms, customer portals, and other public digital interactions are called accessible while still shutting people out in practice.
 
-## What The Engine Does
+Passing a check is not the same as being workable.
 
-Built into this starter already:
+Access for All exists to push back on that.
 
-- Theme controls: default, light, dark
-- Colour controls: palette changes, contrast levels, visual filters
-- Reading controls: text size, line spacing, paragraph spacing, letter spacing, word spacing
-- Font controls: site font, hyperlegible, dyslexia-friendly, system sans
-- Comfort controls: motion reduction, transparency reduction, depth reduction
-- Orientation controls: reading mode, reading guide, landmark highlighting, stronger focus states
-- Media controls: dim imagery to reduce visual noise
-- Talkback support: spoken feedback and page read-aloud where the browser supports it
-- Preference persistence: saved locally so the experience stays consistent
+The goal is simple:
 
-## Why Teams Use It
+- let people change the interface to suit themselves
+- keep those preferences consistent
+- make accessibility part of the product, not a post-launch excuse
+- reopen digital interactions that have been made needlessly hard to use
 
-- Static-first and framework-agnostic
-- No dependency on React, Vue, or a component library
-- Easy to branch, clone, and adapt for client work
-- Token-driven CSS structure that is simple to reskin
-- Built-in demo and reference pages for onboarding teams quickly
-- MIT licensed so it can be adopted, extended, and commercialised freely
-- Designed as an engine model that can be carried into websites, apps, tools, kiosks, portals, and other digital surfaces
+## What It Actually Is
 
-## Who It Is For
+The engine reference in this repo defines Access for All as a fully self-contained runtime preference system.
 
-- Freelancers who want a stronger starting point for accessible client sites
-- Agencies that need a reusable frontend engine across projects
-- Founders who want accessibility built in before launch
-- Developers who want practical controls instead of an empty “accessible by default” claim
-- Organisations that want to show accessibility as a visible product strength
+In practice that means:
 
-## Repo At A Glance
+- it runs entirely inside the webpage
+- it writes root `data-*` attributes to `<html>`
+- it writes runtime CSS custom properties for numeric controls
+- it updates the interface immediately with no page reload
+- it does not depend on a framework
+- it does not rely on OS accessibility support being present or enabled
 
-- [`frontend/index.html`](frontend/index.html): the clean keeper page for new builds
-- [`frontend/pages/demo.html`](frontend/pages/demo.html): optional demo page to show the engine in action
-- [`frontend/pages/engine.html`](frontend/pages/engine.html): optional implementation reference
-- [`frontend/scripts/accessibility-engine.js`](frontend/scripts/accessibility-engine.js): runtime engine state and preference handling
-- [`frontend/scripts/site-ui.js`](frontend/scripts/site-ui.js): modal, drawer, consent UI, and interaction wiring
+This matters because real environments are inconsistent. A polished desktop setup, a locked-down corporate machine, a Linux kiosk, a POS terminal, a browser-only portal, and a public check-in screen do not all offer the same accessibility support. This engine is designed to carry the same control model across those surfaces instead of leaving people at the mercy of the platform.
+
+## Why It Stands Out
+
+Most accessibility tooling falls into one of three traps:
+
+- it is too shallow to make a real difference
+- it is too tied to one stack or product type
+- it treats users as a checklist category instead of a person with layered needs
+
+Access for All is designed to avoid all three.
+
+## What The Runtime Controls
+
+Access for All already supports:
+
+- appearance controls: default, light, dark
+- palette controls: monochrome and colour remapping modes
+- contrast controls: multiple lower and higher contrast steps
+- text controls: font size, line spacing, paragraph spacing, letter spacing, word spacing
+- font controls: site font, hyperlegible, dyslexia-friendly, system sans
+- comfort controls: motion reduction, transparency reduction, depth reduction, visual filters
+- reading controls: focused reading mode and reading guide
+- orientation controls: stronger focus states, clearer links, landmark highlighting
+- media controls: image and media dimming to reduce glare and noise
+- talkback controls: spoken support and page read-aloud where the browser supports it
+- persistence: saved local state so the experience stays consistent across pages
+
+## The Core Principle
+
+Every axis works independently and in conjunction with every other axis.
+
+That is one of the most important parts of the engine. A person does not arrive with one neat accessibility label. Someone may need darker presentation, stronger contrast, calmer motion, wider spacing, and a dyslexia-friendly font at the same time. Access for All treats that combination as valid, intentional, and fully supported.
+
+The runtime does not suppress combinations because they look unusual. If a person chooses dark mode, a yellow palette, stronger contrast, and a warm filter, the engine is expected to honour that exact configuration.
+
+## Built In, Not Bolted On
+
+On the live BaseLayer Digital site, the engine is positioned as something built into the structure rather than retrofitted afterwards. That same model carries into this repo.
+
+This is not meant to sit apart from the product. It is meant to live inside the interface itself:
+
+- the controls are part of the real UI
+- the layout, tokens, and components respond together
+- the person keeps the same page, just adapted to their needs
+- the runtime can be extended instead of fought
+
+## Bigger Than One Website
+
+Access for All should be understood as an engine model, not just a starter repo.
+
+The same runtime idea can be built on and carried into:
+
+- websites
+- web apps
+- customer portals
+- internal tools
+- booking systems
+- kiosk and check-in interfaces
+- browser-based service touchpoints
+- future desktop, mobile, or hybrid surfaces that need the same accessibility logic
+
+The point is not “static first”. The point is that the runtime can sit on top of and inside any digital surface that can expose a document, state, and interface layer.
+
+## Repo Contents
+
+- [`frontend/index.html`](frontend/index.html): minimal starter page with the engine UI wired in
+- [`frontend/pages/demo.html`](frontend/pages/demo.html): proof page for checking the shared runtime visually
+- [`frontend/pages/engine.html`](frontend/pages/engine.html): implementation reference for the runtime contract
+- [`frontend/scripts/accessibility-engine.js`](frontend/scripts/accessibility-engine.js): state model, runtime writes, persistence, talkback
+- [`frontend/scripts/site-ui.js`](frontend/scripts/site-ui.js): modal, drawer, consent UI, and engine form wiring
 - [`frontend/styles/`](frontend/styles/): token, layout, component, and accessibility layers
 
 ## Quick Start
 
-Clone it, open the starter, and begin building:
+Serve the frontend locally:
 
 ```bash
 cd frontend
@@ -80,54 +134,22 @@ python3 -m http.server 8080
 
 Then open `http://localhost:8080`.
 
-No build step is required.
+## Why Teams Can Build On This
 
-## What Makes This Different
+- No framework dependency
+- No page reload needed for state changes
+- Clear runtime contract through root `data-*` attributes and CSS variables
+- Public API exposed at `window.accessibilityEngine`
+- Demo and reference pages included for implementation and testing
+- MIT licensed so the engine can be adopted, extended, and commercialised freely
 
-Most accessibility overlays try to sit on top of a finished website.
+## Verified In This Repo
 
-This engine is meant to live inside the site itself.
-
-That means:
-
-- the controls are part of the real interface
-- the layout, tokens, and components respond together
-- the visitor keeps the same page, just adapted to their needs
-- your team can extend the engine rather than work around it
-
-It is also meant to grow beyond a single website.
-
-The idea behind Access for All is bigger than one frontend starter: it is an engine model that can be built upon and adapted to run across anything with a digital interface.
-
-That includes:
-
-- websites
-- web apps
-- internal tools
-- booking systems
-- customer portals
-- kiosk-style public interfaces
-- service check-in flows
-- future desktop or mobile surfaces that need the same accessibility logic
-
-## Ready To Sell, Ready To Build On
-
-This repo is set up so you can:
-
-- use it as a public starter
-- branch it for client work
-- customise the look without rebuilding the engine model
-- keep the optional demo and documentation pages during development
-- remove the demo/reference pages later and ship only the production-facing build
-- build on the engine concept itself and carry it into other platforms and interaction models
-
-## Verified Starter State
-
-- HTML entry pages serve correctly as static files
-- Shared CSS imports resolve correctly from `styles/master.css`
-- Core engine and UI scripts are linked and parse cleanly
-- Bundled accessibility fonts are included in the repo
-- Optional demo and reference pages are already wired and working
+- the runtime scripts are present and linked
+- active local file references resolve correctly
+- the demo and reference pages are wired
+- the engine model is documented in the repo itself
+- bundled accessibility fonts and notices are included
 
 ## Licensing
 
@@ -135,8 +157,6 @@ Project code is released under the [MIT License](LICENSE).
 
 Bundled third-party assets keep their own licenses where required. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-## Positioning Line
+## GitHub About Line
 
-If you want a short repo description for GitHub’s sidebar, use:
-
-`Accessibility engine built to reopen digital doors with real user controls for reading, contrast, motion, focus, and comfort.`
+`Self-contained accessibility runtime for websites, apps, kiosks, and digital services with real user controls for reading, contrast, motion, focus, and comfort.`

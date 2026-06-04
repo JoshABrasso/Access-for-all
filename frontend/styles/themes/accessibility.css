@@ -187,7 +187,7 @@ html[data-motion="off"] *::after {
 /* ============================================================
    5. TRANSPARENCY MODES
    html[data-transparency] — flatten shared surfaces and disable backdrop-filter.
-   The GM token --gm-surface-opacity must produce visible container changes.
+   The runtime token --gm-surface-opacity must produce visible container changes.
 ============================================================ */
 
 html[data-transparency="reduced"] {

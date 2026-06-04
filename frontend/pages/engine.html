@@ -240,13 +240,17 @@
             <div class="doc-section" id="overview">
               <h2>1. Overview</h2>
               <p>
-                The GM accessibility engine is a fully self-contained runtime preference system built
+                Access for All is a fully self-contained runtime preference system built
                 to solve a problem that OS-level accessibility tools cannot solve in the real world:
                 inconsistency. macOS VoiceOver and Zoom are excellent. ChromeOS accessibility is
                 nearly non-functional. Linux kiosk and POS terminal environments have fractured or
                 absent support. Corporate locked-down systems often have accessibility disabled
                 entirely. The engine treats all of those environments identically, because it
                 runs entirely inside the webpage.
+              </p>
+              <p>
+                This public repo is derived from the Gold Master engine line and represents the
+                cleaned public release-candidate baseline for that runtime model.
               </p>
               <p>
                 Each user interaction writes a <code>data-*</code> attribute to <code>&lt;html&gt;</code>
@@ -1235,7 +1239,7 @@
 
               <div class="doc-law">
                 <strong>Rule 4 — Keep the starter neutral</strong>
-                The GM is a reusable starting point. Keep reference pages and demo copy generic,
+                Access for All is a reusable starting point. Keep reference pages and demo copy generic,
                 and do not let product-specific branding or project-specific content become part of
                 the shared engine baseline.
               </div>
@@ -1250,7 +1254,7 @@
                 <strong>Rule 6 — No layout shift from engine controls</strong>
                 Engine state changes must not shift content. Use <code>outline</code> not
                 <code>border</code> when adding visual indicators to existing elements.
-                The GM landmark axis follows this by using outlines and outline offsets
+                The landmark axis follows this by using outlines and outline offsets
                 rather than adding border width or padding.
               </div>
 
